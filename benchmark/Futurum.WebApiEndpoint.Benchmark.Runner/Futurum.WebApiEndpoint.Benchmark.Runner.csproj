@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
+        <LangVersion>10</LangVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <NoWarn>1701;1702;RCS1090</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <NoWarn>1701;1702;RCS1090</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Futurum.WebApiEndpoint.Benchmark.MinimalApi\Futurum.WebApiEndpoint.Benchmark.MinimalApi.csproj" />
+      <ProjectReference Include="..\Futurum.WebApiEndpoint.Benchmark.MvcController\Futurum.WebApiEndpoint.Benchmark.MvcController.csproj" />
+      <ProjectReference Include="..\Futurum.WebApiEndpoint.Benchmark.WebApiEndpoint\Futurum.WebApiEndpoint.Benchmark.WebApiEndpoint.csproj" />
+    </ItemGroup>
+
+</Project>

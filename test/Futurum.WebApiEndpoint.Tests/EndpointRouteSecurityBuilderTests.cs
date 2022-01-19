@@ -1,0 +1,175 @@
+using System.Collections.Immutable;
+
+using FluentAssertions;
+
+using Futurum.Core.Option;
+using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Internal;
+using Futurum.WebApiEndpoint.Internal.Dispatcher;
+using Futurum.WebApiEndpoint.Metadata;
+using Futurum.WebApiEndpoint.Middleware;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
+
+using Xunit;
+using Xunit.Abstractions;
+
+namespace Futurum.WebApiEndpoint.Tests;
+
+public class EndpointRouteSecurityBuilderTests
+{
+    private readonly ITestOutputHelper _output;
+
+    public EndpointRouteSecurityBuilderTests(ITestOutputHelper output)
+    {
+        _output = output;
+    }
+
+    [Fact]
+    public void when_route_MetadataSecurityDefinition_is_not_specified_and_Configuration_SecureByDefault_is_false_configures_AllowAnonymous()
+    {
+        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Post, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false,
+                                                                  Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+
+        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+                                                                typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response>),
+                                                                typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
+                                                                typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response>));
+        var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
+        var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+        
+        var builder = WebApplication.CreateBuilder();
+
+        var webApiEndpointConfiguration = WebApiEndpointConfiguration.Default;
+        
+        builder.Host.ConfigureServices((_, serviceCollection) =>
+        {
+            serviceCollection.AddSingleton(webApiEndpointConfiguration);
+            serviceCollection.AddSingleton<IRequestOpenApiTypeCreator>(new RequestOpenApiTypeCreator());
+        });
+
+        var application = builder.Build();
+
+        var httpMethod = "GET";
+        var route = string.Empty;
+
+        var routeHandlerBuilder = application.MapMethods(route, new[] { httpMethod }, WebApiEndpointExecutor.ExecuteAsync);
+
+        var endpointRouteSecurityBuilder = new EndpointRouteSecurityBuilder();
+        endpointRouteSecurityBuilder.Configure(routeHandlerBuilder, webApiEndpointConfiguration, metadataDefinition);
+
+        var endpointRouteBuilder = application as IEndpointRouteBuilder;
+
+        var dataSource = endpointRouteBuilder.DataSources.OfType<EndpointDataSource>().FirstOrDefault();
+
+        var endpoint = dataSource.Endpoints.OfType<RouteEndpoint>().Single();
+
+        endpoint.Metadata.GetMetadata<AllowAnonymousAttribute>().Should().NotBeNull();
+    }
+
+    [Fact]
+    public void when_route_MetadataSecurityDefinition_is_not_specified_and_Configuration_SecureByDefault_is_true_configures_Authorize_without_policy()
+    {
+        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Post, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false,
+                                                                  Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+
+        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+                                                                typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response>),
+                                                                typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
+                                                                typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response>));
+        var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
+        var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+        
+        var builder = WebApplication.CreateBuilder();
+
+        var webApiEndpointConfiguration = WebApiEndpointConfiguration.Default with { SecureByDefault = true };
+        builder.Host.ConfigureServices((_, serviceCollection) =>
+        {
+            serviceCollection.AddSingleton(webApiEndpointConfiguration);
+            serviceCollection.AddSingleton<IRequestOpenApiTypeCreator>(new RequestOpenApiTypeCreator());
+        });
+
+        var application = builder.Build();
+
+        var httpMethod = "GET";
+        var route = string.Empty;
+
+        var routeHandlerBuilder = application.MapMethods(route, new[] { httpMethod }, WebApiEndpointExecutor.ExecuteAsync);
+
+        var endpointRouteSecurityBuilder = new EndpointRouteSecurityBuilder();
+        endpointRouteSecurityBuilder.Configure(routeHandlerBuilder, webApiEndpointConfiguration, metadataDefinition);
+
+        var endpointRouteBuilder = application as IEndpointRouteBuilder;
+
+        var dataSource = endpointRouteBuilder.DataSources.OfType<EndpointDataSource>().FirstOrDefault();
+
+        var endpoint = dataSource.Endpoints.OfType<RouteEndpoint>().Single();
+
+        var authorizeAttribute = endpoint.Metadata.GetMetadata<AuthorizeAttribute>();
+        authorizeAttribute.Should().NotBeNull();
+        authorizeAttribute.Policy.Should().BeNullOrEmpty();
+    }
+
+    [Fact]
+    public void when_route_MetadataSecurityDefinition_is_specified_and_Configuration_SecureByDefault_is_true_configures_Authorize_with_policy()
+    {
+        var securityDefinition = new MetadataSecurityDefinition(new List<MetadataSecurityPermissionDefinition>().ToImmutableList(),
+                                                                new List<MetadataSecurityRoleDefinition>().ToImmutableList(),
+                                                                new List<MetadataSecurityClaimDefinition>().ToImmutableList());
+        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Post, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false,
+                                                                  Option<Action<RouteHandlerBuilder>>.None, securityDefinition);
+
+        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+                                                                typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response>),
+                                                                typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
+                                                                typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response>));
+        var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
+        var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+        
+        var builder = WebApplication.CreateBuilder();
+
+        var webApiEndpointConfiguration = WebApiEndpointConfiguration.Default;
+        builder.Host.ConfigureServices((_, serviceCollection) =>
+        {
+            serviceCollection.AddSingleton(webApiEndpointConfiguration);
+            serviceCollection.AddSingleton<IRequestOpenApiTypeCreator>(new RequestOpenApiTypeCreator());
+        });
+
+        var application = builder.Build();
+
+        var httpMethod = "GET";
+        var route = string.Empty;
+
+        var routeHandlerBuilder = application.MapMethods(route, new[] { httpMethod }, WebApiEndpointExecutor.ExecuteAsync);
+
+        var endpointRouteSecurityBuilder = new EndpointRouteSecurityBuilder();
+        endpointRouteSecurityBuilder.Configure(routeHandlerBuilder, webApiEndpointConfiguration, metadataDefinition);
+
+        var endpointRouteBuilder = application as IEndpointRouteBuilder;
+
+        var dataSource = endpointRouteBuilder.DataSources.OfType<EndpointDataSource>().FirstOrDefault();
+
+        var endpoint = dataSource.Endpoints.OfType<RouteEndpoint>().Single();
+
+        var authorizeAttribute = endpoint.Metadata.GetMetadata<AuthorizeAttribute>();
+        authorizeAttribute.Should().NotBeNull();
+        authorizeAttribute.Policy.Should().Be(AuthorizationExtensions.ToAuthorizationPolicy(metadataDefinition));
+    }
+
+    public record RequestDto;
+
+    public record Request;
+
+    public record ResponseDto;
+
+    public record Response;
+
+    private class CommandApiEndpoint : CommandWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>
+    {
+        protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+            new Response().ToResultOkAsync();
+    }
+}

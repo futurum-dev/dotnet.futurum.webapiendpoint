@@ -1,0 +1,91 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Futurum.WebApiEndpoint", "src\Futurum.WebApiEndpoint\Futurum.WebApiEndpoint.csproj", "{2221E9C6-C1EC-4BC6-941A-5B5C9FEFCE63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Futurum.WebApiEndpoint.Tests", "test\Futurum.WebApiEndpoint.Tests\Futurum.WebApiEndpoint.Tests.csproj", "{DE7BBC41-0672-4F42-B38B-1D58AA384ADD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{9F97ECE0-0F64-4BE2-936C-D1E379715AAD}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		LICENSE = LICENSE
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{8AC12976-B12E-41F3-A121-91A5EC59BABE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Futurum.WebApiEndpoint.Sample", "sample\Futurum.WebApiEndpoint.Sample\Futurum.WebApiEndpoint.Sample.csproj", "{BA30EEA8-9C67-4E54-B974-05C09BC4964D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "benchmark", "benchmark", "{F132ED65-7210-4A8B-B8AF-232C45D82328}"
+	ProjectSection(SolutionItems) = preProject
+		stress-test-webapiendpoint.js = benchmark\k6-stress-test\k6-stress-test-webapiendpoint.js
+		stress-test-minimal-api.js = benchmark\k6-stress-test\k6-stress-test-minimal-api.js
+		stress-test-mvc-controller.js = benchmark\k6-stress-test\k6-stress-test-mvc-controller.js
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Futurum.WebApiEndpoint.Benchmark.Runner", "benchmark\Futurum.WebApiEndpoint.Benchmark.Runner\Futurum.WebApiEndpoint.Benchmark.Runner.csproj", "{20DE1949-91F4-44EE-9785-2EFD2F6308DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Futurum.WebApiEndpoint.Benchmark.WebApiEndpoint", "benchmark\Futurum.WebApiEndpoint.Benchmark.WebApiEndpoint\Futurum.WebApiEndpoint.Benchmark.WebApiEndpoint.csproj", "{FE6D1CA5-A206-4CE0-A3D6-55D6847C12B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Futurum.WebApiEndpoint.Benchmark.MinimalApi", "benchmark\Futurum.WebApiEndpoint.Benchmark.MinimalApi\Futurum.WebApiEndpoint.Benchmark.MinimalApi.csproj", "{D174F51A-4E79-44F2-96EA-35DE6CE2F3DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Futurum.WebApiEndpoint.Benchmark.MvcController", "benchmark\Futurum.WebApiEndpoint.Benchmark.MvcController\Futurum.WebApiEndpoint.Benchmark.MvcController.csproj", "{27EA9761-69CD-4A79-AFEB-E8E15ECB188F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Futurum.WebApiEndpoint.Benchmark.WebApiEndpoint.TestRunner", "benchmark\Futurum.WebApiEndpoint.Benchmark.WebApiEndpoint.TestRunner\Futurum.WebApiEndpoint.Benchmark.WebApiEndpoint.TestRunner.csproj", "{B45694E5-DD22-41EF-A5A7-075E0C287A8F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{110660FF-86EE-49A4-9375-7A2208005A64}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = src\Directory.Build.props
+		ci.yml = .github\workflows\ci.yml
+		release.yml = .github\workflows\release.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{83AF92D9-CB8A-430A-A689-CFA99056CCD5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2221E9C6-C1EC-4BC6-941A-5B5C9FEFCE63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2221E9C6-C1EC-4BC6-941A-5B5C9FEFCE63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2221E9C6-C1EC-4BC6-941A-5B5C9FEFCE63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2221E9C6-C1EC-4BC6-941A-5B5C9FEFCE63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE7BBC41-0672-4F42-B38B-1D58AA384ADD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE7BBC41-0672-4F42-B38B-1D58AA384ADD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE7BBC41-0672-4F42-B38B-1D58AA384ADD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE7BBC41-0672-4F42-B38B-1D58AA384ADD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA30EEA8-9C67-4E54-B974-05C09BC4964D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA30EEA8-9C67-4E54-B974-05C09BC4964D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA30EEA8-9C67-4E54-B974-05C09BC4964D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA30EEA8-9C67-4E54-B974-05C09BC4964D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20DE1949-91F4-44EE-9785-2EFD2F6308DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20DE1949-91F4-44EE-9785-2EFD2F6308DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20DE1949-91F4-44EE-9785-2EFD2F6308DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20DE1949-91F4-44EE-9785-2EFD2F6308DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE6D1CA5-A206-4CE0-A3D6-55D6847C12B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE6D1CA5-A206-4CE0-A3D6-55D6847C12B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE6D1CA5-A206-4CE0-A3D6-55D6847C12B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE6D1CA5-A206-4CE0-A3D6-55D6847C12B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D174F51A-4E79-44F2-96EA-35DE6CE2F3DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D174F51A-4E79-44F2-96EA-35DE6CE2F3DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D174F51A-4E79-44F2-96EA-35DE6CE2F3DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D174F51A-4E79-44F2-96EA-35DE6CE2F3DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27EA9761-69CD-4A79-AFEB-E8E15ECB188F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27EA9761-69CD-4A79-AFEB-E8E15ECB188F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27EA9761-69CD-4A79-AFEB-E8E15ECB188F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27EA9761-69CD-4A79-AFEB-E8E15ECB188F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B45694E5-DD22-41EF-A5A7-075E0C287A8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B45694E5-DD22-41EF-A5A7-075E0C287A8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B45694E5-DD22-41EF-A5A7-075E0C287A8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B45694E5-DD22-41EF-A5A7-075E0C287A8F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BA30EEA8-9C67-4E54-B974-05C09BC4964D} = {8AC12976-B12E-41F3-A121-91A5EC59BABE}
+		{20DE1949-91F4-44EE-9785-2EFD2F6308DC} = {F132ED65-7210-4A8B-B8AF-232C45D82328}
+		{FE6D1CA5-A206-4CE0-A3D6-55D6847C12B3} = {F132ED65-7210-4A8B-B8AF-232C45D82328}
+		{D174F51A-4E79-44F2-96EA-35DE6CE2F3DF} = {F132ED65-7210-4A8B-B8AF-232C45D82328}
+		{27EA9761-69CD-4A79-AFEB-E8E15ECB188F} = {F132ED65-7210-4A8B-B8AF-232C45D82328}
+		{B45694E5-DD22-41EF-A5A7-075E0C287A8F} = {F132ED65-7210-4A8B-B8AF-232C45D82328}
+		{DE7BBC41-0672-4F42-B38B-1D58AA384ADD} = {83AF92D9-CB8A-430A-A689-CFA99056CCD5}
+	EndGlobalSection
+EndGlobal
