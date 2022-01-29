@@ -74,7 +74,7 @@ public static class AuthorizationExtensions
         {
             foreach (var claimDefinition in metadataSecurityDefinition.ClaimDefinitions)
             {
-                builder.RequireAssertion(claimDefinition.Handler);
+                builder.RequireAssertion(claimDefinition.ClaimChecker.Execute);
             }
         }
     }

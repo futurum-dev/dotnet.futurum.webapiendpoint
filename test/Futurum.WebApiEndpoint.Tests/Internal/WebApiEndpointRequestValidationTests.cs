@@ -7,7 +7,7 @@ using Futurum.WebApiEndpoint.Internal;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Futurum.WebApiEndpoint.Tests;
+namespace Futurum.WebApiEndpoint.Tests.Internal;
 
 public class WebApiEndpointRequestValidationTests
 {

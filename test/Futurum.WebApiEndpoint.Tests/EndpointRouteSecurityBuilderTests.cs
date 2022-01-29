@@ -1,5 +1,3 @@
-using System.Collections.Immutable;
-
 using FluentAssertions;
 
 using Futurum.Core.Option;
@@ -116,9 +114,9 @@ public class EndpointRouteSecurityBuilderTests
     [Fact]
     public void when_route_MetadataSecurityDefinition_is_specified_and_Configuration_SecureByDefault_is_true_configures_Authorize_with_policy()
     {
-        var securityDefinition = new MetadataSecurityDefinition(new List<MetadataSecurityPermissionDefinition>().ToImmutableList(),
-                                                                new List<MetadataSecurityRoleDefinition>().ToImmutableList(),
-                                                                new List<MetadataSecurityClaimDefinition>().ToImmutableList());
+        var securityDefinition = new MetadataSecurityDefinition(new List<MetadataSecurityPermissionDefinition>(),
+                                                                new List<MetadataSecurityRoleDefinition>(),
+                                                                new List<MetadataSecurityClaimDefinition>());
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Post, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false,
                                                                   Option<Action<RouteHandlerBuilder>>.None, securityDefinition);
 

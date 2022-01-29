@@ -20,7 +20,7 @@ using Microsoft.Extensions.Options;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Futurum.WebApiEndpoint.Tests;
+namespace Futurum.WebApiEndpoint.Tests.Internal;
 
 public class WebApiEndpointHttpContextDispatcherTests
 {

@@ -9,13 +9,13 @@ public interface IWebApiEndpointDefinition
     /// <summary>
     /// Configure a WebApiEndpoint Query
     /// </summary>
-    IWebApiEndpointDefinition Query<TWebApiEndpoint>(Action<QueryMetadataRouteDefinitionBuilder> builderFunc)
+    IWebApiEndpointDefinition Query<TWebApiEndpoint>(Action<QueryMetadataRouteDefinitionInitialBuilder> builderFunc)
         where TWebApiEndpoint : IQueryWebApiEndpoint;
 
     /// <summary>
     /// Configure a WebApiEndpoint Command
     /// </summary>
-    IWebApiEndpointDefinition Command<TWebApiEndpoint>(Action<CommandMetadataRouteDefinitionBuilder> builderFunc)
+    IWebApiEndpointDefinition Command<TWebApiEndpoint>(Action<CommandMetadataRouteDefinitionInitialBuilder> builderFunc)
         where TWebApiEndpoint : ICommandWebApiEndpoint;
 }
 
@@ -29,7 +29,7 @@ public class WebApiEndpointDefinition : IWebApiEndpointDefinition, IApiEndpointD
 
     ApiEndpointDebugNode IApiEndpointDefinitionBuilder.Debug()
     {
-        return new ApiEndpointDebugNode
+        return new()
         {
             Name = "ApiEndpointDefinition",
             Children =
@@ -44,10 +44,10 @@ public class WebApiEndpointDefinition : IWebApiEndpointDefinition, IApiEndpointD
     }
 
     /// <inheritdoc />
-    public IWebApiEndpointDefinition Query<TWebApiEndpoint>(Action<QueryMetadataRouteDefinitionBuilder> builderFunc)
+    public IWebApiEndpointDefinition Query<TWebApiEndpoint>(Action<QueryMetadataRouteDefinitionInitialBuilder> builderFunc)
         where TWebApiEndpoint : IQueryWebApiEndpoint
     {
-        var builder = new QueryMetadataRouteDefinitionBuilder(typeof(TWebApiEndpoint));
+        var builder = new QueryMetadataRouteDefinitionInitialBuilder(typeof(TWebApiEndpoint));
 
         var key = typeof(TWebApiEndpoint);
         var hasRun = false;
@@ -70,17 +70,17 @@ public class WebApiEndpointDefinition : IWebApiEndpointDefinition, IApiEndpointD
         }
         else
         {
-            _builders.Add(key, new List<Func<IMetadataRouteDefinitionBuilder>> { value });
+            _builders.Add(key, new() { value });
         }
 
         return this;
     }
 
     /// <inheritdoc />
-    public IWebApiEndpointDefinition Command<TWebApiEndpoint>(Action<CommandMetadataRouteDefinitionBuilder> builderFunc)
+    public IWebApiEndpointDefinition Command<TWebApiEndpoint>(Action<CommandMetadataRouteDefinitionInitialBuilder> builderFunc)
         where TWebApiEndpoint : ICommandWebApiEndpoint
     {
-        var builder = new CommandMetadataRouteDefinitionBuilder(typeof(TWebApiEndpoint));
+        var builder = new CommandMetadataRouteDefinitionInitialBuilder(typeof(TWebApiEndpoint));
 
         var key = typeof(TWebApiEndpoint);
         var hasRun = false;
@@ -103,7 +103,7 @@ public class WebApiEndpointDefinition : IWebApiEndpointDefinition, IApiEndpointD
         }
         else
         {
-            _builders.Add(key, new List<Func<IMetadataRouteDefinitionBuilder>> { value });
+            _builders.Add(key, new() { value });
         }
 
         return this;
