@@ -80,6 +80,8 @@ public class WebApiEndpointAndMapperModule : IModule
         RegisterMapper(services, assembliesIncludingLibrary, typeof(IWebApiEndpointDataMapper<,>));
 
         RegisterRequestPlainTextMapper(services, assemblies);
+        
+        RegisterRequestUploadFilesMapper(services, assemblies);
 
         RegisterResponseAsyncEnumerableMapper(services, assemblies);
 
@@ -135,6 +137,24 @@ public class WebApiEndpointAndMapperModule : IModule
             var requestPlainTextMapperInterfaceType = typeof(IWebApiEndpointRequestMapper<,>).MakeGenericType(typeof(RequestPlainTextDto), requestPlainTextType);
 
             services.AddSingleton(requestPlainTextMapperInterfaceType, requestPlainTextMapperType);
+        }
+    }
+
+    private static void RegisterRequestUploadFilesMapper(IServiceCollection services, IEnumerable<Assembly> assemblies)
+    {
+        var metadataTypeDefinitions = assemblies.SelectMany(assembly => assembly.GetTypes())
+                                                .SelectMany(GetApiEndpointMetadataTypeDefinitions)
+                                                .Where(metadataTypeDefinition => metadataTypeDefinition.RequestDtoType == typeof(RequestUploadFilesDto));
+
+        foreach (var metadataTypeDefinition in metadataTypeDefinitions)
+        {
+            var requestUploadFilesMapperType = typeof(RequestUploadFilesMapper<>).MakeGenericType(metadataTypeDefinition.WebApiEndpointType);
+
+            var requestUploadFilesType = typeof(RequestUploadFiles<>).MakeGenericType(metadataTypeDefinition.WebApiEndpointType);
+
+            var requestUploadFilesMapperInterfaceType = typeof(IWebApiEndpointRequestMapper<,>).MakeGenericType(typeof(RequestUploadFilesDto), requestUploadFilesType);
+
+            services.AddSingleton(requestUploadFilesMapperInterfaceType, requestUploadFilesMapperType);
         }
     }
 

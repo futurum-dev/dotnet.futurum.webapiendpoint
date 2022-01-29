@@ -23,7 +23,7 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
     public MetadataRouteDefinitionBuilder Post(string route)
     {
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Post, route, null, new(),
-                                                                  null, 201, 400, false, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                  null, 201, 400, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
         var metadataRouteDefinitionBuilder = new MetadataRouteDefinitionBuilder(_apiEndpointType, metadataRouteDefinition);
         _metadataRouteDefinitionBuilder = metadataRouteDefinitionBuilder;
@@ -37,7 +37,7 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
     {
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Post, route, null,
                                                                   parameterDefinitions.Select(x => new MetadataRouteParameterDefinition(x.name, x.type)).ToList(),
-                                                                  null, 201, 400, false, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                  null, 201, 400, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
         
         var metadataRouteDefinitionBuilder = new MetadataRouteDefinitionBuilder(_apiEndpointType, metadataRouteDefinition);
         _metadataRouteDefinitionBuilder = metadataRouteDefinitionBuilder;
@@ -50,7 +50,7 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
     public MetadataRouteDefinitionBuilder Put(string route)
     {
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Put, route, null, new(),
-                                                                  null, 201, 404, false, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                  null, 201, 404, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
         
         var metadataRouteDefinitionBuilder = new MetadataRouteDefinitionBuilder(_apiEndpointType, metadataRouteDefinition);
         _metadataRouteDefinitionBuilder = metadataRouteDefinitionBuilder;
@@ -64,7 +64,7 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
     {
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Put, route, null,
                                                                   parameterDefinitions.Select(x => new MetadataRouteParameterDefinition(x.name, x.type)).ToList(),
-                                                                  null, 201, 404, false, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                  null, 201, 404, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
         
         var metadataRouteDefinitionBuilder = new MetadataRouteDefinitionBuilder(_apiEndpointType, metadataRouteDefinition);
         _metadataRouteDefinitionBuilder = metadataRouteDefinitionBuilder;
@@ -77,7 +77,7 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
     public MetadataRouteDefinitionBuilder Patch(string route)
     {
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Patch, route, null, new(),
-                                                                  null, 200, 404, false, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                  null, 200, 404, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
         
         var metadataRouteDefinitionBuilder = new MetadataRouteDefinitionBuilder(_apiEndpointType, metadataRouteDefinition);
         _metadataRouteDefinitionBuilder = metadataRouteDefinitionBuilder;
@@ -91,7 +91,7 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
     {
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Patch, route, null,
                                                                   parameterDefinitions.Select(x => new MetadataRouteParameterDefinition(x.name, x.type)).ToList(),
-                                                                  null, 200, 404, false, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                  null, 200, 404, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
         
         var metadataRouteDefinitionBuilder = new MetadataRouteDefinitionBuilder(_apiEndpointType, metadataRouteDefinition);
         _metadataRouteDefinitionBuilder = metadataRouteDefinitionBuilder;
@@ -104,7 +104,7 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
     public MetadataRouteDefinitionBuilder Delete(string route)
     {
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Delete, route, null, new(),
-                                                                  null, 200, 404, false, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                  null, 200, 404, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
         
         var metadataRouteDefinitionBuilder = new MetadataRouteDefinitionBuilder(_apiEndpointType, metadataRouteDefinition);
         _metadataRouteDefinitionBuilder = metadataRouteDefinitionBuilder;
@@ -118,7 +118,7 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
     {
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Delete, route, null,
                                                                   parameterDefinitions.Select(x => new MetadataRouteParameterDefinition(x.name, x.type)).ToList(),
-                                                                  null, 200, 404, false, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                  null, 200, 404, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
         
         var metadataRouteDefinitionBuilder = new MetadataRouteDefinitionBuilder(_apiEndpointType, metadataRouteDefinition);
         _metadataRouteDefinitionBuilder = metadataRouteDefinitionBuilder;

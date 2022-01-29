@@ -30,7 +30,7 @@ public class EndpointRouteBuilderExtensionsTests
     {
         var route = "test-route-123";
 
-        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, route, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false,
+        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, route, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                   Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
         var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
@@ -67,7 +67,7 @@ public class EndpointRouteBuilderExtensionsTests
     [Fact]
     public void check_MetadataDefinition_is_set_in_Metadata()
     {
-        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route-123", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false,
+        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route-123", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                   Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
         var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
@@ -104,7 +104,7 @@ public class EndpointRouteBuilderExtensionsTests
     [Fact]
     public void check_other_EndpointRoute_Builders_are_called()
     {
-        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route-123", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false,
+        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route-123", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                   Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
         var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
@@ -170,7 +170,7 @@ public class EndpointRouteBuilderExtensionsTests
 
         private static void TestRunner(MetadataRouteHttpMethod httpMethod)
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(httpMethod, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(httpMethod, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),

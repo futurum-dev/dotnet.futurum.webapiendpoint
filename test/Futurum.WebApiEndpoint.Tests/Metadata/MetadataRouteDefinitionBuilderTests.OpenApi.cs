@@ -23,7 +23,7 @@ public class MetadataRouteDefinitionBuilderOpenApiTests
             var summary = Guid.NewGuid().ToString();
             
             var metadataRouteOpenApiOperation = new MetadataRouteOpenApiOperation(summary, string.Empty);
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), metadataRouteOpenApiOperation, 0, 0, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), metadataRouteOpenApiOperation, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition)
@@ -40,7 +40,7 @@ public class MetadataRouteDefinitionBuilderOpenApiTests
         [Fact]
         public void when_not_specified()
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition);
@@ -62,7 +62,7 @@ public class MetadataRouteDefinitionBuilderOpenApiTests
             var description = Guid.NewGuid().ToString();
             
             var metadataRouteOpenApiOperation = new MetadataRouteOpenApiOperation(string.Empty, description);
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), metadataRouteOpenApiOperation, 0, 0, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), metadataRouteOpenApiOperation, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition)
@@ -79,7 +79,7 @@ public class MetadataRouteDefinitionBuilderOpenApiTests
         [Fact]
         public void when_not_specified()
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition);

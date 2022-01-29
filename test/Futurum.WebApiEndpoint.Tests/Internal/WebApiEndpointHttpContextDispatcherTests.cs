@@ -50,6 +50,47 @@ public class WebApiEndpointHttpContextDispatcherTests
                 result.ShouldBeSuccessWithValue(new RequestPlainTextDto(message));
             }
         }
+        
+        public class RequestUploadFiles
+        {
+            [Fact]
+            public async Task success()
+            {
+                await using var file = File.OpenRead("./Data/hello-world.txt");
+        
+                var formFile = new FormFile(file, 0, file.Length, "hello-world.txt", "hello-world.txt");
+
+                var webApiEndpointHttpContextDispatcher = new WebApiEndpointHttpContextDispatcher(Options.Create(new JsonOptions()));
+
+                var httpContext = new DefaultHttpContext();
+                httpContext.Request.Form = new FormCollection(null, new FormFileCollection { formFile });
+
+                var result = await webApiEndpointHttpContextDispatcher.ReadRequestAsync<RequestUploadFilesDto>(httpContext, null, CancellationToken.None);
+
+                result.ShouldBeSuccessWithValueAssertion(x =>
+                {
+                    x.Files.Count().Should().Be(1);
+
+                    var formFile = x.Files.Single();
+
+                    formFile.Name.Should().Be("hello-world.txt");
+                    formFile.FileName.Should().Be("hello-world.txt");
+                    formFile.Length.Should().Be(file.Length);
+                });
+            }
+            
+            [Fact]
+            public async Task failure()
+            {
+                var webApiEndpointHttpContextDispatcher = new WebApiEndpointHttpContextDispatcher(Options.Create(new JsonOptions()));
+
+                var httpContext = new DefaultHttpContext();
+
+                var result = await webApiEndpointHttpContextDispatcher.ReadRequestAsync<RequestUploadFilesDto>(httpContext, null, CancellationToken.None);
+
+                result.ShouldBeFailureWithError("Failed to read upload files");
+            }
+        }
 
         public class Json
         {
@@ -164,7 +205,7 @@ public class WebApiEndpointHttpContextDispatcherTests
         public async Task success()
         {
             MetadataRouteDefinition metadataRouteDefinition =
-                new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false, Option<Action<RouteHandlerBuilder>>.None, null);
+                new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, Option<Action<RouteHandlerBuilder>>.None, null);
 
             var webApiEndpointHttpContextDispatcher = new WebApiEndpointHttpContextDispatcher(Options.Create(new JsonOptions()));
 
@@ -199,7 +240,7 @@ public class WebApiEndpointHttpContextDispatcherTests
                 var responseDto = new ResponseStreamDto(new FileInfo("./Data/hello-world.txt").OpenRead(), MediaTypeNames.Application.Octet);
 
                 MetadataRouteDefinition metadataRouteDefinition =
-                    new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false, Option<Action<RouteHandlerBuilder>>.None, null);
+                    new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, Option<Action<RouteHandlerBuilder>>.None, null);
 
                 var result = await webApiEndpointHttpContextDispatcher.HandleSuccessResponseAsync(httpContext, responseDto, metadataRouteDefinition, CancellationToken.None);
 
@@ -236,7 +277,7 @@ public class WebApiEndpointHttpContextDispatcherTests
                 var responseDto = new ResponseFileStreamDto(new FileInfo("./Data/hello-world.txt"), MediaTypeNames.Application.Octet);
 
                 MetadataRouteDefinition metadataRouteDefinition =
-                    new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false, Option<Action<RouteHandlerBuilder>>.None, null);
+                    new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, Option<Action<RouteHandlerBuilder>>.None, null);
 
                 var result = await webApiEndpointHttpContextDispatcher.HandleSuccessResponseAsync(httpContext, responseDto, metadataRouteDefinition, CancellationToken.None);
 
@@ -273,7 +314,7 @@ public class WebApiEndpointHttpContextDispatcherTests
                 var responseDto = new ResponseBytesDto(sentBytes, MediaTypeNames.Application.Octet);
 
                 MetadataRouteDefinition metadataRouteDefinition =
-                    new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false, Option<Action<RouteHandlerBuilder>>.None, null);
+                    new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, Option<Action<RouteHandlerBuilder>>.None, null);
 
                 var result = await webApiEndpointHttpContextDispatcher.HandleSuccessResponseAsync(httpContext, responseDto, metadataRouteDefinition, CancellationToken.None);
 
@@ -308,7 +349,7 @@ public class WebApiEndpointHttpContextDispatcherTests
                 var responseDto = new ResponseAsyncEnumerableDto<int>(AsyncEnumerable(numbers));
 
                 MetadataRouteDefinition metadataRouteDefinition =
-                    new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false, Option<Action<RouteHandlerBuilder>>.None, null);
+                    new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, Option<Action<RouteHandlerBuilder>>.None, null);
 
                 var result = await webApiEndpointHttpContextDispatcher.HandleSuccessResponseAsync(httpContext, responseDto, metadataRouteDefinition, CancellationToken.None);
 
@@ -350,7 +391,7 @@ public class WebApiEndpointHttpContextDispatcherTests
                 var responseDto = new ResponseEmptyJsonDto();
 
                 MetadataRouteDefinition metadataRouteDefinition =
-                    new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false, Option<Action<RouteHandlerBuilder>>.None, null);
+                    new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, Option<Action<RouteHandlerBuilder>>.None, null);
 
                 var result = await webApiEndpointHttpContextDispatcher.HandleSuccessResponseAsync(httpContext, responseDto, metadataRouteDefinition, CancellationToken.None);
 
@@ -385,7 +426,7 @@ public class WebApiEndpointHttpContextDispatcherTests
                 var responseDto = new ResponseDto(Guid.NewGuid().ToString(), 10);
 
                 MetadataRouteDefinition metadataRouteDefinition =
-                    new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false, Option<Action<RouteHandlerBuilder>>.None, null);
+                    new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, Option<Action<RouteHandlerBuilder>>.None, null);
 
                 var result = await webApiEndpointHttpContextDispatcher.HandleSuccessResponseAsync(httpContext, responseDto, metadataRouteDefinition, CancellationToken.None);
 
@@ -420,7 +461,7 @@ public class WebApiEndpointHttpContextDispatcherTests
             httpContext.Response.Body = new MemoryStream();
 
             MetadataRouteDefinition metadataRouteDefinition =
-                new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false, Option<Action<RouteHandlerBuilder>>.None, null);
+                new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, Option<Action<RouteHandlerBuilder>>.None, null);
 
             var result = await webApiEndpointHttpContextDispatcher.HandleFailedResponseAsync(httpContext, resultError, metadataRouteDefinition, CancellationToken.None);
 

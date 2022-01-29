@@ -24,8 +24,7 @@ public class MetadataRouteDefinitionBuilderAuthorizationTests
         public void when_specified()
         {
             var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0,
-                                                                      0, false,
-                                                                      Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                      0, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition)
                 .AllowAnonymousAuthorization();
@@ -41,7 +40,7 @@ public class MetadataRouteDefinitionBuilderAuthorizationTests
         [Fact]
         public void when_not_specified()
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition);
@@ -61,8 +60,7 @@ public class MetadataRouteDefinitionBuilderAuthorizationTests
         public void when_specified()
         {
             var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0,
-                                                                      0, false,
-                                                                      Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                      0, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition)
                 .RequireAuthorization();
@@ -81,7 +79,7 @@ public class MetadataRouteDefinitionBuilderAuthorizationTests
         [Fact]
         public void when_not_specified()
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition);
@@ -105,8 +103,7 @@ public class MetadataRouteDefinitionBuilderAuthorizationTests
                                         .ToList();
 
             var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0,
-                                                                      0, false,
-                                                                      Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                      0, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition)
                 .RequirePermissionAuthorization(permissions.ToArray());
@@ -126,7 +123,7 @@ public class MetadataRouteDefinitionBuilderAuthorizationTests
         [Fact]
         public void when_not_specified()
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition);
@@ -149,8 +146,7 @@ public class MetadataRouteDefinitionBuilderAuthorizationTests
             var claim = Guid.NewGuid().ToString();
         
             var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 0,
-                                                                      0, false,
-                                                                      Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                      0, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
         
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition)
                 .RequireClaimAuthorization(claimType, claim);
@@ -184,8 +180,7 @@ public class MetadataRouteDefinitionBuilderAuthorizationTests
                                          .ToList();
         
             var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 0,
-                                                                      0, false,
-                                                                      Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                      0, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
         
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition)
                 .RequireClaimAuthorization(claimRecords.Select(claimRecord => (claimRecord.Type, claimRecord.Name)).ToArray());
@@ -217,8 +212,7 @@ public class MetadataRouteDefinitionBuilderAuthorizationTests
             var handler = (AuthorizationHandlerContext authorizationHandlerContext) => true;
 
             var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0,
-                                                                      0, false,
-                                                                      Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                      0, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition)
                 .RequireClaimAuthorization(handler);
@@ -247,7 +241,7 @@ public class MetadataRouteDefinitionBuilderAuthorizationTests
         [Fact]
         public void when_not_specified()
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition);
@@ -271,8 +265,7 @@ public class MetadataRouteDefinitionBuilderAuthorizationTests
                                         .ToList();
 
             var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0,
-                                                                      0, false,
-                                                                      Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                      0, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition)
                 .RequireRoleAuthorization(roles.ToArray());
@@ -292,7 +285,7 @@ public class MetadataRouteDefinitionBuilderAuthorizationTests
         [Fact]
         public void when_not_specified()
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition);

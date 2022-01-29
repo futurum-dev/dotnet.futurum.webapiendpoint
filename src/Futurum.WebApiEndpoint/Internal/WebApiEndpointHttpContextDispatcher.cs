@@ -36,6 +36,12 @@ internal class WebApiEndpointHttpContextDispatcher : IWebApiEndpointHttpContextD
             return httpContext.Request.ReadPlainTextBodyAsync()
                               .MapAsync(body => new RequestPlainTextDto(body) as TRequestDto);
         }
+        
+        if (typeof(TRequestDto) == typeof(RequestUploadFilesDto))
+        {
+            return httpContext.Request.ReadUploadFilesAsync()
+                              .MapAsync(files => new RequestUploadFilesDto(files) as TRequestDto);
+        }
 
         if (httpContext.Request.HasJsonContentType() && httpContext.Request.ContentLength > 0)
         {

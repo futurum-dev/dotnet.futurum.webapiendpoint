@@ -29,7 +29,7 @@ public class EndpointRouteSecurityBuilderTests
     [Fact]
     public void when_route_MetadataSecurityDefinition_is_not_specified_and_Configuration_SecureByDefault_is_false_configures_AllowAnonymous()
     {
-        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Post, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false,
+        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Post, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                   Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
         var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
@@ -71,7 +71,7 @@ public class EndpointRouteSecurityBuilderTests
     [Fact]
     public void when_route_MetadataSecurityDefinition_is_not_specified_and_Configuration_SecureByDefault_is_true_configures_Authorize_without_policy()
     {
-        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Post, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false,
+        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Post, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                   Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
         var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
@@ -117,7 +117,7 @@ public class EndpointRouteSecurityBuilderTests
         var securityDefinition = new MetadataSecurityDefinition(new List<MetadataSecurityPermissionDefinition>(),
                                                                 new List<MetadataSecurityRoleDefinition>(),
                                                                 new List<MetadataSecurityClaimDefinition>());
-        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Post, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false,
+        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Post, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                   Option<Action<RouteHandlerBuilder>>.None, securityDefinition);
 
         var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),

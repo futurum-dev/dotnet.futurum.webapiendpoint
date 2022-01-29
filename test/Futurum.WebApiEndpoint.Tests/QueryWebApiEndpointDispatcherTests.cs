@@ -48,7 +48,7 @@ public class QueryWebApiEndpointDispatcherTests
     public record Response;
 
     private static readonly MetadataRouteDefinition MetadataRouteDefinition =
-        new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false, Option<Action<RouteHandlerBuilder>>.None, null);
+        new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, Option<Action<RouteHandlerBuilder>>.None, null);
 
     public class QueryWithoutRequestWithResponse
     {

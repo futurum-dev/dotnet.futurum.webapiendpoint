@@ -47,6 +47,21 @@ public class EndpointRouteOpenApiBuilderTests
         }
 
         [Fact]
+        public void RequestUploadFilesDto()
+        {
+            var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestUploadFilesDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+                                                                    typeof(ICommandWebApiEndpoint<RequestUploadFilesDto, ResponseDto, Request, Response>),
+                                                                    typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
+                                                                    typeof(CommandWebApiEndpointDispatcher<RequestUploadFilesDto, ResponseDto, Request, Response>));
+            var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
+
+            var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition);
+
+            endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be<RequestUploadFilesDto>();
+            endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be("multipart/form-data");
+        }
+
+        [Fact]
         public void RequestDto_without_MapFrom()
         {
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
@@ -82,27 +97,9 @@ public class EndpointRouteOpenApiBuilderTests
             endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
         }
 
-        [Fact]
-        public void RequestDto_AllowFileUploads()
-        {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, true,
-                                                                      Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
-
-            var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response>),
-                                                                    typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response>));
-            var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
-
-            var (_, endpoint) = TestRunner(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
-
-            endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be<RequestDto>();
-            endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be("multipart/form-data");
-        }
-
         private static (IServiceProvider serviceProvider, RouteEndpoint routeEndpoint) TestRunner(MetadataTypeDefinition metadataTypeDefinition, MetadataMapFromDefinition metadataMapFromDefinition)
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             return TestRunner(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
@@ -147,7 +144,7 @@ public class EndpointRouteOpenApiBuilderTests
         [Fact]
         public void IResponseStreamDto()
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(TestRequestStreamDto), typeof(CommandApiEndpoint),
@@ -166,7 +163,7 @@ public class EndpointRouteOpenApiBuilderTests
         [Fact]
         public void ResponseAsyncEnumerableDto()
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseAsyncEnumerableDto<int>), typeof(CommandApiEndpoint),
@@ -185,7 +182,7 @@ public class EndpointRouteOpenApiBuilderTests
         [Fact]
         public void NotEmptyResponseDto()
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
@@ -255,7 +252,7 @@ public class EndpointRouteOpenApiBuilderTests
 
         private static (IServiceProvider serviceProvider, RouteEndpoint routeEndpoint) TestRunner(MetadataTypeDefinition metadataTypeDefinition, MetadataMapFromDefinition metadataMapFromDefinition)
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
