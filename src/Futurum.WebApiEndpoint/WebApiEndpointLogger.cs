@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 using Futurum.ApiEndpoint;
 using Futurum.Core.Result;
 
@@ -14,6 +16,7 @@ public interface IWebApiEndpointLogger : IApiEndpointLogger
     void Error(string path, IResultError error);
 }
 
+[ExcludeFromCodeCoverage]
 internal class WebApiEndpointLogger : IWebApiEndpointLogger
 {
     private readonly ILogger _logger;

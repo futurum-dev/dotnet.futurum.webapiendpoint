@@ -23,7 +23,7 @@ using Moq;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Futurum.WebApiEndpoint.Tests;
+namespace Futurum.WebApiEndpoint.Tests.Internal;
 
 public class WebApiEndpointExecutorServiceTests
 {
