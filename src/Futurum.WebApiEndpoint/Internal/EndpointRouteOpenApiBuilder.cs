@@ -31,7 +31,7 @@ internal class EndpointRouteOpenApiBuilder : IEndpointRouteOpenApiBuilder
 
     private void ConfigureAccepts(RouteHandlerBuilder routeHandlerBuilder, MetadataDefinition metadataDefinition)
     {
-        var (metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition) = metadataDefinition;
+        var (_, metadataTypeDefinition, metadataMapFromDefinition) = metadataDefinition;
 
         var requestDtoType = metadataTypeDefinition.RequestDtoType;
 
@@ -39,7 +39,11 @@ internal class EndpointRouteOpenApiBuilder : IEndpointRouteOpenApiBuilder
         {
             routeHandlerBuilder.Accepts(typeof(EmptyRequestDto), MediaTypeNames.Text.Plain);
         }
-        else if (requestDtoType != typeof(EmptyRequestDto) && !metadataRouteDefinition.AllowFileUploads)
+        else if (requestDtoType == typeof(RequestUploadFilesDto))
+        {
+            routeHandlerBuilder.Accepts(requestDtoType, "multipart/form-data");
+        }
+        else if (requestDtoType != typeof(EmptyRequestDto))
         {
             if (metadataMapFromDefinition != null && metadataMapFromDefinition.MapFromParameterDefinitions.Any())
             {
@@ -54,10 +58,6 @@ internal class EndpointRouteOpenApiBuilder : IEndpointRouteOpenApiBuilder
             {
                 routeHandlerBuilder.Accepts(requestDtoType, MediaTypeNames.Application.Json);
             }
-        }
-        else if (requestDtoType != typeof(EmptyRequestDto) && metadataRouteDefinition.AllowFileUploads)
-        {
-            routeHandlerBuilder.Accepts(requestDtoType, "multipart/form-data");
         }
     }
 

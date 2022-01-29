@@ -22,7 +22,7 @@ public class MetadataRouteDefinitionBuilderStatusCodeTests
         [Fact]
         public void when_number_specified()
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             var statusCode = 100;
@@ -41,7 +41,7 @@ public class MetadataRouteDefinitionBuilderStatusCodeTests
         [Fact]
         public void when_enum_specified()
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition)
@@ -58,7 +58,7 @@ public class MetadataRouteDefinitionBuilderStatusCodeTests
         [Fact]
         public void when_not_specified()
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition);
@@ -77,7 +77,7 @@ public class MetadataRouteDefinitionBuilderStatusCodeTests
         [Fact]
         public void when_number_specified()
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             var statusCode = 100;
@@ -96,7 +96,7 @@ public class MetadataRouteDefinitionBuilderStatusCodeTests
         [Fact]
         public void when_enum_specified()
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition)
@@ -113,7 +113,7 @@ public class MetadataRouteDefinitionBuilderStatusCodeTests
         [Fact]
         public void when_not_specified()
         {
-            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0, false,
+            var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition);

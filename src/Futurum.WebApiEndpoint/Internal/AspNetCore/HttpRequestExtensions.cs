@@ -14,4 +14,18 @@ internal static class HttpRequestExtensions
 
         return Result.TryAsync(Execute, () => "Failed to read request as plain text");
     }
+    
+    public static Task<Result<IEnumerable<IFormFile>>> ReadUploadFilesAsync(this HttpRequest httpRequest)
+    {
+        async Task<IEnumerable<IFormFile>> Execute()
+        {
+            var form = await httpRequest.ReadFormAsync();
+            return form.Files.ToList();
+        }
+
+        if (!httpRequest.HasFormContentType)
+            return Result.FailAsync<IEnumerable<IFormFile>>("Failed to read upload files");
+
+        return Result.TryAsync(Execute, () => "Failed to read upload files");
+    }
 }

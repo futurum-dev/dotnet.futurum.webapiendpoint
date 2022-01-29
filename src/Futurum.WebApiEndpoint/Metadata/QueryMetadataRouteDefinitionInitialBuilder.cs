@@ -23,7 +23,7 @@ public class QueryMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefiniti
     public MetadataRouteDefinitionBuilder Route(string route)
     {
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, route, null, new(),
-                                                                  null, 200, 503, false, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                  null, 200, 503, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
         var metadataRouteDefinitionBuilder = new MetadataRouteDefinitionBuilder(_apiEndpointType, metadataRouteDefinition);
         _metadataRouteDefinitionBuilder = metadataRouteDefinitionBuilder;
@@ -37,7 +37,7 @@ public class QueryMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefiniti
     {
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, route, null,
                                                                   parameterDefinitions.Select(x => new MetadataRouteParameterDefinition(x.name, x.type)).ToList(),
-                                                                  null, 200, 404, false, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                  null, 200, 404, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
         
         var metadataRouteDefinitionBuilder = new MetadataRouteDefinitionBuilder(_apiEndpointType, metadataRouteDefinition);
         _metadataRouteDefinitionBuilder = metadataRouteDefinitionBuilder;

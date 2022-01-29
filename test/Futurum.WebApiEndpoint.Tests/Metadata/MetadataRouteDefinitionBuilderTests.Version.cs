@@ -19,7 +19,7 @@ public class MetadataRouteDefinitionBuilderVersionTests
     [Fact]
     public void when_specified()
     {
-        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0, false,
+        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0,
                                                                   Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
         var apiVersion = new ApiVersion(2, 1);
@@ -38,7 +38,7 @@ public class MetadataRouteDefinitionBuilderVersionTests
     [Fact]
     public void when_not_specified()
     {
-        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0, false,
+        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), null, 0, 0,
                                                                   Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
         IMetadataRouteDefinitionBuilder builder = new MetadataRouteDefinitionBuilder(typeof(ApiEndpoint), metadataRouteDefinition);

@@ -65,6 +65,16 @@ public class ApiEndpointDefinition : IApiEndpointDefinition
                          .Command<CommandWithRequestPlainTextWithResponseFileStreamWithContentTypeScenario.ApiEndpoint>(builder => builder.Post("command-with-request-plain-text-with-response-file-stream-with-content-type"))
                          .Command<CommandWithRequestPlainTextWithResponseStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-plain-text-with-response-stream"))
                          
+                         .Command<CommandWithRequestUploadFilesWithoutResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-with-response"))
+                         .Command<CommandWithRequestUploadFilesWithoutResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-without-response"))
+                         .Command<CommandWithRequestUploadFilesWithResponseAsyncEnumerableScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-with-response-async-enumerable"))
+                         .Command<CommandWithRequestUploadFilesWithResponseBytesScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-with-response-bytes"))
+                         .Command<CommandWithRequestUploadFilesWithResponseDataCollectionScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-with-response-data-collection"))
+                         .Command<CommandWithRequestUploadFilesWithResponseEmptyJsonScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-with-response-empty-json"))
+                         .Command<CommandWithRequestUploadFilesWithResponseFileStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-with-response-file-stream"))
+                         .Command<CommandWithRequestUploadFilesWithResponseFileStreamWithContentTypeScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-with-response-file-stream-with-content-type"))
+                         .Command<CommandWithRequestUploadFilesWithResponseStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-with-response-stream"))
+                         
                          .Command<CommandWithRequestWithResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-with-response"))
                          .Command<CommandWithRequestWithoutResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-without-response"))
                          .Command<CommandWithRequestWithResponseAsyncEnumerableScenario.ApiEndpoint>(builder => builder.Post("command-with-request-with-response-async-enumerable"))

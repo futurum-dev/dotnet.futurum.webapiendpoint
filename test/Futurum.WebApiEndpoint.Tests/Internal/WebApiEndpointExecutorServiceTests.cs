@@ -111,7 +111,7 @@ public class WebApiEndpointExecutorServiceTests
         httpContext.RequestServices = services.BuildServiceProvider();
 
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
-                                                                  false, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                  Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
         var metadataTypeDefinition = new MetadataTypeDefinition(typeof(CommandDto), typeof(ResponseDto), typeof(SuccessApiEndpoint),
                                                                 typeof(ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response>),
@@ -158,7 +158,7 @@ public class WebApiEndpointExecutorServiceTests
         httpContext.RequestServices = services.BuildServiceProvider();
 
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
-                                                                  false, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                  Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
         var metadataTypeDefinition = new MetadataTypeDefinition(typeof(CommandDto), typeof(ResponseDto), typeof(SuccessApiEndpoint),
                                                                 typeof(ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response>),
@@ -195,7 +195,7 @@ public class WebApiEndpointExecutorServiceTests
         httpContext.RequestServices = services.BuildServiceProvider();
 
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
-                                                                  false, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
+                                                                  Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
         var metadataTypeDefinition = new MetadataTypeDefinition(typeof(CommandDto), typeof(ResponseDto), typeof(SuccessApiEndpoint),
                                                                 typeof(ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response>),
