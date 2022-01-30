@@ -56,9 +56,9 @@ public class WebApiEndpointHttpContextDispatcherTests
             [Fact]
             public async Task success()
             {
-                await using var file = File.OpenRead("./Data/hello-world.txt");
+                await using var fileStream = File.OpenRead("./Data/hello-world.txt");
         
-                var formFile = new FormFile(file, 0, file.Length, "hello-world.txt", "hello-world.txt");
+                var formFile = new FormFile(fileStream, 0, fileStream.Length, "hello-world.txt", "hello-world.txt");
 
                 var webApiEndpointHttpContextDispatcher = new WebApiEndpointHttpContextDispatcher(Options.Create(new JsonOptions()));
 
@@ -75,7 +75,7 @@ public class WebApiEndpointHttpContextDispatcherTests
 
                     formFile.Name.Should().Be("hello-world.txt");
                     formFile.FileName.Should().Be("hello-world.txt");
-                    formFile.Length.Should().Be(file.Length);
+                    formFile.Length.Should().Be(fileStream.Length);
                 });
             }
             

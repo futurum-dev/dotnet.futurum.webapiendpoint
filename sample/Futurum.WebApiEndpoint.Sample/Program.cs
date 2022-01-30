@@ -60,3 +60,10 @@ finally
     Log.Information("Application shut down complete");
     Log.CloseAndFlush();
 }
+
+namespace Futurum.WebApiEndpoint.Sample
+{
+    public partial class Program
+    {
+    }
+}

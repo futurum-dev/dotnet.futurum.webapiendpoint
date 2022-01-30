@@ -5,13 +5,17 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+    
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute"/>
+    </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Futurum.ApiEndpoint" Version="1.0.0" />
-        <PackageReference Include="Futurum.Core" Version="1.0.0" />
-        <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+        <PackageReference Include="Futurum.ApiEndpoint" Version="1.0.0"/>
+        <PackageReference Include="Futurum.Core" Version="1.0.0"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="4.1.0"/>
+        <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -24,7 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Futurum.WebApiEndpoint\Futurum.WebApiEndpoint.csproj" />
+        <ProjectReference Include="..\..\src\Futurum.WebApiEndpoint\Futurum.WebApiEndpoint.csproj"/>
     </ItemGroup>
 
 </Project>

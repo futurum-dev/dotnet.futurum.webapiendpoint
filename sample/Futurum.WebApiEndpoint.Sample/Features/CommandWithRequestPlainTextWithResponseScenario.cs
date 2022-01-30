@@ -8,7 +8,7 @@ public static class CommandWithRequestPlainTextWithResponseScenario
     {
         protected override Task<Result<Feature>> ExecuteAsync(RequestPlainText query, CancellationToken cancellationToken) =>
             Enumerable.Range(0, 10)
-                      .Select(i => new Feature($"Name - {i} - {query}"))
+                      .Select(i => new Feature($"Name - {i} - {query.Body}"))
                       .First()
                       .ToResultOkAsync();
     }

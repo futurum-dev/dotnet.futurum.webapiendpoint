@@ -33,4 +33,25 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          flag-name: unit
+          parallel: true
           path-to-lcov: ./test/Futurum.WebApiEndpoint.Tests/TestResults/coverage.info
+
+      - name: Publish coverage report to coveralls.io
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          flag-name: end-to-end
+          parallel: true
+          path-to-lcov: ./test/Futurum.WebApiEndpoint.EndToEndTests/TestResults/coverage.info
+          
+  finish:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
