@@ -99,6 +99,33 @@ public class WebApiEndpointMiddlewareExecutorTests
     }
 
     [Fact]
+    public async Task when_there_is_no_middleware_then_the_apiEndpoint_is_still_called()
+    {
+        var apiEndpointWasCalled = false;
+
+        var apiEndpoint = new SuccessApiEndpoint(() =>
+        {
+            apiEndpointWasCalled.Should().BeFalse();
+
+            apiEndpointWasCalled = true;
+        });
+
+        apiEndpointWasCalled.Should().BeFalse();
+
+        var middlewares = new IWebApiEndpointMiddleware<Command, Response>[] {  };
+        var middlewareExecutor = new WebApiEndpointMiddlewareExecutor<Command, Response>(middlewares);
+
+        var command = new Command();
+
+        var httpContext = new DefaultHttpContext();
+
+        var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteCommandAsync(c, ct), CancellationToken.None);
+
+        result.ShouldBeSuccess();
+        apiEndpointWasCalled.Should().BeTrue();
+    }
+
+    [Fact]
     public async Task called_in_the_correct_order()
     {
         var middleware1WasCalled = false;

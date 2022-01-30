@@ -6,9 +6,9 @@ internal class WebApiEndpointPreProcessorMiddleware<TRequest, TResponse> : IWebA
 {
     private readonly IWebApiEndpointPreProcessorMiddleware<TRequest>[] _middleware;
 
-    public WebApiEndpointPreProcessorMiddleware(IWebApiEndpointPreProcessorMiddleware<TRequest>[] middleware)
+    public WebApiEndpointPreProcessorMiddleware(IEnumerable<IWebApiEndpointPreProcessorMiddleware<TRequest>> middleware)
     {
-        _middleware = middleware;
+        _middleware = middleware.ToArray();
     }
 
     public Task<Result<TResponse>> ExecuteAsync(HttpContext httpContext, TRequest request, Func<TRequest, CancellationToken, Task<Result<TResponse>>> next, CancellationToken cancellationToken)
