@@ -13,9 +13,9 @@ public class RequestUploadFilesTests
     [Fact]
     public async Task ToNonApiEndpoint()
     {
-        await using var file = File.OpenRead("./Data/hello-world.txt");
+        await using var fileStream = File.OpenRead("./Data/hello-world.txt");
         
-        var formFile = new FormFile(file, 0, file.Length, "hello-world.txt", "hello-world.txt");
+        var formFile = new FormFile(fileStream, 0, fileStream.Length, "hello-world.txt", "hello-world.txt");
 
         var generic = new RequestUploadFiles<object>(EnumerableExtensions.Return(formFile));
 

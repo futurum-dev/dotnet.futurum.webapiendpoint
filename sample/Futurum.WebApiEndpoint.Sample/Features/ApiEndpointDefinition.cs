@@ -45,7 +45,7 @@ public class ApiEndpointDefinition : IApiEndpointDefinition
                          .Command<CommandWithRequestParameterWithResponseMapFromFileStreamWithContentTypeScenario.ApiEndpoint>(builder => builder.Post("command-with-request-parameter-with-response-file-stream-with-content-type/{Id}", ("Id", typeof(string))))
                          .Command<CommandWithRequestParameterMapFromWithResponseStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-parameter-with-response-stream/{Id}", ("Id", typeof(string))))
                          
-                         .Command<CommandWithRequestParameterWithResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-parameter-map-from-with-request/{Id}", ("Id", typeof(string))))
+                         .Command<CommandWithRequestParameterWithResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-parameter-map-from-with-response/{Id}", ("Id", typeof(string))))
                          .Command<CommandWithRequestParameterWithoutResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-parameter-map-from-without-response/{Id}", ("Id", typeof(string))))
                          .Command<CommandWithRequestParameterWithResponseAsyncEnumerableScenario.ApiEndpoint>(builder => builder.Post("command-with-request-parameter-map-from-with-response-async-enumerable/{Id}", ("Id", typeof(string))))
                          .Command<CommandWithRequestParameterWithResponseBytesScenario.ApiEndpoint>(builder => builder.Post("command-with-request-parameter-map-from-with-response-bytes/{Id}", ("Id", typeof(string))))
@@ -65,7 +65,7 @@ public class ApiEndpointDefinition : IApiEndpointDefinition
                          .Command<CommandWithRequestPlainTextWithResponseFileStreamWithContentTypeScenario.ApiEndpoint>(builder => builder.Post("command-with-request-plain-text-with-response-file-stream-with-content-type"))
                          .Command<CommandWithRequestPlainTextWithResponseStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-plain-text-with-response-stream"))
                          
-                         .Command<CommandWithRequestUploadFilesWithoutResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-with-response"))
+                         .Command<CommandWithRequestUploadFilesWithResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-with-response"))
                          .Command<CommandWithRequestUploadFilesWithoutResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-without-response"))
                          .Command<CommandWithRequestUploadFilesWithResponseAsyncEnumerableScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-with-response-async-enumerable"))
                          .Command<CommandWithRequestUploadFilesWithResponseBytesScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-with-response-bytes"))

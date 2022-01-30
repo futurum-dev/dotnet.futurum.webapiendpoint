@@ -8,7 +8,7 @@ public static class CommandWithRequestUploadFilesWithResponseScenario
     {
         protected override Task<Result<Feature>> ExecuteAsync(RequestUploadFiles query, CancellationToken cancellationToken) =>
             Enumerable.Range(0, 10)
-                      .Select(i => new Feature($"Name - {i} - {query}"))
+                      .Select(i => new Feature($"Name - {i} - {query.Files.Single().FileName}"))
                       .First()
                       .ToResultOkAsync();
     }
