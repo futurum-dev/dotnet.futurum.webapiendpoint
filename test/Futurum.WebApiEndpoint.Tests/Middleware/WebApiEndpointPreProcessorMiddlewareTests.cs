@@ -11,13 +11,13 @@ using Xunit.Abstractions;
 
 namespace Futurum.WebApiEndpoint.Tests.Middleware;
 
-public class WebApiEndpointPostProcessorMiddlewareTests
+public class WebApiEndpointPreProcessorMiddlewareTests
 {
     private readonly ITestOutputHelper _output;
 
     private const string ErrorMessage = "ERROR_MESSAGE";
 
-    public WebApiEndpointPostProcessorMiddlewareTests(ITestOutputHelper output)
+    public WebApiEndpointPreProcessorMiddlewareTests(ITestOutputHelper output)
     {
         _output = output;
     }
@@ -64,7 +64,7 @@ public class WebApiEndpointPostProcessorMiddlewareTests
         }
     }
 
-    public class SuccessMiddleware<TRequest, TResponse> : IWebApiEndpointPostProcessorMiddleware<TRequest, TResponse>
+    public class SuccessMiddleware<TRequest, TResponse> : IWebApiEndpointPreProcessorMiddleware<TRequest>
     {
         private readonly Action _action;
 
@@ -73,7 +73,7 @@ public class WebApiEndpointPostProcessorMiddlewareTests
             _action = action;
         }
 
-        public Task<Result> ExecuteAsync(HttpContext httpContext, TRequest request, TResponse response, CancellationToken cancellationToken)
+        public Task<Result> ExecuteAsync(HttpContext httpContext, TRequest request, CancellationToken cancellationToken)
         {
             _action();
 
@@ -81,7 +81,7 @@ public class WebApiEndpointPostProcessorMiddlewareTests
         }
     }
 
-    public class FailureMiddleware<TRequest, TResponse> : IWebApiEndpointPostProcessorMiddleware<TRequest, TResponse>
+    public class FailureMiddleware<TRequest, TResponse> : IWebApiEndpointPreProcessorMiddleware<TRequest>
     {
         private readonly Action _action;
 
@@ -90,7 +90,7 @@ public class WebApiEndpointPostProcessorMiddlewareTests
             _action = action;
         }
 
-        public Task<Result> ExecuteAsync(HttpContext httpContext, TRequest request, TResponse response, CancellationToken cancellationToken)
+        public Task<Result> ExecuteAsync(HttpContext httpContext, TRequest request, CancellationToken cancellationToken)
         {
             _action();
 
@@ -112,8 +112,8 @@ public class WebApiEndpointPostProcessorMiddlewareTests
 
         apiEndpointWasCalled.Should().BeFalse();
 
-        var middlewares = new IWebApiEndpointPostProcessorMiddleware<Command, Response>[] { };
-        var middlewareExecutor = new WebApiEndpointPostProcessorMiddleware<Command, Response>(middlewares);
+        var middlewares = new IWebApiEndpointPreProcessorMiddleware<Command>[] { };
+        var middlewareExecutor = new WebApiEndpointPreProcessorMiddleware<Command, Response>(middlewares);
 
         var command = new Command();
 
@@ -122,6 +122,7 @@ public class WebApiEndpointPostProcessorMiddlewareTests
         var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteCommandAsync(c, ct), CancellationToken.None);
 
         result.ShouldBeSuccess();
+        
         apiEndpointWasCalled.Should().BeTrue();
     }
 
@@ -134,35 +135,35 @@ public class WebApiEndpointPostProcessorMiddlewareTests
 
         var testMiddleware1 = new SuccessMiddleware<Command, Response>(() =>
         {
-            apiEndpointWasCalled.Should().BeTrue();
             middleware1WasCalled.Should().BeFalse();
             middleware2WasCalled.Should().BeFalse();
+            apiEndpointWasCalled.Should().BeFalse();
 
             middleware1WasCalled = true;
         });
 
         var testMiddleware2 = new SuccessMiddleware<Command, Response>(() =>
         {
-            apiEndpointWasCalled.Should().BeTrue();
             middleware1WasCalled.Should().BeTrue();
             middleware2WasCalled.Should().BeFalse();
+            apiEndpointWasCalled.Should().BeFalse();
 
             middleware2WasCalled = true;
         });
 
         var apiEndpoint = new SuccessApiEndpoint(() =>
         {
+            middleware1WasCalled.Should().BeTrue();
+            middleware2WasCalled.Should().BeTrue();
             apiEndpointWasCalled.Should().BeFalse();
-            middleware1WasCalled.Should().BeFalse();
-            middleware2WasCalled.Should().BeFalse();
 
             apiEndpointWasCalled = true;
         });
 
         apiEndpointWasCalled.Should().BeFalse();
 
-        var middlewares = new IWebApiEndpointPostProcessorMiddleware<Command, Response>[] { testMiddleware1, testMiddleware2 };
-        var middlewareExecutor = new WebApiEndpointPostProcessorMiddleware<Command, Response>(middlewares);
+        var middlewares = new IWebApiEndpointPreProcessorMiddleware<Command>[] { testMiddleware1, testMiddleware2 };
+        var middlewareExecutor = new WebApiEndpointPreProcessorMiddleware<Command, Response>(middlewares);
 
         var command = new Command();
 
@@ -171,9 +172,10 @@ public class WebApiEndpointPostProcessorMiddlewareTests
         var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteCommandAsync(c, ct), CancellationToken.None);
 
         result.ShouldBeSuccess();
-        apiEndpointWasCalled.Should().BeTrue();
+        
         middleware1WasCalled.Should().BeTrue();
         middleware2WasCalled.Should().BeTrue();
+        apiEndpointWasCalled.Should().BeTrue();
     }
 
     [Fact]
@@ -185,7 +187,7 @@ public class WebApiEndpointPostProcessorMiddlewareTests
 
         var testMiddleware1 = new SuccessMiddleware<Command, Response>(() =>
         {
-            apiEndpointWasCalled.Should().BeTrue();
+            apiEndpointWasCalled.Should().BeFalse();
             middleware1WasCalled.Should().BeFalse();
             middleware2WasCalled.Should().BeFalse();
 
@@ -194,26 +196,26 @@ public class WebApiEndpointPostProcessorMiddlewareTests
 
         var testMiddleware2 = new SuccessMiddleware<Command, Response>(() =>
         {
-            apiEndpointWasCalled.Should().BeTrue();
             middleware1WasCalled.Should().BeTrue();
             middleware2WasCalled.Should().BeFalse();
+            apiEndpointWasCalled.Should().BeFalse();
 
             middleware2WasCalled = true;
         });
 
         var apiEndpoint = new FailureApiEndpoint(() =>
         {
+            middleware1WasCalled.Should().BeTrue();
+            middleware2WasCalled.Should().BeTrue();
             apiEndpointWasCalled.Should().BeFalse();
-            middleware1WasCalled.Should().BeFalse();
-            middleware2WasCalled.Should().BeFalse();
 
             apiEndpointWasCalled = true;
         });
 
         apiEndpointWasCalled.Should().BeFalse();
 
-        var middlewares = new IWebApiEndpointPostProcessorMiddleware<Command, Response>[] { testMiddleware1, testMiddleware2 };
-        var middlewareExecutor = new WebApiEndpointPostProcessorMiddleware<Command, Response>(middlewares);
+        var middlewares = new IWebApiEndpointPreProcessorMiddleware<Command>[] { testMiddleware1, testMiddleware2 };
+        var middlewareExecutor = new WebApiEndpointPreProcessorMiddleware<Command, Response>(middlewares);
 
         var command = new Command();
 
@@ -221,9 +223,9 @@ public class WebApiEndpointPostProcessorMiddlewareTests
 
         var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteCommandAsync(c, ct), CancellationToken.None);
 
+        middleware1WasCalled.Should().BeTrue();
+        middleware2WasCalled.Should().BeTrue();
         apiEndpointWasCalled.Should().BeTrue();
-        middleware1WasCalled.Should().BeFalse();
-        middleware2WasCalled.Should().BeFalse();
 
         result.ShouldBeFailureWithError(ErrorMessage);
     }
@@ -237,35 +239,35 @@ public class WebApiEndpointPostProcessorMiddlewareTests
 
         var testMiddleware1 = new FailureMiddleware<Command, Response>(() =>
         {
-            apiEndpointWasCalled.Should().BeTrue();
             middleware1WasCalled.Should().BeFalse();
             middleware2WasCalled.Should().BeFalse();
+            apiEndpointWasCalled.Should().BeFalse();
 
             middleware1WasCalled = true;
         });
 
         var testMiddleware2 = new SuccessMiddleware<Command, Response>(() =>
         {
-            apiEndpointWasCalled.Should().BeTrue();
             middleware1WasCalled.Should().BeTrue();
             middleware2WasCalled.Should().BeFalse();
+            apiEndpointWasCalled.Should().BeFalse();
 
             middleware2WasCalled = true;
         });
 
         var apiEndpoint = new FailureApiEndpoint(() =>
         {
+            middleware1WasCalled.Should().BeTrue();
+            middleware2WasCalled.Should().BeTrue();
             apiEndpointWasCalled.Should().BeFalse();
-            middleware1WasCalled.Should().BeFalse();
-            middleware2WasCalled.Should().BeFalse();
 
             apiEndpointWasCalled = true;
         });
 
         apiEndpointWasCalled.Should().BeFalse();
 
-        var middlewares = new IWebApiEndpointPostProcessorMiddleware<Command, Response>[] { testMiddleware1, testMiddleware2 };
-        var middlewareExecutor = new WebApiEndpointPostProcessorMiddleware<Command, Response>(middlewares);
+        var middlewares = new IWebApiEndpointPreProcessorMiddleware<Command>[] { testMiddleware1, testMiddleware2 };
+        var middlewareExecutor = new WebApiEndpointPreProcessorMiddleware<Command, Response>(middlewares);
 
         var command = new Command();
 
@@ -273,9 +275,9 @@ public class WebApiEndpointPostProcessorMiddlewareTests
 
         var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteCommandAsync(c, ct), CancellationToken.None);
 
-        apiEndpointWasCalled.Should().BeTrue();
-        middleware1WasCalled.Should().BeFalse();
+        middleware1WasCalled.Should().BeTrue();
         middleware2WasCalled.Should().BeFalse();
+        apiEndpointWasCalled.Should().BeFalse();
 
         result.ShouldBeFailureWithError(ErrorMessage);
     }

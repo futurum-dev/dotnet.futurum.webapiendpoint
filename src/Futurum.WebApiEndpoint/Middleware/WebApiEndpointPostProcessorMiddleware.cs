@@ -6,9 +6,9 @@ internal class WebApiEndpointPostProcessorMiddleware<TRequest, TResponse> : IWeb
 {
     private readonly IWebApiEndpointPostProcessorMiddleware<TRequest, TResponse>[] _middleware;
 
-    public WebApiEndpointPostProcessorMiddleware(IWebApiEndpointPostProcessorMiddleware<TRequest, TResponse>[] middleware)
+    public WebApiEndpointPostProcessorMiddleware(IEnumerable<IWebApiEndpointPostProcessorMiddleware<TRequest, TResponse>> middleware)
     {
-        _middleware = middleware;
+        _middleware = middleware.ToArray();
     }
 
     public Task<Result<TResponse>> ExecuteAsync(HttpContext httpContext, TRequest request, Func<TRequest, CancellationToken, Task<Result<TResponse>>> next, CancellationToken cancellationToken)
