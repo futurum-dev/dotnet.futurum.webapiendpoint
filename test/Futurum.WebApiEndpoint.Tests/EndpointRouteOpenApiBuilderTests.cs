@@ -35,9 +35,9 @@ public class EndpointRouteOpenApiBuilderTests
         public void RequestPlainTextDto()
         {
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestPlainTextDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestPlainTextDto, ResponseDto, Request, Response>),
+                                                                    typeof(ICommandWebApiEndpoint<RequestPlainTextDto, ResponseDto, Request, Response, RequestPlainTextDtoMapper, RequestPlainTextDtoMapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestPlainTextDto, ResponseDto, Request, Response>));
+                                                                    typeof(CommandWebApiEndpointDispatcher<RequestPlainTextDto, ResponseDto, Request, Response, RequestPlainTextDtoMapper, RequestPlainTextDtoMapper>));
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
 
             var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition);
@@ -46,13 +46,22 @@ public class EndpointRouteOpenApiBuilderTests
             endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Text.Plain);
         }
 
+        private class RequestPlainTextDtoMapper : IWebApiEndpointRequestMapper<RequestPlainTextDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+        {
+            public Result<Request> Map(HttpContext httpContext, RequestPlainTextDto dto) =>
+                throw new NotImplementedException();
+
+            public Result<ResponseDto> Map(Response domain) =>
+                throw new NotImplementedException();
+        }
+
         [Fact]
         public void RequestUploadFilesDto()
         {
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestUploadFilesDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestUploadFilesDto, ResponseDto, Request, Response>),
+                                                                    typeof(ICommandWebApiEndpoint<RequestUploadFilesDto, ResponseDto, Request, Response, RequestUploadFilesDtoMapper, RequestUploadFilesDtoMapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestUploadFilesDto, ResponseDto, Request, Response>));
+                                                                    typeof(CommandWebApiEndpointDispatcher<RequestUploadFilesDto, ResponseDto, Request, Response, RequestUploadFilesDtoMapper, RequestUploadFilesDtoMapper>));
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
 
             var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition);
@@ -61,13 +70,22 @@ public class EndpointRouteOpenApiBuilderTests
             endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be("multipart/form-data");
         }
 
+        public class RequestUploadFilesDtoMapper : IWebApiEndpointRequestMapper<RequestUploadFilesDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+        {
+            public Result<Request> Map(HttpContext httpContext, RequestUploadFilesDto dto) =>
+                throw new NotImplementedException();
+
+            public Result<ResponseDto> Map(Response domain) =>
+                throw new NotImplementedException();
+        }
+
         [Fact]
         public void RequestDto_without_MapFrom()
         {
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response>),
+                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, RequestDto_without_MapFromMapper, RequestDto_without_MapFromMapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response>));
+                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, RequestDto_without_MapFromMapper, RequestDto_without_MapFromMapper>));
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
 
             var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition);
@@ -76,13 +94,22 @@ public class EndpointRouteOpenApiBuilderTests
             endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
         }
 
+        public class RequestDto_without_MapFromMapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+        {
+            public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
+                throw new NotImplementedException();
+
+            public Result<ResponseDto> Map(Response domain) =>
+                throw new NotImplementedException();
+        }
+
         [Fact]
         public void RequestDto_with_MapFrom()
         {
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response>),
+                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, RequestDto_with_MapFromMapper, RequestDto_with_MapFromMapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response>));
+                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, RequestDto_with_MapFromMapper, RequestDto_with_MapFromMapper>));
 
             var metadataMapFromParameterDefinition = new MetadataMapFromParameterDefinition("Id",
                                                                                             typeof(RequestDto).GetProperties().Single(x => x.Name == nameof(RequestDto.Id)),
@@ -95,6 +122,15 @@ public class EndpointRouteOpenApiBuilderTests
 
             endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be(requestOpenApiTypeCreator.Get(typeof(RequestDto)));
             endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
+        }
+
+        public class RequestDto_with_MapFromMapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+        {
+            public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
+                throw new NotImplementedException();
+
+            public Result<ResponseDto> Map(Response domain) =>
+                throw new NotImplementedException();
         }
 
         private static (IServiceProvider serviceProvider, RouteEndpoint routeEndpoint) TestRunner(MetadataTypeDefinition metadataTypeDefinition, MetadataMapFromDefinition metadataMapFromDefinition)
@@ -148,9 +184,9 @@ public class EndpointRouteOpenApiBuilderTests
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(TestRequestStreamDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestDto, TestRequestStreamDto, Request, Response>),
+                                                                    typeof(ICommandWebApiEndpoint<RequestDto, TestRequestStreamDto, Request, Response, IResponseStreamDtoMapper, IResponseStreamDtoMapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, TestRequestStreamDto, Request, Response>));
+                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, TestRequestStreamDto, Request, Response, IResponseStreamDtoMapper, IResponseStreamDtoMapper>));
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
 
             var (_, endpoint) = TestRunner(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
@@ -160,6 +196,15 @@ public class EndpointRouteOpenApiBuilderTests
             endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Application.Octet);
         }
 
+        public class IResponseStreamDtoMapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, TestRequestStreamDto>
+        {
+            public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
+                throw new NotImplementedException();
+
+            public Result<TestRequestStreamDto> Map(Response domain) =>
+                throw new NotImplementedException();
+        }
+
         [Fact]
         public void ResponseAsyncEnumerableDto()
         {
@@ -167,9 +212,9 @@ public class EndpointRouteOpenApiBuilderTests
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseAsyncEnumerableDto<int>), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseAsyncEnumerableDto<int>, Request, Response>),
+                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseAsyncEnumerableDto<int>, Request, Response, ResponseAsyncEnumerableDtoMapper, ResponseAsyncEnumerableDtoMapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseAsyncEnumerableDto<int>, Request, Response>));
+                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseAsyncEnumerableDto<int>, Request, Response, ResponseAsyncEnumerableDtoMapper, ResponseAsyncEnumerableDtoMapper>));
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
 
             var (_, endpoint) = TestRunner(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
@@ -179,6 +224,15 @@ public class EndpointRouteOpenApiBuilderTests
             endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
         }
 
+        public class ResponseAsyncEnumerableDtoMapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseAsyncEnumerableDto<int>>
+        {
+            public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
+                throw new NotImplementedException();
+
+            public Result<ResponseAsyncEnumerableDto<int>> Map(Response domain) =>
+                throw new NotImplementedException();
+        }
+
         [Fact]
         public void NotEmptyResponseDto()
         {
@@ -186,9 +240,9 @@ public class EndpointRouteOpenApiBuilderTests
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response>),
+                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, NotEmptyResponseDtoMapper, NotEmptyResponseDtoMapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response>));
+                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, NotEmptyResponseDtoMapper, NotEmptyResponseDtoMapper>));
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
 
             var (_, endpoint) = TestRunner(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
@@ -196,6 +250,15 @@ public class EndpointRouteOpenApiBuilderTests
             endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Single().Type.Should().Be<ResponseDto>();
             endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Single().StatusCode.Should().Be(metadataRouteDefinition.SuccessStatusCode);
             endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
+        }
+
+        public class NotEmptyResponseDtoMapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+        {
+            public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
+                throw new NotImplementedException();
+
+            public Result<ResponseDto> Map(Response domain) =>
+                throw new NotImplementedException();
         }
 
         private static (IServiceProvider serviceProvider, RouteEndpoint routeEndpoint) TestRunner(MetadataRouteDefinition metadataRouteDefinition, MetadataTypeDefinition metadataTypeDefinition,
@@ -239,10 +302,10 @@ public class EndpointRouteOpenApiBuilderTests
         [Fact]
         public void check_correct_tag_is_set()
         {
-            var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestPlainTextDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestPlainTextDto, ResponseDto, Request, Response>),
+            var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestPlainTextDto, ResponseDto, Request, Response>));
+                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>));
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
 
             var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition);
@@ -297,9 +360,18 @@ public class EndpointRouteOpenApiBuilderTests
 
     public record Response;
 
-    private class CommandApiEndpoint : CommandWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>
+    private class CommandApiEndpoint : CommandWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
     {
         protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
             new Response().ToResultOkAsync();
+    }
+
+    private class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+    {
+        public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
+            new Request().ToResultOk();
+
+        public Result<ResponseDto> Map(Response domain) =>
+            new ResponseDto().ToResultOk();
     }
 }

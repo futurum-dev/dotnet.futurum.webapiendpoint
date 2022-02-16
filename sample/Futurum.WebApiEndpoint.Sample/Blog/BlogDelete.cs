@@ -7,7 +7,7 @@ public static class BlogDelete
 {
     public record Command(Id Id);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<Command>.WithoutResponse
+    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<Command>.WithoutResponse.WithMapper<Mapper>
     {
         private readonly IBlogStorageBroker _storageBroker;
 

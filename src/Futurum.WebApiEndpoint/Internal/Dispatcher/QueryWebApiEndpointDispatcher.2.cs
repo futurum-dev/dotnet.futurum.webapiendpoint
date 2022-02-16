@@ -5,15 +5,16 @@ using Futurum.WebApiEndpoint.Middleware;
 
 namespace Futurum.WebApiEndpoint.Internal.Dispatcher;
 
-internal class QueryWebApiEndpointDispatcher<TResponseDto, TResponse> : IWebApiEndpointDispatcher
+internal class QueryWebApiEndpointDispatcher<TResponseDto, TResponse, TResponseMapper> : IWebApiEndpointDispatcher
+    where TResponseMapper : IWebApiEndpointResponseMapper<TResponse, TResponseDto>
 {
     private readonly IWebApiEndpointLogger _logger;
     private readonly IWebApiEndpointHttpContextDispatcher _httpContextDispatcher;
-    private readonly IWebApiEndpointResponseMapper<TResponse, TResponseDto> _responseMapper;
+    private readonly TResponseMapper _responseMapper;
 
     public QueryWebApiEndpointDispatcher(IWebApiEndpointLogger logger,
                                          IWebApiEndpointHttpContextDispatcher httpContextDispatcher,
-                                         IWebApiEndpointResponseMapper<TResponse, TResponseDto> responseMapper)
+                                         TResponseMapper responseMapper)
     {
         _logger = logger;
         _httpContextDispatcher = httpContextDispatcher;
@@ -24,7 +25,7 @@ internal class QueryWebApiEndpointDispatcher<TResponseDto, TResponse> : IWebApiE
                                      IWebApiEndpoint apiEndpoint, CancellationToken cancellationToken)
     {
         var middlewareExecutorTyped = middlewareExecutor as IWebApiEndpointMiddlewareExecutor<Unit, TResponse>;
-        var apiEndpointTyped = apiEndpoint as IQueryWebApiEndpoint<TResponseDto, TResponse>;
+        var apiEndpointTyped = apiEndpoint as IQueryWebApiEndpoint<TResponseDto, TResponse, TResponseMapper>;
 
         return middlewareExecutorTyped.ExecuteAsync(httpContext, Unit.Value, (_, ct) => apiEndpointTyped.ExecuteQueryAsync(ct), cancellationToken)
                                       .ThenAsync(response => _responseMapper.Map(response))

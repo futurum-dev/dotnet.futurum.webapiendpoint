@@ -5,18 +5,19 @@ using Futurum.WebApiEndpoint.Middleware;
 
 namespace Futurum.WebApiEndpoint.Internal.Dispatcher;
 
-internal class CommandWebApiEndpointDispatcher<TCommandDto, TCommand> : IWebApiEndpointDispatcher
+internal class CommandWebApiEndpointDispatcher<TCommandDto, TCommand, TRequestMapper> : IWebApiEndpointDispatcher
     where TCommandDto : class
+    where TRequestMapper : IWebApiEndpointRequestMapper<TCommandDto, TCommand>
 {
     private readonly IWebApiEndpointLogger _logger;
     private readonly IWebApiEndpointHttpContextDispatcher _httpContextDispatcher;
     private readonly IWebApiEndpointRequestValidation<TCommandDto> _requestValidation;
-    private readonly IWebApiEndpointRequestMapper<TCommandDto, TCommand> _requestMapper;
+    private readonly TRequestMapper _requestMapper;
 
     public CommandWebApiEndpointDispatcher(IWebApiEndpointLogger logger,
                                            IWebApiEndpointHttpContextDispatcher httpContextDispatcher,
                                            IWebApiEndpointRequestValidation<TCommandDto> requestValidation,
-                                           IWebApiEndpointRequestMapper<TCommandDto, TCommand> requestMapper)
+                                           TRequestMapper requestMapper)
     {
         _logger = logger;
         _httpContextDispatcher = httpContextDispatcher;
@@ -28,7 +29,7 @@ internal class CommandWebApiEndpointDispatcher<TCommandDto, TCommand> : IWebApiE
                                      CancellationToken cancellationToken)
     {
         var middlewareExecutorTyped = middlewareExecutor as IWebApiEndpointMiddlewareExecutor<TCommand, Unit>;
-        var apiEndpointTyped = apiEndpoint as ICommandWebApiEndpoint<TCommandDto, TCommand>;
+        var apiEndpointTyped = apiEndpoint as ICommandWebApiEndpoint<TCommandDto, TCommand, TRequestMapper>;
 
         return _httpContextDispatcher.ReadRequestAsync<TCommandDto>(httpContext, metadataDefinition.MetadataMapFromDefinition, cancellationToken)
                                      .ThenAsync(commandDto => _requestValidation.ExecuteAsync(commandDto))

@@ -101,20 +101,20 @@ public class CommandWebApiEndpointDispatcherTests
             mocker.Use<IWebApiEndpointResponseMapper<Response, ResponseDto>>(new Mapper());
 
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(CommandDto), typeof(ResponseDto), typeof(ApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response>),
+                                                                    typeof(ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Command, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response>));
+                                                                    typeof(CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>));
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
             var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
 
             var middlewareExecutor = new DisabledWebApiEndpointMiddlewareExecutor<Command, Response>();
 
-            var commandWebApiEndpointDispatcher = mocker.CreateInstance<CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response>>();
+            var commandWebApiEndpointDispatcher = mocker.CreateInstance<CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>>();
 
             return await commandWebApiEndpointDispatcher.ExecuteAsync(metadataDefinition, httpContext, middlewareExecutor, apiEndpoint, CancellationToken.None);
         }
 
-        private class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>
+        private class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
         {
             private readonly bool _isSuccess;
 
@@ -198,20 +198,20 @@ public class CommandWebApiEndpointDispatcherTests
             mocker.Use<IWebApiEndpointResponseMapper<Response, ResponseDto>>(new Mapper());
 
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(EmptyRequestDto), typeof(ResponseDto), typeof(ApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<ResponseDto, Command, Response>),
+                                                                    typeof(ICommandWebApiEndpoint<ResponseDto, Command, Response, Mapper, Mapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Command, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<ResponseDto, Command, Response>));
+                                                                    typeof(CommandWebApiEndpointDispatcher<ResponseDto, Command, Response, Mapper, Mapper>));
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
             var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
 
             var middlewareExecutor = new DisabledWebApiEndpointMiddlewareExecutor<Command, Response>();
 
-            var commandWebApiEndpointDispatcher = mocker.CreateInstance<CommandWebApiEndpointDispatcher<ResponseDto, Command, Response>>();
+            var commandWebApiEndpointDispatcher = mocker.CreateInstance<CommandWebApiEndpointDispatcher<ResponseDto, Command, Response, Mapper, Mapper>>();
 
             return await commandWebApiEndpointDispatcher.ExecuteAsync(metadataDefinition, httpContext, middlewareExecutor, apiEndpoint, CancellationToken.None);
         }
 
-        private class ApiEndpoint : CommandWebApiEndpoint.WithRequest<Command>.WithResponse<ResponseDto, Response>
+        private class ApiEndpoint : CommandWebApiEndpoint.WithRequest<Command>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
         {
             private readonly bool _isSuccess;
 
@@ -294,20 +294,20 @@ public class CommandWebApiEndpointDispatcherTests
             mocker.Use<IWebApiEndpointRequestMapper<CommandDto, Command>>(new Mapper());
 
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(CommandDto), typeof(EmptyResponseDto), typeof(ApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<CommandDto, Command>),
+                                                                    typeof(ICommandWebApiEndpoint<CommandDto, Command, Mapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Command, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<CommandDto, Command>));
+                                                                    typeof(CommandWebApiEndpointDispatcher<CommandDto, Command, Mapper>));
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
             var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
 
             var middlewareExecutor = new DisabledWebApiEndpointMiddlewareExecutor<Command, Unit>();
 
-            var commandWebApiEndpointDispatcher = mocker.CreateInstance<CommandWebApiEndpointDispatcher<CommandDto, Command>>();
+            var commandWebApiEndpointDispatcher = mocker.CreateInstance<CommandWebApiEndpointDispatcher<CommandDto, Command, Mapper>>();
 
             return await commandWebApiEndpointDispatcher.ExecuteAsync(metadataDefinition, httpContext, middlewareExecutor, apiEndpoint, CancellationToken.None);
         }
 
-        private class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithoutResponse
+        private class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithoutResponse.WithMapper<Mapper>
         {
             private readonly bool _isSuccess;
 
@@ -387,20 +387,20 @@ public class CommandWebApiEndpointDispatcherTests
 
 
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(EmptyRequestDto), typeof(EmptyResponseDto), typeof(ApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<Command>),
+                                                                    typeof(ICommandWebApiEndpoint<Command, Mapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Command, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<Command>));
+                                                                    typeof(CommandWebApiEndpointDispatcher<Command, Mapper>));
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
             var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
 
             var middlewareExecutor = new DisabledWebApiEndpointMiddlewareExecutor<Command, Unit>();
 
-            var commandWebApiEndpointDispatcher = mocker.CreateInstance<CommandWebApiEndpointDispatcher<Command>>();
+            var commandWebApiEndpointDispatcher = mocker.CreateInstance<CommandWebApiEndpointDispatcher<Command, Mapper>>();
 
             return await commandWebApiEndpointDispatcher.ExecuteAsync(metadataDefinition, httpContext, middlewareExecutor, apiEndpoint, CancellationToken.None);
         }
 
-        private class ApiEndpoint : CommandWebApiEndpoint.WithRequest<Command>.WithoutResponse
+        private class ApiEndpoint : CommandWebApiEndpoint.WithRequest<Command>.WithoutResponse.WithMapper<Mapper>
         {
             private readonly bool _isSuccess;
 

@@ -8,7 +8,7 @@ public static class BlogUpdate
     
     public record Command(Blog Blog);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<BlogDto, Blog>
+    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<BlogDto, Blog>.WithMapper<Mapper, BlogMapper>
     {
         private readonly IBlogStorageBroker _storageBroker;
 

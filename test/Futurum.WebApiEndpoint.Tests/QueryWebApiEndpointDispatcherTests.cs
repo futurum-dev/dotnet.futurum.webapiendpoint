@@ -100,20 +100,20 @@ public class QueryWebApiEndpointDispatcherTests
             mocker.Use<IWebApiEndpointResponseMapper<Response, ResponseDto>>(new Mapper());
 
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(EmptyRequestDto), typeof(ResponseDto), typeof(ApiEndpoint),
-                                                                    typeof(IQueryWebApiEndpoint<ResponseDto, Query, Response>),
+                                                                    typeof(IQueryWebApiEndpoint<ResponseDto, Query, Response, Mapper, Mapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Query, Response>),
-                                                                    typeof(QueryWebApiEndpointDispatcher<ResponseDto, Query, Response>));
+                                                                    typeof(QueryWebApiEndpointDispatcher<ResponseDto, Query, Response, Mapper, Mapper>));
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
             var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
 
             var middlewareExecutor = new DisabledWebApiEndpointMiddlewareExecutor<Query, Response>();
 
-            var queryWebApiEndpointDispatcher = mocker.CreateInstance<QueryWebApiEndpointDispatcher<ResponseDto, Query, Response>>();
+            var queryWebApiEndpointDispatcher = mocker.CreateInstance<QueryWebApiEndpointDispatcher<ResponseDto, Query, Response, Mapper, Mapper>>();
 
             return await queryWebApiEndpointDispatcher.ExecuteAsync(metadataDefinition, httpContext, middlewareExecutor, apiEndpoint, CancellationToken.None);
         }
 
-        private class ApiEndpoint : QueryWebApiEndpoint.WithRequest<Query>.WithResponse<ResponseDto, Response>
+        private class ApiEndpoint : QueryWebApiEndpoint.WithRequest<Query>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
         {
             private readonly bool _isSuccess;
 
@@ -198,20 +198,20 @@ public class QueryWebApiEndpointDispatcherTests
             mocker.Use<IWebApiEndpointResponseMapper<Response, ResponseDto>>(new Mapper());
 
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(QueryDto), typeof(ResponseDto), typeof(ApiEndpoint),
-                                                                    typeof(IQueryWebApiEndpoint<QueryDto, ResponseDto, Query, Response>),
+                                                                    typeof(IQueryWebApiEndpoint<QueryDto, ResponseDto, Query, Response, Mapper, Mapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Query, Response>),
-                                                                    typeof(QueryWebApiEndpointDispatcher<QueryDto, ResponseDto, Query, Response>));
+                                                                    typeof(QueryWebApiEndpointDispatcher<QueryDto, ResponseDto, Query, Response, Mapper, Mapper>));
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
             var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
 
             var middlewareExecutor = new DisabledWebApiEndpointMiddlewareExecutor<Query, Response>();
 
-            var queryWebApiEndpointDispatcher = mocker.CreateInstance<QueryWebApiEndpointDispatcher<QueryDto, ResponseDto, Query, Response>>();
+            var queryWebApiEndpointDispatcher = mocker.CreateInstance<QueryWebApiEndpointDispatcher<QueryDto, ResponseDto, Query, Response, Mapper, Mapper>>();
 
             return await queryWebApiEndpointDispatcher.ExecuteAsync(metadataDefinition, httpContext, middlewareExecutor, apiEndpoint, CancellationToken.None);
         }
 
-        private class ApiEndpoint : QueryWebApiEndpoint.WithRequest<QueryDto, Query>.WithResponse<ResponseDto, Response>
+        private class ApiEndpoint : QueryWebApiEndpoint.WithRequest<QueryDto, Query>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
         {
             private readonly bool _isSuccess;
 
@@ -293,20 +293,20 @@ public class QueryWebApiEndpointDispatcherTests
             mocker.Use<IWebApiEndpointResponseMapper<Response, ResponseDto>>(new Mapper());
 
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(EmptyRequestDto), typeof(ResponseDto), typeof(ApiEndpoint),
-                                                                    typeof(IQueryWebApiEndpoint<ResponseDto, Response>),
+                                                                    typeof(IQueryWebApiEndpoint<ResponseDto, Response, Mapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Unit, Response>),
-                                                                    typeof(QueryWebApiEndpointDispatcher<ResponseDto, Response>));
+                                                                    typeof(QueryWebApiEndpointDispatcher<ResponseDto, Response, Mapper>));
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
             var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
 
             var middlewareExecutor = new DisabledWebApiEndpointMiddlewareExecutor<Unit, Response>();
 
-            var queryWebApiEndpointDispatcher = mocker.CreateInstance<QueryWebApiEndpointDispatcher<ResponseDto, Response>>();
+            var queryWebApiEndpointDispatcher = mocker.CreateInstance<QueryWebApiEndpointDispatcher<ResponseDto, Response, Mapper>>();
 
             return await queryWebApiEndpointDispatcher.ExecuteAsync(metadataDefinition, httpContext, middlewareExecutor, apiEndpoint, CancellationToken.None);
         }
 
-        private class ApiEndpoint : QueryWebApiEndpoint.WithoutRequest.WithResponse<ResponseDto, Response>
+        private class ApiEndpoint : QueryWebApiEndpoint.WithoutRequest.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
         {
             private readonly bool _isSuccess;
 

@@ -4,20 +4,22 @@ using Futurum.WebApiEndpoint.Middleware;
 
 namespace Futurum.WebApiEndpoint.Internal.Dispatcher;
 
-internal class QueryWebApiEndpointDispatcher<TQueryDto, TResponseDto, TQuery, TResponse> : IWebApiEndpointDispatcher
+internal class QueryWebApiEndpointDispatcher<TQueryDto, TResponseDto, TQuery, TResponse, TRequestMapper, TResponseMapper> : IWebApiEndpointDispatcher
     where TQueryDto : class
+    where TRequestMapper : IWebApiEndpointRequestMapper<TQueryDto, TQuery>
+    where TResponseMapper : IWebApiEndpointResponseMapper<TResponse, TResponseDto>
 {
     private readonly IWebApiEndpointLogger _logger;
     private readonly IWebApiEndpointHttpContextDispatcher _httpContextDispatcher;
     private readonly IWebApiEndpointRequestValidation<TQueryDto> _requestValidation;
-    private readonly IWebApiEndpointRequestMapper<TQueryDto, TQuery> _requestMapper;
-    private readonly IWebApiEndpointResponseMapper<TResponse, TResponseDto> _responseMapper;
+    private readonly TRequestMapper _requestMapper;
+    private readonly TResponseMapper _responseMapper;
 
     public QueryWebApiEndpointDispatcher(IWebApiEndpointLogger logger,
                                          IWebApiEndpointHttpContextDispatcher httpContextDispatcher,
                                          IWebApiEndpointRequestValidation<TQueryDto> requestValidation,
-                                         IWebApiEndpointRequestMapper<TQueryDto, TQuery> requestMapper,
-                                         IWebApiEndpointResponseMapper<TResponse, TResponseDto> responseMapper)
+                                         TRequestMapper requestMapper,
+                                         TResponseMapper responseMapper)
     {
         _logger = logger;
         _httpContextDispatcher = httpContextDispatcher;
@@ -30,7 +32,7 @@ internal class QueryWebApiEndpointDispatcher<TQueryDto, TResponseDto, TQuery, TR
                                      IWebApiEndpoint apiEndpoint, CancellationToken cancellationToken)
     {
         var middlewareExecutorTyped = middlewareExecutor as IWebApiEndpointMiddlewareExecutor<TQuery, TResponse>;
-        var apiEndpointTyped = apiEndpoint as IQueryWebApiEndpoint<TQueryDto, TResponseDto, TQuery, TResponse>;
+        var apiEndpointTyped = apiEndpoint as IQueryWebApiEndpoint<TQueryDto, TResponseDto, TQuery, TResponse, TRequestMapper, TResponseMapper>;
 
         return _httpContextDispatcher.ReadRequestAsync<TQueryDto>(httpContext, metadataDefinition.MetadataMapFromDefinition, cancellationToken)
                                      .ThenAsync(commandDto => _requestValidation.ExecuteAsync(commandDto))

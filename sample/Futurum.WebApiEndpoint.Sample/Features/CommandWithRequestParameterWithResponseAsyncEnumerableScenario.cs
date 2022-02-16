@@ -7,7 +7,7 @@ public static class CommandWithRequestParameterWithResponseAsyncEnumerableScenar
 {
     public record Command(string Id);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<Command>.WithResponseAsyncEnumerable<ApiEndpoint, FeatureDto, Feature>
+    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<Command>.WithResponseAsyncEnumerable<ApiEndpoint, FeatureDto, Feature>.WithMapper<Mapper>
     {
         protected override Task<Result<ResponseAsyncEnumerable<Feature>>> ExecuteAsync(Command command, CancellationToken cancellationToken)
         {

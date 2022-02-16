@@ -9,6 +9,8 @@ using Futurum.WebApiEndpoint.Internal.Dispatcher;
 using Futurum.WebApiEndpoint.Metadata;
 using Futurum.WebApiEndpoint.Middleware;
 
+using Microsoft.AspNetCore.Http;
+
 using Xunit;
 using Xunit.Abstractions;
 
@@ -42,10 +44,16 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
 
             public record Response;
 
-            public class ApiEndpoint : Futurum.WebApiEndpoint.QueryWebApiEndpoint.WithoutRequest.WithResponse<ResponseDto, Response>
+            public class ApiEndpoint : Futurum.WebApiEndpoint.QueryWebApiEndpoint.WithoutRequest.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
             {
                 protected override Task<Result<Response>> ExecuteAsync(CancellationToken cancellationToken) =>
                     new Response().ToResultOkAsync();
+            }
+
+            public class Mapper : IWebApiEndpointResponseMapper<Response, ResponseDto>
+            {
+                public Result<ResponseDto> Map(Response domain) =>
+                    throw new NotImplementedException();
             }
 
             [Fact]
@@ -59,8 +67,8 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
                 metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<EmptyRequestDto>();
                 metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
                 metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Unit, Response>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<ResponseDto, Response>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<ResponseDto, Response>>();
+                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<ResponseDto, Response, Mapper>>();
+                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<ResponseDto, Response, Mapper>>();
                 metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
                 metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
             }
@@ -85,10 +93,19 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
 
             public record Response;
 
-            public class ApiEndpoint : Futurum.WebApiEndpoint.QueryWebApiEndpoint.WithRequest<Request>.WithResponse<ResponseDto, Response>
+            public class ApiEndpoint : Futurum.WebApiEndpoint.QueryWebApiEndpoint.WithRequest<Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
             {
                 protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
                     new Response().ToResultOkAsync();
+            }
+
+            public class Mapper : IWebApiEndpointRequestMapper<Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+            {
+                public Result<Request> Map(HttpContext httpContext) =>
+                    throw new NotImplementedException();
+
+                public Result<ResponseDto> Map(Response domain) =>
+                    throw new NotImplementedException();
             }
 
             [Fact]
@@ -102,8 +119,8 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
                 metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<EmptyRequestDto>();
                 metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
                 metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Response>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<ResponseDto, Request, Response>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<ResponseDto, Request, Response>>();
+                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<ResponseDto, Request, Response, Mapper, Mapper>>();
+                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<ResponseDto, Request, Response, Mapper, Mapper>>();
                 metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
                 metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
             }
@@ -130,10 +147,19 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
 
             public record Response;
 
-            public class ApiEndpoint : Futurum.WebApiEndpoint.QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>
+            public class ApiEndpoint : Futurum.WebApiEndpoint.QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
             {
                 protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
                     new Response().ToResultOkAsync();
+            }
+
+            public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+            {
+                public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
+                    throw new NotImplementedException();
+
+                public Result<ResponseDto> Map(Response domain) =>
+                    throw new NotImplementedException();
             }
 
             [Fact]
@@ -147,8 +173,8 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
                 metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<RequestDto>();
                 metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
                 metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Response>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<RequestDto, ResponseDto, Request, Response>>();
+                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>>();
+                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>>();
                 metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
                 metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
             }
@@ -178,10 +204,19 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
 
             public record Response;
 
-            public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>
+            public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
             {
                 protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
                     new Response().ToResultOkAsync();
+            }
+
+            public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+            {
+                public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
+                    throw new NotImplementedException();
+
+                public Result<ResponseDto> Map(Response domain) =>
+                    throw new NotImplementedException();
             }
 
             [Fact]
@@ -195,8 +230,8 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
                 metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<RequestDto>();
                 metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
                 metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Response>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response>>();
+                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>>();
+                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>>();
                 metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
                 metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
             }
@@ -221,10 +256,19 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
 
             public record Response;
 
-            public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<Request>.WithResponse<ResponseDto, Response>
+            public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
             {
                 protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
                     new Response().ToResultOkAsync();
+            }
+
+            public class Mapper : IWebApiEndpointRequestMapper<Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+            {
+                public Result<Request> Map(HttpContext httpContext) =>
+                    throw new NotImplementedException();
+
+                public Result<ResponseDto> Map(Response domain) =>
+                    throw new NotImplementedException();
             }
 
             [Fact]
@@ -238,8 +282,8 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
                 metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<EmptyRequestDto>();
                 metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
                 metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Response>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<ResponseDto, Request, Response>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<ResponseDto, Request, Response>>();
+                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<ResponseDto, Request, Response, Mapper, Mapper>>();
+                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<ResponseDto, Request, Response, Mapper, Mapper>>();
                 metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
                 metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
             }
@@ -262,10 +306,16 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
 
             public record Request;
 
-            public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<RequestDto, Request>.WithoutResponse
+            public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<RequestDto, Request>.WithoutResponse.WithMapper<Mapper>
             {
                 protected override Task<Result> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
                     Result.OkAsync();
+            }
+
+            public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>
+            {
+                public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
+                    throw new NotImplementedException();
             }
 
             [Fact]
@@ -279,8 +329,8 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
                 metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<RequestDto>();
                 metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<EmptyResponseDto>();
                 metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Unit>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<RequestDto, Request>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<RequestDto, Request>>();
+                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<RequestDto, Request, Mapper>>();
+                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<RequestDto, Request, Mapper>>();
                 metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
                 metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
             }
@@ -301,10 +351,16 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
 
             public record Request;
 
-            public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<Request>.WithoutResponse
+            public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<Request>.WithoutResponse.WithMapper<Mapper>
             {
                 protected override Task<Result> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
                     Result.OkAsync();
+            }
+
+            public class Mapper : IWebApiEndpointRequestMapper<Request>
+            {
+                public Result<Request> Map(HttpContext httpContext) =>
+                    throw new NotImplementedException();
             }
 
             [Fact]
@@ -318,8 +374,8 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
                 metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<EmptyRequestDto>();
                 metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<EmptyResponseDto>();
                 metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Unit>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<Request>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<Request>>();
+                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<Request, Mapper>>();
+                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<Request, Mapper>>();
                 metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
                 metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
             }

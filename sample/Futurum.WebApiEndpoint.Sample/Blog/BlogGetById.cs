@@ -11,7 +11,7 @@ public static class BlogGetById
 
     public record Query(Id Id);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<QueryDto, Query>.WithResponse<BlogDto, Blog>
+    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<QueryDto, Query>.WithResponse<BlogDto, Blog>.WithMapper<Mapper, BlogMapper>
     {
         private readonly IBlogStorageBroker _storageBroker;
 

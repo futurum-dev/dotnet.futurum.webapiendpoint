@@ -11,7 +11,7 @@ public static class QueryWithRequestParameterMapFromWithResponseScenario
 
     public record Request(string Id);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<FeatureDto, Feature>
+    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<FeatureDto, Feature>.WithMapper<Mapper, FeatureMapper>
     {
         protected override Task<Result<Feature>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
             Enumerable.Range(0, 10)
