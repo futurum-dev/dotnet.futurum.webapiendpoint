@@ -41,7 +41,7 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
     {
         var apiEndpointDefinitions = assemblies.SelectMany(s => s.GetTypes())
                                                .Where(p => typeof(IApiEndpointDefinition).IsAssignableFrom(p))
-                                               .OrderBy(x => x.GetType().FullName)
+                                               .OrderBy(x => x.FullName)
                                                .Select(Activator.CreateInstance)
                                                .Cast<IApiEndpointDefinition>();
 
