@@ -72,14 +72,14 @@ public class WebApiEndpointModule : IModule
 
     private static void RegisterDispatchers(IServiceCollection services)
     {
-        services.AddSingleton(typeof(QueryWebApiEndpointDispatcher<,>));
         services.AddSingleton(typeof(QueryWebApiEndpointDispatcher<,,>));
-        services.AddSingleton(typeof(QueryWebApiEndpointDispatcher<,,,>));
+        services.AddSingleton(typeof(QueryWebApiEndpointDispatcher<,,,,>));
+        services.AddSingleton(typeof(QueryWebApiEndpointDispatcher<,,,,,>));
 
-        services.AddSingleton(typeof(CommandWebApiEndpointDispatcher<,,,>));
+        services.AddSingleton(typeof(CommandWebApiEndpointDispatcher<,,,,,>));
+        services.AddSingleton(typeof(CommandWebApiEndpointDispatcher<,,,,>));
         services.AddSingleton(typeof(CommandWebApiEndpointDispatcher<,,>));
         services.AddSingleton(typeof(CommandWebApiEndpointDispatcher<,>));
-        services.AddSingleton(typeof(CommandWebApiEndpointDispatcher<>));
     }
 
     private static void RegisterValidation(IServiceCollection services, Assembly[] assemblies)

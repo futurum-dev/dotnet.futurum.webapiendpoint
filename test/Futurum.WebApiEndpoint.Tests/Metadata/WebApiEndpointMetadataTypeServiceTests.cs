@@ -7,6 +7,8 @@ using Futurum.WebApiEndpoint.Internal.Dispatcher;
 using Futurum.WebApiEndpoint.Metadata;
 using Futurum.WebApiEndpoint.Middleware;
 
+using Microsoft.AspNetCore.Http;
+
 using Xunit;
 using Xunit.Abstractions;
 
@@ -26,7 +28,7 @@ public class WebApiEndpointMetadataTypeServiceTests
         [Fact]
         public void check()
         {
-            var apiEndpointInterfaceType = typeof(IQueryWebApiEndpoint<ResponseDto, Response>);
+            var apiEndpointInterfaceType = typeof(IQueryWebApiEndpoint<ResponseDto, Response, Mapper>);
             var apiEndpointType = typeof(ApiEndpoint);
 
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForQueryWithoutRequest(apiEndpointInterfaceType, apiEndpointType);
@@ -34,8 +36,8 @@ public class WebApiEndpointMetadataTypeServiceTests
             metadataTypeDefinition.RequestDtoType.Should().Be<EmptyRequestDto>();
             metadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
             metadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Unit, Response>>();
-            metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<ResponseDto, Response>>();
-            metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<ResponseDto, Response>>();
+            metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<ResponseDto, Response, Mapper>>();
+            metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<ResponseDto, Response, Mapper>>();
             metadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
         }
 
@@ -43,10 +45,16 @@ public class WebApiEndpointMetadataTypeServiceTests
 
         public record Response;
 
-        public class ApiEndpoint : QueryWebApiEndpoint.WithoutRequest.WithResponse<ResponseDto, Response>
+        public class ApiEndpoint : QueryWebApiEndpoint.WithoutRequest.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
         {
             protected override Task<Result<Response>> ExecuteAsync(CancellationToken cancellationToken) =>
                 new Response().ToResultOkAsync();
+        }
+
+        public class Mapper : IWebApiEndpointResponseMapper<Response, ResponseDto>
+        {
+            public Result<ResponseDto> Map(Response domain) =>
+                throw new NotImplementedException();
         }
     }
 
@@ -55,7 +63,7 @@ public class WebApiEndpointMetadataTypeServiceTests
         [Fact]
         public void check()
         {
-            var apiEndpointInterfaceType = typeof(IQueryWebApiEndpoint<ResponseDto, Request, Response>);
+            var apiEndpointInterfaceType = typeof(IQueryWebApiEndpoint<ResponseDto, Request, Response, Mapper, Mapper>);
             var apiEndpointType = typeof(ApiEndpoint);
 
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForQueryWithoutRequestDto(apiEndpointInterfaceType, apiEndpointType);
@@ -63,8 +71,8 @@ public class WebApiEndpointMetadataTypeServiceTests
             metadataTypeDefinition.RequestDtoType.Should().Be<EmptyRequestDto>();
             metadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
             metadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Response>>();
-            metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<ResponseDto, Request, Response>>();
-            metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<ResponseDto, Request, Response>>();
+            metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<ResponseDto, Request, Response, Mapper, Mapper>>();
+            metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<ResponseDto, Request, Response, Mapper, Mapper>>();
             metadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
         }
 
@@ -74,10 +82,19 @@ public class WebApiEndpointMetadataTypeServiceTests
 
         public record Response;
 
-        public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<Request>.WithResponse<ResponseDto, Response>
+        public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
         {
             protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
                 new Response().ToResultOkAsync();
+        }
+
+        public class Mapper : IWebApiEndpointResponseMapper<Response, ResponseDto>, IWebApiEndpointRequestMapper<Request>
+        {
+            public Result<ResponseDto> Map(Response domain) =>
+                throw new NotImplementedException();
+
+            public Result<Request> Map(HttpContext httpContext) =>
+                throw new NotImplementedException();
         }
     }
 
@@ -86,7 +103,7 @@ public class WebApiEndpointMetadataTypeServiceTests
         [Fact]
         public void check()
         {
-            var apiEndpointInterfaceType = typeof(IQueryWebApiEndpoint<RequestDto, ResponseDto, Request, Response>);
+            var apiEndpointInterfaceType = typeof(IQueryWebApiEndpoint<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>);
             var apiEndpointType = typeof(ApiEndpoint);
 
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForQueryWithRequestDto(apiEndpointInterfaceType, apiEndpointType);
@@ -94,8 +111,8 @@ public class WebApiEndpointMetadataTypeServiceTests
             metadataTypeDefinition.RequestDtoType.Should().Be<RequestDto>();
             metadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
             metadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Response>>();
-            metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response>>();
-            metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<RequestDto, ResponseDto, Request, Response>>();
+            metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>>();
+            metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>>();
             metadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
         }
 
@@ -107,10 +124,19 @@ public class WebApiEndpointMetadataTypeServiceTests
 
         public record Response;
 
-        public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>
+        public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
         {
             protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
                 new Response().ToResultOkAsync();
+        }
+
+        public class Mapper : IWebApiEndpointResponseMapper<Response, ResponseDto>, IWebApiEndpointRequestMapper<RequestDto, Request>
+        {
+            public Result<ResponseDto> Map(Response domain) =>
+                throw new NotImplementedException();
+
+            public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
+                throw new NotImplementedException();
         }
     }
 
@@ -119,7 +145,7 @@ public class WebApiEndpointMetadataTypeServiceTests
         [Fact]
         public void check()
         {
-            var apiEndpointInterfaceType = typeof(ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response>);
+            var apiEndpointInterfaceType = typeof(ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>);
             var apiEndpointType = typeof(ApiEndpoint);
 
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForCommandWithRequestWithResponse(apiEndpointInterfaceType, apiEndpointType);
@@ -127,8 +153,8 @@ public class WebApiEndpointMetadataTypeServiceTests
             metadataTypeDefinition.RequestDtoType.Should().Be<CommandDto>();
             metadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
             metadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Command, Response>>();
-            metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response>>();
-            metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response>>();
+            metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>>();
+            metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>>();
             metadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
         }
 
@@ -140,10 +166,19 @@ public class WebApiEndpointMetadataTypeServiceTests
 
         public record Response;
 
-        public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>
+        public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
         {
             protected override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken) =>
                 new Response().ToResultOkAsync();
+        }
+
+        public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+        {
+            public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
+                throw new NotImplementedException();
+
+            public Result<ResponseDto> Map(Response domain) =>
+                throw new NotImplementedException();
         }
     }
 
@@ -152,7 +187,7 @@ public class WebApiEndpointMetadataTypeServiceTests
         [Fact]
         public void check()
         {
-            var apiEndpointInterfaceType = typeof(ICommandWebApiEndpoint<ResponseDto, Command, Response>);
+            var apiEndpointInterfaceType = typeof(ICommandWebApiEndpoint<ResponseDto, Command, Response, Mapper, Mapper>);
             var apiEndpointType = typeof(ApiEndpoint);
 
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForCommandWithoutRequestWithResponse(apiEndpointInterfaceType, apiEndpointType);
@@ -160,8 +195,8 @@ public class WebApiEndpointMetadataTypeServiceTests
             metadataTypeDefinition.RequestDtoType.Should().Be<EmptyRequestDto>();
             metadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
             metadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Command, Response>>();
-            metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<ResponseDto, Command, Response>>();
-            metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<ResponseDto, Command, Response>>();
+            metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<ResponseDto, Command, Response, Mapper, Mapper>>();
+            metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<ResponseDto, Command, Response, Mapper, Mapper>>();
             metadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
         }
 
@@ -171,10 +206,19 @@ public class WebApiEndpointMetadataTypeServiceTests
 
         public record Response;
 
-        public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<Command>.WithResponse<ResponseDto, Response>
+        public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<Command>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
         {
             protected override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken) =>
                 new Response().ToResultOkAsync();
+        }
+
+        public class Mapper : IWebApiEndpointRequestMapper<Command>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+        {
+            public Result<Command> Map(HttpContext httpContext) =>
+                throw new NotImplementedException();
+
+            public Result<ResponseDto> Map(Response domain) =>
+                throw new NotImplementedException();
         }
     }
 
@@ -183,7 +227,7 @@ public class WebApiEndpointMetadataTypeServiceTests
         [Fact]
         public void check()
         {
-            var apiEndpointInterfaceType = typeof(ICommandWebApiEndpoint<CommandDto, Command>);
+            var apiEndpointInterfaceType = typeof(ICommandWebApiEndpoint<CommandDto, Command, Mapper>);
             var apiEndpointType = typeof(ApiEndpoint);
 
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForCommandWithoutResponse(apiEndpointInterfaceType, apiEndpointType);
@@ -191,8 +235,8 @@ public class WebApiEndpointMetadataTypeServiceTests
             metadataTypeDefinition.RequestDtoType.Should().Be<CommandDto>();
             metadataTypeDefinition.ResponseDtoType.Should().Be<EmptyResponseDto>();
             metadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Command, Unit>>();
-            metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<CommandDto, Command>>();
-            metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<CommandDto, Command>>();
+            metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<CommandDto, Command, Mapper>>();
+            metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<CommandDto, Command, Mapper>>();
             metadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
         }
 
@@ -200,10 +244,16 @@ public class WebApiEndpointMetadataTypeServiceTests
 
         public record Command;
 
-        public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithoutResponse
+        public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithoutResponse.WithMapper<Mapper>
         {
             protected override Task<Result> ExecuteAsync(Command query, CancellationToken cancellationToken) =>
                 Result.OkAsync();
+        }
+
+        public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>
+        {
+            public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
+                throw new NotImplementedException();
         }
     }
 
@@ -212,7 +262,7 @@ public class WebApiEndpointMetadataTypeServiceTests
         [Fact]
         public void check()
         {
-            var apiEndpointInterfaceType = typeof(ICommandWebApiEndpoint<Command>);
+            var apiEndpointInterfaceType = typeof(ICommandWebApiEndpoint<Command, Mapper>);
             var apiEndpointType = typeof(ApiEndpoint);
 
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForCommandWithoutRequestWithoutResponse(apiEndpointInterfaceType, apiEndpointType);
@@ -220,17 +270,23 @@ public class WebApiEndpointMetadataTypeServiceTests
             metadataTypeDefinition.RequestDtoType.Should().Be<EmptyRequestDto>();
             metadataTypeDefinition.ResponseDtoType.Should().Be<EmptyResponseDto>();
             metadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Command, Unit>>();
-            metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<Command>>();
-            metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<Command>>();
+            metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<Command, Mapper>>();
+            metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<Command, Mapper>>();
             metadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
         }
 
         public record Command;
 
-        public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<Command>.WithoutResponse
+        public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<Command>.WithoutResponse.WithMapper<Mapper>
         {
             protected override Task<Result> ExecuteAsync(Command query, CancellationToken cancellationToken) =>
                 Result.OkAsync();
+        }
+
+        public class Mapper : IWebApiEndpointRequestMapper<Command>
+        {
+            public Result<Command> Map(HttpContext httpContext) =>
+                throw new NotImplementedException();
         }
     }
 }

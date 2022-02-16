@@ -11,7 +11,7 @@ public static class QueryWithRequestParameterMapFromWithResponseFileStreamScenar
 
     public record Request(string Id);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponseFileStream<ApiEndpoint>
+    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponseFileStream<ApiEndpoint>.WithMapper<Mapper>
     {
         protected override Task<Result<ResponseFileStream>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
             new ResponseFileStream(new FileInfo("./Data/hello-world.txt")).ToResultOkAsync();

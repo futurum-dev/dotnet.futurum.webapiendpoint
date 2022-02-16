@@ -26,7 +26,7 @@ public class DisabledWebApiEndpointMiddlewareExecutorTests
     public record ResponseDto;
     public record Response;
     
-    private class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>
+    private class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
     {
         private readonly bool _isSuccess;
 
@@ -47,6 +47,15 @@ public class DisabledWebApiEndpointMiddlewareExecutorTests
                 ? new Response().ToResultOkAsync()
                 : Result.FailAsync<Response>(ErrorMessage);
         }
+    }
+
+    public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+    {
+        public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
+            throw new NotImplementedException();
+
+        public Result<ResponseDto> Map(Response domain) =>
+            throw new NotImplementedException();
     }
 
     [Fact]

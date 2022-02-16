@@ -5,15 +5,16 @@ using Futurum.WebApiEndpoint.Middleware;
 
 namespace Futurum.WebApiEndpoint.Internal.Dispatcher;
 
-internal class CommandWebApiEndpointDispatcher<TCommand> : IWebApiEndpointDispatcher
+internal class CommandWebApiEndpointDispatcher<TCommand, TRequestMapper> : IWebApiEndpointDispatcher
+    where TRequestMapper : IWebApiEndpointRequestMapper<TCommand>
 {
     private readonly IWebApiEndpointLogger _logger;
     private readonly IWebApiEndpointHttpContextDispatcher _httpContextDispatcher;
-    private readonly IWebApiEndpointRequestMapper<TCommand> _requestMapper;
+    private readonly TRequestMapper _requestMapper;
 
     public CommandWebApiEndpointDispatcher(IWebApiEndpointLogger logger,
                                            IWebApiEndpointHttpContextDispatcher httpContextDispatcher,
-                                           IWebApiEndpointRequestMapper<TCommand> requestMapper)
+                                           TRequestMapper requestMapper)
     {
         _logger = logger;
         _httpContextDispatcher = httpContextDispatcher;
@@ -24,7 +25,7 @@ internal class CommandWebApiEndpointDispatcher<TCommand> : IWebApiEndpointDispat
                                      CancellationToken cancellationToken)
     {
         var middlewareExecutorTyped = middlewareExecutor as IWebApiEndpointMiddlewareExecutor<TCommand, Unit>;
-        var apiEndpointTyped = apiEndpoint as ICommandWebApiEndpoint<TCommand>;
+        var apiEndpointTyped = apiEndpoint as ICommandWebApiEndpoint<TCommand, TRequestMapper>;
 
         return _httpContextDispatcher.ReadRequestAsync<EmptyRequestDto>(httpContext, metadataDefinition.MetadataMapFromDefinition, cancellationToken)
                                      .ThenAsync(commandDto => _requestMapper.Map(httpContext))

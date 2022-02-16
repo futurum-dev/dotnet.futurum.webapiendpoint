@@ -7,7 +7,7 @@ public static class QueryWithRequestParameterWithResponseAsyncEnumerableScenario
 {
     public record Request(string Id);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<Request>.WithResponseAsyncEnumerable<ApiEndpoint, FeatureDto, Feature>
+    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<Request>.WithResponseAsyncEnumerable<ApiEndpoint, FeatureDto, Feature>.WithMapper<Mapper>
     {
         protected override Task<Result<ResponseAsyncEnumerable<Feature>>> ExecuteAsync(Request query, CancellationToken cancellationToken)
         {

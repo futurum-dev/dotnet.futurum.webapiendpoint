@@ -11,8 +11,9 @@ internal static class WebApiEndpointMetadataTypeService
     {
         var responseDtoType = apiEndpointInterfaceType?.GetGenericArguments()[0];
         var responseType = apiEndpointInterfaceType?.GetGenericArguments()[1];
+        var mapperType = apiEndpointInterfaceType?.GetGenericArguments()[2];
 
-        var apiEndpointExecutorServiceType = typeof(QueryWebApiEndpointDispatcher<,>).MakeGenericType(responseDtoType, responseType);
+        var apiEndpointExecutorServiceType = typeof(QueryWebApiEndpointDispatcher<,,>).MakeGenericType(responseDtoType, responseType, mapperType);
 
         var middlewareExecutorType = typeof(IWebApiEndpointMiddlewareExecutor<,>).MakeGenericType(typeof(Unit), responseType);
 
@@ -24,8 +25,10 @@ internal static class WebApiEndpointMetadataTypeService
         var responseDtoType = apiEndpointInterfaceType?.GetGenericArguments()[0];
         var queryType = apiEndpointInterfaceType?.GetGenericArguments()[1];
         var responseType = apiEndpointInterfaceType?.GetGenericArguments()[2];
+        var requestMapperType = apiEndpointInterfaceType?.GetGenericArguments()[3];
+        var responseMapperType = apiEndpointInterfaceType?.GetGenericArguments()[4];
 
-        var apiEndpointExecutorServiceType = typeof(QueryWebApiEndpointDispatcher<,,>).MakeGenericType(responseDtoType, queryType, responseType);
+        var apiEndpointExecutorServiceType = typeof(QueryWebApiEndpointDispatcher<,,,,>).MakeGenericType(responseDtoType, queryType, responseType, requestMapperType, responseMapperType);
 
         var middlewareExecutorType = typeof(IWebApiEndpointMiddlewareExecutor<,>).MakeGenericType(queryType, responseType);
 
@@ -38,8 +41,10 @@ internal static class WebApiEndpointMetadataTypeService
         var responseDtoType = apiEndpointInterfaceType?.GetGenericArguments()[1];
         var queryType = apiEndpointInterfaceType?.GetGenericArguments()[2];
         var responseType = apiEndpointInterfaceType?.GetGenericArguments()[3];
+        var requestMapperType = apiEndpointInterfaceType?.GetGenericArguments()[4];
+        var responseMapperType = apiEndpointInterfaceType?.GetGenericArguments()[5];
 
-        var apiEndpointExecutorServiceType = typeof(QueryWebApiEndpointDispatcher<,,,>).MakeGenericType(requestDtoType, responseDtoType, queryType, responseType);
+        var apiEndpointExecutorServiceType = typeof(QueryWebApiEndpointDispatcher<,,,,,>).MakeGenericType(requestDtoType, responseDtoType, queryType, responseType, requestMapperType, responseMapperType);
 
         var middlewareExecutorType = typeof(IWebApiEndpointMiddlewareExecutor<,>).MakeGenericType(queryType, responseType);
 
@@ -52,8 +57,10 @@ internal static class WebApiEndpointMetadataTypeService
         var responseDtoType = apiEndpointInterfaceType?.GetGenericArguments()[1];
         var commandType = apiEndpointInterfaceType?.GetGenericArguments()[2];
         var responseType = apiEndpointInterfaceType?.GetGenericArguments()[3];
+        var requestMapperType = apiEndpointInterfaceType?.GetGenericArguments()[4];
+        var responseMapperType = apiEndpointInterfaceType?.GetGenericArguments()[5];
 
-        var apiEndpointExecutorServiceType = typeof(CommandWebApiEndpointDispatcher<,,,>).MakeGenericType(commandDtoType, responseDtoType, commandType, responseType);
+        var apiEndpointExecutorServiceType = typeof(CommandWebApiEndpointDispatcher<,,,,,>).MakeGenericType(commandDtoType, responseDtoType, commandType, responseType, requestMapperType, responseMapperType);
 
         var middlewareExecutorType = typeof(IWebApiEndpointMiddlewareExecutor<,>).MakeGenericType(commandType, responseType);
 
@@ -65,8 +72,10 @@ internal static class WebApiEndpointMetadataTypeService
         var responseDtoType = apiEndpointInterfaceType?.GetGenericArguments()[0];
         var commandType = apiEndpointInterfaceType?.GetGenericArguments()[1];
         var responseType = apiEndpointInterfaceType?.GetGenericArguments()[2];
+        var requestMapperType = apiEndpointInterfaceType?.GetGenericArguments()[3];
+        var responseMapperType = apiEndpointInterfaceType?.GetGenericArguments()[4];
 
-        var apiEndpointExecutorServiceType = typeof(CommandWebApiEndpointDispatcher<,,>).MakeGenericType(responseDtoType, commandType, responseType);
+        var apiEndpointExecutorServiceType = typeof(CommandWebApiEndpointDispatcher<,,,,>).MakeGenericType(responseDtoType, commandType, responseType, requestMapperType, responseMapperType);
 
         var middlewareExecutorType = typeof(IWebApiEndpointMiddlewareExecutor<,>).MakeGenericType(commandType, responseType);
 
@@ -77,8 +86,9 @@ internal static class WebApiEndpointMetadataTypeService
     {
         var commandDtoType = apiEndpointInterfaceType?.GetGenericArguments()[0];
         var commandType = apiEndpointInterfaceType?.GetGenericArguments()[1];
+        var mapperType = apiEndpointInterfaceType?.GetGenericArguments()[2];
 
-        var apiEndpointExecutorServiceType = typeof(CommandWebApiEndpointDispatcher<,>).MakeGenericType(commandDtoType, commandType);
+        var apiEndpointExecutorServiceType = typeof(CommandWebApiEndpointDispatcher<,,>).MakeGenericType(commandDtoType, commandType, mapperType);
 
         var middlewareExecutorType = typeof(IWebApiEndpointMiddlewareExecutor<,>).MakeGenericType(commandType, typeof(Unit));
 
@@ -88,8 +98,9 @@ internal static class WebApiEndpointMetadataTypeService
     public static MetadataTypeDefinition GetForCommandWithoutRequestWithoutResponse(Type apiEndpointInterfaceType, Type apiEndpointType)
     {
         var commandType = apiEndpointInterfaceType?.GetGenericArguments()[0];
+        var mapperType = apiEndpointInterfaceType?.GetGenericArguments()[1];
 
-        var apiEndpointExecutorServiceType = typeof(CommandWebApiEndpointDispatcher<>).MakeGenericType(commandType);
+        var apiEndpointExecutorServiceType = typeof(CommandWebApiEndpointDispatcher<,>).MakeGenericType(commandType, mapperType);
 
         var middlewareExecutorType = typeof(IWebApiEndpointMiddlewareExecutor<,>).MakeGenericType(commandType, typeof(Unit));
 

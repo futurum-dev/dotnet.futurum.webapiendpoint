@@ -30,7 +30,7 @@ public class WebApiEndpointPreProcessorMiddlewareTests
 
     public record Response;
 
-    private class SuccessApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>
+    private class SuccessApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
     {
         private readonly Action _action;
 
@@ -47,7 +47,7 @@ public class WebApiEndpointPreProcessorMiddlewareTests
         }
     }
 
-    private class FailureApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>
+    private class FailureApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
     {
         private readonly Action _action;
 
@@ -62,6 +62,15 @@ public class WebApiEndpointPreProcessorMiddlewareTests
 
             return Result.FailAsync<Response>(ErrorMessage);
         }
+    }
+
+    public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+    {
+        public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
+            new Command().ToResultOk();
+
+        public Result<ResponseDto> Map(Response domain) =>
+            new ResponseDto().ToResultOk();
     }
 
     public class SuccessMiddleware<TRequest, TResponse> : IWebApiEndpointPreProcessorMiddleware<TRequest>

@@ -60,9 +60,9 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
         var metadataRouteDefinition = apiEndpointDefinition.MetadataDefinition as MetadataRouteDefinition;
         var apiEndpointType = apiEndpointDefinition.ApiEndpointType;
 
-        if (apiEndpointType.IsClosedTypeOf(typeof(IQueryWebApiEndpoint<,>)))
+        if (apiEndpointType.IsClosedTypeOf(typeof(IQueryWebApiEndpoint<,,>)))
         {
-            var apiEndpointInterfaceType = apiEndpointType.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IQueryWebApiEndpoint<,>));
+            var apiEndpointInterfaceType = apiEndpointType.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IQueryWebApiEndpoint<,,>));
 
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForQueryWithoutRequest(apiEndpointInterfaceType, apiEndpointType);
 
@@ -71,9 +71,9 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
             yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
         }
 
-        if (apiEndpointType.IsClosedTypeOf(typeof(IQueryWebApiEndpoint<,,>)))
+        if (apiEndpointType.IsClosedTypeOf(typeof(IQueryWebApiEndpoint<,,,,>)))
         {
-            var apiEndpointInterfaceType = apiEndpointType.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IQueryWebApiEndpoint<,,>));
+            var apiEndpointInterfaceType = apiEndpointType.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IQueryWebApiEndpoint<,,,,>));
 
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForQueryWithoutRequestDto(apiEndpointInterfaceType, apiEndpointType);
 
@@ -82,9 +82,9 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
             yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
         }
 
-        if (apiEndpointType.IsClosedTypeOf(typeof(IQueryWebApiEndpoint<,,,>)))
+        if (apiEndpointType.IsClosedTypeOf(typeof(IQueryWebApiEndpoint<,,,,,>)))
         {
-            var apiEndpointInterfaceType = apiEndpointType.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IQueryWebApiEndpoint<,,,>));
+            var apiEndpointInterfaceType = apiEndpointType.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IQueryWebApiEndpoint<,,,,,>));
 
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForQueryWithRequestDto(apiEndpointInterfaceType, apiEndpointType);
 
@@ -93,11 +93,22 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
             yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
         }
 
-        if (apiEndpointType.IsClosedTypeOf(typeof(ICommandWebApiEndpoint<,,,>)))
+        if (apiEndpointType.IsClosedTypeOf(typeof(ICommandWebApiEndpoint<,,,,,>)))
         {
-            var apiEndpointInterfaceType = apiEndpointType.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(ICommandWebApiEndpoint<,,,>));
+            var apiEndpointInterfaceType = apiEndpointType.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(ICommandWebApiEndpoint<,,,,,>));
 
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForCommandWithRequestWithResponse(apiEndpointInterfaceType, apiEndpointType);
+
+            var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
+
+            yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+        }
+
+        if (apiEndpointType.IsClosedTypeOf(typeof(ICommandWebApiEndpoint<,,,,>)))
+        {
+            var apiEndpointInterfaceType = apiEndpointType.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(ICommandWebApiEndpoint<,,,,>));
+
+            var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForCommandWithoutRequestWithResponse(apiEndpointInterfaceType, apiEndpointType);
 
             var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
 
@@ -108,7 +119,7 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
         {
             var apiEndpointInterfaceType = apiEndpointType.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(ICommandWebApiEndpoint<,,>));
 
-            var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForCommandWithoutRequestWithResponse(apiEndpointInterfaceType, apiEndpointType);
+            var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForCommandWithoutResponse(apiEndpointInterfaceType, apiEndpointType);
 
             var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
 
@@ -118,17 +129,6 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
         if (apiEndpointType.IsClosedTypeOf(typeof(ICommandWebApiEndpoint<,>)))
         {
             var apiEndpointInterfaceType = apiEndpointType.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(ICommandWebApiEndpoint<,>));
-
-            var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForCommandWithoutResponse(apiEndpointInterfaceType, apiEndpointType);
-
-            var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
-
-            yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
-        }
-
-        if (apiEndpointType.IsClosedTypeOf(typeof(ICommandWebApiEndpoint<>)))
-        {
-            var apiEndpointInterfaceType = apiEndpointType.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(ICommandWebApiEndpoint<>));
 
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForCommandWithoutRequestWithoutResponse(apiEndpointInterfaceType, apiEndpointType);
 
