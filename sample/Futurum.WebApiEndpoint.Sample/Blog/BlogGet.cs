@@ -4,7 +4,7 @@ namespace Futurum.WebApiEndpoint.Sample.Blog;
 
 public static class BlogGet
 {
-    public class ApiEndpoint : QueryWebApiEndpoint.WithoutRequest.WithResponseDataCollection<ApiEndpoint, BlogDto, Blog>
+    public class ApiEndpoint : QueryWebApiEndpoint.WithoutRequest.WithResponseDataCollection<ApiEndpoint, BlogDto, Blog>.WithMapper<BlogDataMapper>
     {
         private readonly IBlogStorageBroker _storageBroker;
 

@@ -128,11 +128,9 @@ public class WebApiEndpointAndMapperModule : IModule
                                                 .SelectMany(GetApiEndpointMetadataTypeDefinitions)
                                                 .Where(metadataTypeDefinition => metadataTypeDefinition.RequestDtoType == typeof(RequestPlainTextDto));
 
-        foreach (var metadataTypeDefinition in metadataTypeDefinitions)
+        foreach (var mapperType in metadataTypeDefinitions.SelectMany(x => x.MapperTypes))
         {
-            var requestPlainTextMapperType = typeof(RequestPlainTextMapper<>).MakeGenericType(metadataTypeDefinition.WebApiEndpointType);
-
-            services.AddSingleton(requestPlainTextMapperType);
+            services.AddSingleton(mapperType);
         }
     }
 
@@ -142,11 +140,9 @@ public class WebApiEndpointAndMapperModule : IModule
                                                 .SelectMany(GetApiEndpointMetadataTypeDefinitions)
                                                 .Where(metadataTypeDefinition => metadataTypeDefinition.RequestDtoType == typeof(RequestUploadFilesDto));
 
-        foreach (var metadataTypeDefinition in metadataTypeDefinitions)
+        foreach (var mapperType in metadataTypeDefinitions.SelectMany(x => x.MapperTypes))
         {
-            var requestUploadFilesMapperType = typeof(RequestUploadFilesMapper<>).MakeGenericType(metadataTypeDefinition.WebApiEndpointType);
-
-            services.AddSingleton(requestUploadFilesMapperType);
+            services.AddSingleton(mapperType);
         }
     }
 
@@ -157,13 +153,8 @@ public class WebApiEndpointAndMapperModule : IModule
                                                 .Where(metadataTypeDefinition => metadataTypeDefinition.ResponseDtoType.IsGenericType &&
                                                                                  metadataTypeDefinition.ResponseDtoType.GetGenericTypeDefinition() == typeof(ResponseAsyncEnumerableDto<>));
 
-        foreach (var metadataTypeDefinition in metadataTypeDefinitions)
+        foreach (var mapperType in metadataTypeDefinitions.SelectMany(x => x.MapperTypes))
         {
-            var dataDtoType = metadataTypeDefinition.ResponseDtoType.GetGenericArguments()[0];
-            var dataType = metadataTypeDefinition.ResponseType.GetGenericArguments()[1];
-
-            var mapperType = typeof(ResponseAsyncEnumerableMapper<,,>).MakeGenericType(metadataTypeDefinition.WebApiEndpointType, dataType, dataDtoType);
-
             services.AddSingleton(mapperType);
         }
     }
@@ -174,10 +165,8 @@ public class WebApiEndpointAndMapperModule : IModule
                                                 .SelectMany(GetApiEndpointMetadataTypeDefinitions)
                                                 .Where(metadataTypeDefinition => metadataTypeDefinition.ResponseDtoType == typeof(ResponseBytesDto));
 
-        foreach (var metadataTypeDefinition in metadataTypeDefinitions)
+        foreach (var mapperType in metadataTypeDefinitions.SelectMany(x => x.MapperTypes))
         {
-            var mapperType = typeof(ResponseBytesMapper<>).MakeGenericType(metadataTypeDefinition.WebApiEndpointType);
-
             services.AddSingleton(mapperType);
         }
     }
@@ -189,13 +178,8 @@ public class WebApiEndpointAndMapperModule : IModule
                                                 .Where(metadataTypeDefinition => metadataTypeDefinition.ResponseDtoType.IsGenericType &&
                                                                                  metadataTypeDefinition.ResponseDtoType.GetGenericTypeDefinition() == typeof(ResponseDataCollectionDto<>));
 
-        foreach (var metadataTypeDefinition in metadataTypeDefinitions)
+        foreach (var mapperType in metadataTypeDefinitions.SelectMany(x => x.MapperTypes))
         {
-            var dataDtoType = metadataTypeDefinition.ResponseDtoType.GetGenericArguments()[0];
-            var dataType = metadataTypeDefinition.ResponseType.GetGenericArguments()[1];
-
-            var mapperType = typeof(ResponseDataCollectionMapper<,,>).MakeGenericType(metadataTypeDefinition.WebApiEndpointType, dataType, dataDtoType);
-
             services.AddSingleton(mapperType);
         }
     }
@@ -206,10 +190,8 @@ public class WebApiEndpointAndMapperModule : IModule
                                                 .SelectMany(GetApiEndpointMetadataTypeDefinitions)
                                                 .Where(metadataTypeDefinition => metadataTypeDefinition.ResponseDtoType == typeof(ResponseEmptyJsonDto));
 
-        foreach (var metadataTypeDefinition in metadataTypeDefinitions)
+        foreach (var mapperType in metadataTypeDefinitions.SelectMany(x => x.MapperTypes))
         {
-            var mapperType = typeof(ResponseEmptyJsonMapper<>).MakeGenericType(metadataTypeDefinition.WebApiEndpointType);
-
             services.AddSingleton(mapperType);
         }
     }
@@ -220,10 +202,8 @@ public class WebApiEndpointAndMapperModule : IModule
                                                 .SelectMany(GetApiEndpointMetadataTypeDefinitions)
                                                 .Where(metadataTypeDefinition => metadataTypeDefinition.ResponseDtoType == typeof(ResponseFileStreamDto));
 
-        foreach (var metadataTypeDefinition in metadataTypeDefinitions)
+        foreach (var mapperType in metadataTypeDefinitions.SelectMany(x => x.MapperTypes))
         {
-            var mapperType = typeof(ResponseFileStreamMapper<>).MakeGenericType(metadataTypeDefinition.WebApiEndpointType);
-
             services.AddSingleton(mapperType);
         }
     }
@@ -234,10 +214,8 @@ public class WebApiEndpointAndMapperModule : IModule
                                                 .SelectMany(GetApiEndpointMetadataTypeDefinitions)
                                                 .Where(metadataTypeDefinition => metadataTypeDefinition.ResponseDtoType == typeof(ResponseStreamDto));
 
-        foreach (var metadataTypeDefinition in metadataTypeDefinitions)
+        foreach (var mapperType in metadataTypeDefinitions.SelectMany(x => x.MapperTypes))
         {
-            var mapperType = typeof(ResponseStreamMapper<>).MakeGenericType(metadataTypeDefinition.WebApiEndpointType);
-
             services.AddSingleton(mapperType);
         }
     }

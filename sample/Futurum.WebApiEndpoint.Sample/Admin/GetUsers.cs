@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Sample.Features;
 
 namespace Futurum.WebApiEndpoint.Sample.Admin;
 
@@ -8,7 +9,7 @@ public static class GetUsers
 
     public record User(string FirstName, string LastName);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.WithoutRequest.WithResponseDataCollection<ApiEndpoint, UserDto, User>
+    public class ApiEndpoint : QueryWebApiEndpoint.WithoutRequest.WithResponseDataCollection<ApiEndpoint, UserDto, User>.WithMapper<Mapper>
     {
         protected override Task<Result<ResponseDataCollection<User>>> ExecuteAsync(CancellationToken cancellationToken) =>
             Enumerable.Range(0, 10)

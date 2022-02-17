@@ -39,6 +39,7 @@ public class WebApiEndpointMetadataTypeServiceTests
             metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<ResponseDto, Response, Mapper>>();
             metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<ResponseDto, Response, Mapper>>();
             metadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
+            metadataTypeDefinition.MapperTypes.Should().BeEquivalentTo(new[] { typeof(Mapper) });
         }
 
         public record ResponseDto;
@@ -74,6 +75,7 @@ public class WebApiEndpointMetadataTypeServiceTests
             metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<ResponseDto, Request, Response, Mapper, Mapper>>();
             metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<ResponseDto, Request, Response, Mapper, Mapper>>();
             metadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
+            metadataTypeDefinition.MapperTypes.Should().BeEquivalentTo(new[] { typeof(Mapper), typeof(Mapper) });
         }
 
         public record Request;
@@ -114,6 +116,7 @@ public class WebApiEndpointMetadataTypeServiceTests
             metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>>();
             metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>>();
             metadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
+            metadataTypeDefinition.MapperTypes.Should().BeEquivalentTo(new[] { typeof(Mapper), typeof(Mapper) });
         }
 
         public record RequestDto;
@@ -156,6 +159,7 @@ public class WebApiEndpointMetadataTypeServiceTests
             metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>>();
             metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>>();
             metadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
+            metadataTypeDefinition.MapperTypes.Should().BeEquivalentTo(new[] { typeof(Mapper), typeof(Mapper) });
         }
 
         public record CommandDto;
@@ -198,6 +202,7 @@ public class WebApiEndpointMetadataTypeServiceTests
             metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<ResponseDto, Command, Response, Mapper, Mapper>>();
             metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<ResponseDto, Command, Response, Mapper, Mapper>>();
             metadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
+            metadataTypeDefinition.MapperTypes.Should().BeEquivalentTo(new[] { typeof(Mapper), typeof(Mapper) });
         }
 
         public record Command;
@@ -238,6 +243,7 @@ public class WebApiEndpointMetadataTypeServiceTests
             metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<CommandDto, Command, Mapper>>();
             metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<CommandDto, Command, Mapper>>();
             metadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
+            metadataTypeDefinition.MapperTypes.Should().BeEquivalentTo(new[] { typeof(Mapper) });
         }
 
         public record CommandDto;
@@ -273,6 +279,7 @@ public class WebApiEndpointMetadataTypeServiceTests
             metadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<Command, Mapper>>();
             metadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<Command, Mapper>>();
             metadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
+            metadataTypeDefinition.MapperTypes.Should().BeEquivalentTo(new[] { typeof(Mapper) });
         }
 
         public record Command;

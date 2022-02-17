@@ -12,7 +12,7 @@ public class ResponseDataCollectionMapperTests
         var numbers = Enumerable.Range(0, 100)
                                 .ToList();
 
-        var result = new ResponseDataCollectionMapper<object, int, int>(new DataMapper()).Map(new ResponseDataCollection<object, int>(numbers));
+        var result = new ResponseDataCollectionMapper<object, int, int, DataMapper>(new DataMapper()).Map(new ResponseDataCollection<object, int>(numbers));
 
         result.ShouldBeSuccessWithValueEquivalentTo(new ResponseDataCollectionDto<int>(numbers.Select(x => x * 2).ToList()));
     }

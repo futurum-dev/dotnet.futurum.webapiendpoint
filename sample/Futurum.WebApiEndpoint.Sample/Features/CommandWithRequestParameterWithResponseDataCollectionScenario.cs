@@ -7,7 +7,7 @@ public static class CommandWithRequestParameterWithResponseDataCollectionScenari
 {
     public record Command(string Id);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<Command>.WithResponseDataCollection<ApiEndpoint, FeatureDto, Feature>.WithMapper<Mapper>
+    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<Command>.WithResponseDataCollection<ApiEndpoint, FeatureDto, Feature>.WithMapper<Mapper, FeatureDataMapper>
     {
         protected override Task<Result<ResponseDataCollection<Feature>>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             new ResponseDataCollection<Feature>(Enumerable.Range(0, 10).Select(i => new Feature($"Name - {i} - {command.Id}"))).ToResultOkAsync();

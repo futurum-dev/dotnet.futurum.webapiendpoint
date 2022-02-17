@@ -48,18 +48,22 @@ public partial class CommandWebApiEndpoint
         /// <summary>
         /// Configure with response async enumerable
         /// </summary>
-        public abstract class WithResponseAsyncEnumerable<TDataDto, TData> : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseAsyncEnumerableDto<TDataDto>, RequestPlainText<TApiEndpoint>,
-            ResponseAsyncEnumerable<TApiEndpoint, TData>, RequestPlainTextMapper<TApiEndpoint>, ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto>>
+        public abstract class WithResponseAsyncEnumerable<TDataDto, TData>
         {
-            /// <inheritdoc />
-            public Task<Result<ResponseAsyncEnumerable<TApiEndpoint, TData>>> ExecuteCommandAsync(RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
-                ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken).MapAsync(responseAsyncEnumerable => responseAsyncEnumerable.ToApiEndpoint<TApiEndpoint>());
+            public abstract class WithMapper<TDataMapper> : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseAsyncEnumerableDto<TDataDto>, RequestPlainText<TApiEndpoint>,
+                ResponseAsyncEnumerable<TApiEndpoint, TData>, RequestPlainTextMapper<TApiEndpoint>, ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TDataMapper>>
+                where TDataMapper : IWebApiEndpointDataMapper<TData, TDataDto>
+            {
+                /// <inheritdoc />
+                public Task<Result<ResponseAsyncEnumerable<TApiEndpoint, TData>>> ExecuteCommandAsync(RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
+                    ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken).MapAsync(responseAsyncEnumerable => responseAsyncEnumerable.ToApiEndpoint<TApiEndpoint>());
 
-            /// <summary>
-            /// Execute the WebApiEndpoint
-            /// <para>This method is called once for each request received</para>
-            /// </summary>
-            protected abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken);
+                /// <summary>
+                /// Execute the WebApiEndpoint
+                /// <para>This method is called once for each request received</para>
+                /// </summary>
+                protected abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken);
+            }
         }
 
         /// <summary>
@@ -82,18 +86,22 @@ public partial class CommandWebApiEndpoint
         /// <summary>
         /// Configure with response data collection
         /// </summary>
-        public abstract class WithResponseDataCollection<TDataDto, TData> : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseDataCollectionDto<TDataDto>, RequestPlainText<TApiEndpoint>,
-            ResponseDataCollection<TApiEndpoint, TData>, RequestPlainTextMapper<TApiEndpoint>, ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto>>
+        public abstract class WithResponseDataCollection<TDataDto, TData>
         {
-            /// <inheritdoc />
-            public Task<Result<ResponseDataCollection<TApiEndpoint, TData>>> ExecuteCommandAsync(RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
-                ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken).MapAsync(responseDataCollection => responseDataCollection.ToApiEndpoint<TApiEndpoint>());
+            public abstract class WithMapper<TDataMapper> : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseDataCollectionDto<TDataDto>, RequestPlainText<TApiEndpoint>,
+                                                                     ResponseDataCollection<TApiEndpoint, TData>, RequestPlainTextMapper<TApiEndpoint>, ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TDataMapper>>
+                where TDataMapper : IWebApiEndpointDataMapper<TData, TDataDto>
+            {
+                /// <inheritdoc />
+                public Task<Result<ResponseDataCollection<TApiEndpoint, TData>>> ExecuteCommandAsync(RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
+                    ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken).MapAsync(responseDataCollection => responseDataCollection.ToApiEndpoint<TApiEndpoint>());
 
-            /// <summary>
-            /// Execute the WebApiEndpoint
-            /// <para>This method is called once for each request received</para>
-            /// </summary>
-            protected abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken);
+                /// <summary>
+                /// Execute the WebApiEndpoint
+                /// <para>This method is called once for each request received</para>
+                /// </summary>
+                protected abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken);
+            }
         }
 
         /// <summary>

@@ -20,11 +20,12 @@ public record ResponseAsyncEnumerable<TData>(IAsyncEnumerable<TData> Data)
 /// </summary>
 public record ResponseAsyncEnumerableDto<T>(IAsyncEnumerable<T> AsyncEnumerable);
 
-internal class ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto> : IWebApiEndpointResponseMapper<ResponseAsyncEnumerable<TApiEndpoint, TData>, ResponseAsyncEnumerableDto<TDataDto>>
+internal class ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TDataMapper> : IWebApiEndpointResponseMapper<ResponseAsyncEnumerable<TApiEndpoint, TData>, ResponseAsyncEnumerableDto<TDataDto>>
+    where TDataMapper : IWebApiEndpointDataMapper<TData, TDataDto>
 {
-    private readonly IWebApiEndpointDataMapper<TData, TDataDto> _dataMapper;
+    private readonly TDataMapper _dataMapper;
 
-    public ResponseAsyncEnumerableMapper(IWebApiEndpointDataMapper<TData, TDataDto> dataMapper)
+    public ResponseAsyncEnumerableMapper(TDataMapper dataMapper)
     {
         _dataMapper = dataMapper;
     }

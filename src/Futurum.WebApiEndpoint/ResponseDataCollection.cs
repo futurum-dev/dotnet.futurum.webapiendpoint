@@ -52,11 +52,12 @@ public record ResponseDataCollectionDto<T>(ICollection<T> Data)
     public long Count => Data.Count;
 }
 
-internal class ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto> : IWebApiEndpointResponseMapper<ResponseDataCollection<TApiEndpoint, TData>, ResponseDataCollectionDto<TDataDto>>
+internal class ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TDataMapper> : IWebApiEndpointResponseMapper<ResponseDataCollection<TApiEndpoint, TData>, ResponseDataCollectionDto<TDataDto>>
+    where TDataMapper : IWebApiEndpointDataMapper<TData, TDataDto>
 {
-    private readonly IWebApiEndpointDataMapper<TData, TDataDto> _dataMapper;
+    private readonly TDataMapper _dataMapper;
 
-    public ResponseDataCollectionMapper(IWebApiEndpointDataMapper<TData, TDataDto> dataMapper)
+    public ResponseDataCollectionMapper(TDataMapper dataMapper)
     {
         _dataMapper = dataMapper;
     }
