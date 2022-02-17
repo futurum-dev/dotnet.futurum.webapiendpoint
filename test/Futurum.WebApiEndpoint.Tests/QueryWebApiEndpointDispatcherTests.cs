@@ -102,7 +102,8 @@ public class QueryWebApiEndpointDispatcherTests
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(EmptyRequestDto), typeof(ResponseDto), typeof(ApiEndpoint),
                                                                     typeof(IQueryWebApiEndpoint<ResponseDto, Query, Response, Mapper, Mapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Query, Response>),
-                                                                    typeof(QueryWebApiEndpointDispatcher<ResponseDto, Query, Response, Mapper, Mapper>));
+                                                                    typeof(QueryWebApiEndpointDispatcher<ResponseDto, Query, Response, Mapper, Mapper>),
+                                                                    new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
             var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
 
@@ -200,7 +201,8 @@ public class QueryWebApiEndpointDispatcherTests
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(QueryDto), typeof(ResponseDto), typeof(ApiEndpoint),
                                                                     typeof(IQueryWebApiEndpoint<QueryDto, ResponseDto, Query, Response, Mapper, Mapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Query, Response>),
-                                                                    typeof(QueryWebApiEndpointDispatcher<QueryDto, ResponseDto, Query, Response, Mapper, Mapper>));
+                                                                    typeof(QueryWebApiEndpointDispatcher<QueryDto, ResponseDto, Query, Response, Mapper, Mapper>),
+                                                                    new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
             var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
 
@@ -295,7 +297,8 @@ public class QueryWebApiEndpointDispatcherTests
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(EmptyRequestDto), typeof(ResponseDto), typeof(ApiEndpoint),
                                                                     typeof(IQueryWebApiEndpoint<ResponseDto, Response, Mapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Unit, Response>),
-                                                                    typeof(QueryWebApiEndpointDispatcher<ResponseDto, Response, Mapper>));
+                                                                    typeof(QueryWebApiEndpointDispatcher<ResponseDto, Response, Mapper>),
+                                                                    new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
             var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
 

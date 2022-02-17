@@ -11,7 +11,7 @@ public static class QueryWithRequestParameterMapFromWithResponseAsyncEnumerableS
 
     public record Request(string Id);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponseAsyncEnumerable<ApiEndpoint, FeatureDto, Feature>.WithMapper<Mapper>
+    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponseAsyncEnumerable<ApiEndpoint, FeatureDto, Feature>.WithMapper<Mapper, FeatureDataMapper>
     {
         protected override Task<Result<ResponseAsyncEnumerable<Feature>>> ExecuteAsync(Request query, CancellationToken cancellationToken)
         {

@@ -4,7 +4,7 @@ namespace Futurum.WebApiEndpoint.Sample.Features;
 
 public static class CommandWithRequestPlainTextWithResponseAsyncEnumerableScenario
 {
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequestPlainText<ApiEndpoint>.WithResponseAsyncEnumerable<FeatureDto, Feature>
+    public class ApiEndpoint : CommandWebApiEndpoint.WithRequestPlainText<ApiEndpoint>.WithResponseAsyncEnumerable<FeatureDto, Feature>.WithMapper<FeatureDataMapper>
     {
         protected override Task<Result<ResponseAsyncEnumerable<Feature>>> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken)
         {

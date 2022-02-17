@@ -49,8 +49,9 @@ public partial class QueryWebApiEndpoint
         /// </summary>
         public abstract class WithResponseAsyncEnumerable<TApiEndpoint, TDataDto, TData>
         {
-            public abstract class WithMapper<TRequestMapper> : IQueryWebApiEndpoint<ResponseAsyncEnumerableDto<TDataDto>, TQueryDomain, ResponseAsyncEnumerable<TApiEndpoint, TData>, TRequestMapper, ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto>>
+            public abstract class WithMapper<TRequestMapper, TDataMapper> : IQueryWebApiEndpoint<ResponseAsyncEnumerableDto<TDataDto>, TQueryDomain, ResponseAsyncEnumerable<TApiEndpoint, TData>, TRequestMapper, ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TDataMapper>>
                 where TRequestMapper : IWebApiEndpointRequestMapper<TQueryDomain>
+                where TDataMapper : IWebApiEndpointDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
                 public Task<Result<ResponseAsyncEnumerable<TApiEndpoint, TData>>> ExecuteQueryAsync(TQueryDomain query, CancellationToken cancellationToken) =>
@@ -89,8 +90,9 @@ public partial class QueryWebApiEndpoint
         /// </summary>
         public abstract class WithResponseDataCollection<TApiEndpoint, TDataDto, TData>
         {
-            public abstract class WithMapper<TRequestMapper> : IQueryWebApiEndpoint<ResponseDataCollectionDto<TDataDto>, TQueryDomain, ResponseDataCollection<TApiEndpoint, TData>, TRequestMapper, ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto>>
+            public abstract class WithMapper<TRequestMapper, TDataMapper> : IQueryWebApiEndpoint<ResponseDataCollectionDto<TDataDto>, TQueryDomain, ResponseDataCollection<TApiEndpoint, TData>, TRequestMapper, ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TDataMapper>>
                 where TRequestMapper : IWebApiEndpointRequestMapper<TQueryDomain>
+                where TDataMapper : IWebApiEndpointDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
                 public Task<Result<ResponseDataCollection<TApiEndpoint, TData>>> ExecuteQueryAsync(TQueryDomain query, CancellationToken cancellationToken) =>

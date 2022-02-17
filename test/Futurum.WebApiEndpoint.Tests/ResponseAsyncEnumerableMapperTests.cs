@@ -14,7 +14,7 @@ public class ResponseAsyncEnumerableMapperTests
 
         var nonGeneric = new ResponseAsyncEnumerable<object, int>(AsyncEnumerable(numbers));
 
-        var result = new ResponseAsyncEnumerableMapper<object, int, int>(new DataMapper()).Map(nonGeneric);
+        var result = new ResponseAsyncEnumerableMapper<object, int, int, DataMapper>(new DataMapper()).Map(nonGeneric);
 
         await result.ShouldBeSuccessWithValueEquivalentToAsync(x => x.AsyncEnumerable,
                                                                new ResponseAsyncEnumerableDto<int>(AsyncEnumerable(numbers)).AsyncEnumerable);

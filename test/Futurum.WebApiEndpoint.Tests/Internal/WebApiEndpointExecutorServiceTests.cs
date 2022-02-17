@@ -116,7 +116,8 @@ public class WebApiEndpointExecutorServiceTests
         var metadataTypeDefinition = new MetadataTypeDefinition(typeof(CommandDto), typeof(ResponseDto), typeof(SuccessApiEndpoint),
                                                                 typeof(ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>),
                                                                 typeof(IWebApiEndpointMiddlewareExecutor<Command, Response>),
-                                                                typeof(CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>));
+                                                                typeof(CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>),
+                                                                new List<Type>());
 
         var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
 
@@ -163,7 +164,8 @@ public class WebApiEndpointExecutorServiceTests
         var metadataTypeDefinition = new MetadataTypeDefinition(typeof(CommandDto), typeof(ResponseDto), typeof(SuccessApiEndpoint),
                                                                 typeof(ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>),
                                                                 typeof(IWebApiEndpointMiddlewareExecutor<Command, Response>),
-                                                                typeof(CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>));
+                                                                typeof(CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>),
+                                                                new List<Type>());
 
         var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
 
@@ -200,7 +202,8 @@ public class WebApiEndpointExecutorServiceTests
         var metadataTypeDefinition = new MetadataTypeDefinition(typeof(CommandDto), typeof(ResponseDto), typeof(SuccessApiEndpoint),
                                                                 typeof(ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>),
                                                                 typeof(IWebApiEndpointMiddlewareExecutor<Command, Response>),
-                                                                typeof(CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>));
+                                                                typeof(CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>),
+                                                                new List<Type>());
 
         var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
 

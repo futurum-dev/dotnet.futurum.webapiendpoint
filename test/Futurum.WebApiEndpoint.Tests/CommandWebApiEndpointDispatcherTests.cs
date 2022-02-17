@@ -103,7 +103,8 @@ public class CommandWebApiEndpointDispatcherTests
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(CommandDto), typeof(ResponseDto), typeof(ApiEndpoint),
                                                                     typeof(ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Command, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>));
+                                                                    typeof(CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>),
+                                                                    new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
             var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
 
@@ -200,7 +201,8 @@ public class CommandWebApiEndpointDispatcherTests
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(EmptyRequestDto), typeof(ResponseDto), typeof(ApiEndpoint),
                                                                     typeof(ICommandWebApiEndpoint<ResponseDto, Command, Response, Mapper, Mapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Command, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<ResponseDto, Command, Response, Mapper, Mapper>));
+                                                                    typeof(CommandWebApiEndpointDispatcher<ResponseDto, Command, Response, Mapper, Mapper>),
+                                                                    new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
             var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
 
@@ -296,7 +298,8 @@ public class CommandWebApiEndpointDispatcherTests
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(CommandDto), typeof(EmptyResponseDto), typeof(ApiEndpoint),
                                                                     typeof(ICommandWebApiEndpoint<CommandDto, Command, Mapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Command, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<CommandDto, Command, Mapper>));
+                                                                    typeof(CommandWebApiEndpointDispatcher<CommandDto, Command, Mapper>),
+                                                                    new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
             var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
 
@@ -389,7 +392,8 @@ public class CommandWebApiEndpointDispatcherTests
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(EmptyRequestDto), typeof(EmptyResponseDto), typeof(ApiEndpoint),
                                                                     typeof(ICommandWebApiEndpoint<Command, Mapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Command, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<Command, Mapper>));
+                                                                    typeof(CommandWebApiEndpointDispatcher<Command, Mapper>),
+                                                                    new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
             var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
 

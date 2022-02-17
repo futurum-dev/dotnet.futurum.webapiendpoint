@@ -4,7 +4,7 @@ namespace Futurum.WebApiEndpoint.Sample.Features;
 
 public static class QueryWithoutRequestWithResponseAsyncEnumerableScenario
 {
-    public class ApiEndpoint : QueryWebApiEndpoint.WithoutRequest.WithResponseAsyncEnumerable<ApiEndpoint, FeatureDto, Feature>
+    public class ApiEndpoint : QueryWebApiEndpoint.WithoutRequest.WithResponseAsyncEnumerable<ApiEndpoint, FeatureDto, Feature>.WithMapper<FeatureDataMapper>
     {
         protected override Task<Result<ResponseAsyncEnumerable<Feature>>> ExecuteAsync(CancellationToken cancellationToken)
         {
