@@ -2,12 +2,12 @@ using Futurum.Core.Result;
 
 namespace Futurum.WebApiEndpoint;
 
-public partial class CommandWebApiEndpoint
+public abstract partial class CommandWebApiEndpoint
 {
     /// <summary>
     /// Configure with request upload files
     /// </summary>
-    public class WithRequestUploadFiles<TApiEndpoint>
+    public abstract class WithRequestUploadFiles<TApiEndpoint>
     {
         /// <summary>
         /// Configure without response

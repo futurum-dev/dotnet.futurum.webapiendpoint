@@ -2,27 +2,27 @@ using Futurum.Core.Result;
 
 namespace Futurum.WebApiEndpoint;
 
-public partial class CommandWebApiEndpoint
+public abstract partial class CommandWebApiEndpoint
 {
     /// <summary>
     /// Configure with request plain text
     /// </summary>
-    public class WithRequestPlainText<TApiEndpoint>
+    public abstract class WithRequestPlainText<TApiEndpoint>
     {
         /// <summary>
         /// Configure without response
         /// </summary>
         public abstract class WithoutResponse : ICommandWebApiEndpoint<RequestPlainTextDto, RequestPlainText<TApiEndpoint>, RequestPlainTextMapper<TApiEndpoint>>
         {
-                /// <inheritdoc />
-                public Task<Result> ExecuteCommandAsync(RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken);
+            /// <inheritdoc />
+            public Task<Result> ExecuteCommandAsync(RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
+                ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken);
 
-                /// <summary>
-                /// Execute the WebApiEndpoint
-                /// <para>This method is called once for each request received</para>
-                /// </summary>
-                protected abstract Task<Result> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken);
+            /// <summary>
+            /// Execute the WebApiEndpoint
+            /// <para>This method is called once for each request received</para>
+            /// </summary>
+            protected abstract Task<Result> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken);
         }
 
         /// <summary>
