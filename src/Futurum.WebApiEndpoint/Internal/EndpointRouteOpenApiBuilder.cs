@@ -82,6 +82,8 @@ internal class EndpointRouteOpenApiBuilder : IEndpointRouteOpenApiBuilder
         {
             routeHandlerBuilder.Produces(metadataRouteDefinition.SuccessStatusCode, responseDtoType, MediaTypeNames.Application.Json);
         }
+
+        routeHandlerBuilder.Produces(metadataRouteDefinition.FailedStatusCode);
     }
 
     private void ConfigureApiVersion(RouteHandlerBuilder routeHandlerBuilder, MetadataDefinition metadataDefinition)

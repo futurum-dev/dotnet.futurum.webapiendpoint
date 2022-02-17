@@ -196,9 +196,15 @@ public class EndpointRouteOpenApiBuilderTests
 
             var (_, endpoint) = TestRunner(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
 
-            endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Single().Type.Should().Be(typeof(void));
-            endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Single().StatusCode.Should().Be(metadataRouteDefinition.SuccessStatusCode);
-            endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Application.Octet);
+            var successProducesResponseTypeMetadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().First();
+            successProducesResponseTypeMetadata.Type.Should().Be(typeof(void));
+            successProducesResponseTypeMetadata.StatusCode.Should().Be(metadataRouteDefinition.SuccessStatusCode);
+            successProducesResponseTypeMetadata.ContentTypes.Single().Should().Be(MediaTypeNames.Application.Octet);
+            
+            var failedProducesResponseTypeMetadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Skip(1).First();
+            failedProducesResponseTypeMetadata.Type.Should().Be(typeof(void));
+            failedProducesResponseTypeMetadata.StatusCode.Should().Be(metadataRouteDefinition.FailedStatusCode);
+            failedProducesResponseTypeMetadata.ContentTypes.Should().BeEmpty();
         }
 
         public class IResponseStreamDtoMapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, TestRequestStreamDto>
@@ -225,9 +231,15 @@ public class EndpointRouteOpenApiBuilderTests
 
             var (_, endpoint) = TestRunner(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
 
-            endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Single().Type.Should().Be<IEnumerable<int>>();
-            endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Single().StatusCode.Should().Be(metadataRouteDefinition.SuccessStatusCode);
-            endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
+            var successProducesResponseTypeMetadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().First();
+            successProducesResponseTypeMetadata.Type.Should().Be<IEnumerable<int>>();
+            successProducesResponseTypeMetadata.StatusCode.Should().Be(metadataRouteDefinition.SuccessStatusCode);
+            successProducesResponseTypeMetadata.ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
+            
+            var failedProducesResponseTypeMetadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Skip(1).First();
+            failedProducesResponseTypeMetadata.Type.Should().Be(typeof(void));
+            failedProducesResponseTypeMetadata.StatusCode.Should().Be(metadataRouteDefinition.FailedStatusCode);
+            failedProducesResponseTypeMetadata.ContentTypes.Should().BeEmpty();
         }
 
         public class ResponseAsyncEnumerableDtoMapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseAsyncEnumerableDto<int>>
@@ -254,9 +266,15 @@ public class EndpointRouteOpenApiBuilderTests
 
             var (_, endpoint) = TestRunner(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
 
-            endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Single().Type.Should().Be<ResponseDto>();
-            endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Single().StatusCode.Should().Be(metadataRouteDefinition.SuccessStatusCode);
-            endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
+            var successProducesResponseTypeMetadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().First();
+            successProducesResponseTypeMetadata.Type.Should().Be<ResponseDto>();
+            successProducesResponseTypeMetadata.StatusCode.Should().Be(metadataRouteDefinition.SuccessStatusCode);
+            successProducesResponseTypeMetadata.ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
+            
+            var failedProducesResponseTypeMetadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Skip(1).First();
+            failedProducesResponseTypeMetadata.Type.Should().Be(typeof(void));
+            failedProducesResponseTypeMetadata.StatusCode.Should().Be(metadataRouteDefinition.FailedStatusCode);
+            failedProducesResponseTypeMetadata.ContentTypes.Should().BeEmpty();
         }
 
         public class NotEmptyResponseDtoMapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
