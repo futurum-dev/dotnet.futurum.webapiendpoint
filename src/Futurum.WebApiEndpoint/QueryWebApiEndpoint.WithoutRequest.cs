@@ -5,12 +5,12 @@ namespace Futurum.WebApiEndpoint;
 /// <summary>
 /// Builder for <see cref="IQueryWebApiEndpoint"/>
 /// </summary>
-public partial class QueryWebApiEndpoint
+public abstract partial class QueryWebApiEndpoint
 {
     /// <summary>
     /// Configure without request
     /// </summary>
-    public class WithoutRequest
+    public abstract class WithoutRequest
     {
         /// <summary>
         /// Configure with response

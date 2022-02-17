@@ -2,12 +2,12 @@ using Futurum.Core.Result;
 
 namespace Futurum.WebApiEndpoint;
 
-public partial class QueryWebApiEndpoint
+public abstract partial class QueryWebApiEndpoint
 {
     /// <summary>
     /// Configure with request
     /// </summary>
-    public class WithRequest<TQueryDto, TQueryDomain>
+    public abstract class WithRequest<TQueryDto, TQueryDomain>
     {
         /// <summary>
         /// Configure with response
@@ -49,6 +49,20 @@ public partial class QueryWebApiEndpoint
         /// </summary>
         public abstract class WithResponseAsyncEnumerable<TApiEndpoint, TDataDto, TData>
         {
+            public abstract class WithMapper<TMapper> : IQueryWebApiEndpoint<TQueryDto, ResponseAsyncEnumerableDto<TDataDto>, TQueryDomain, ResponseAsyncEnumerable<TApiEndpoint, TData>, TMapper, ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TMapper>>
+                where TMapper : IWebApiEndpointRequestMapper<TQueryDto, TQueryDomain>, IWebApiEndpointDataMapper<TData, TDataDto>
+            {
+                /// <inheritdoc />
+                public Task<Result<ResponseAsyncEnumerable<TApiEndpoint, TData>>> ExecuteQueryAsync(TQueryDomain query, CancellationToken cancellationToken) =>
+                    ExecuteAsync(query, cancellationToken).MapAsync(responseAsyncEnumerable => responseAsyncEnumerable.ToApiEndpoint<TApiEndpoint>());
+
+                /// <summary>
+                /// Execute the WebApiEndpoint
+                /// <para>This method is called once for each request received</para>
+                /// </summary>
+                protected abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
+            }
+            
             public abstract class WithMapper<TRequestMapper, TDataMapper> : IQueryWebApiEndpoint<TQueryDto, ResponseAsyncEnumerableDto<TDataDto>, TQueryDomain, ResponseAsyncEnumerable<TApiEndpoint, TData>, TRequestMapper, ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TDataMapper>>
                 where TRequestMapper : IWebApiEndpointRequestMapper<TQueryDto, TQueryDomain>
                 where TDataMapper : IWebApiEndpointDataMapper<TData, TDataDto>
@@ -90,6 +104,20 @@ public partial class QueryWebApiEndpoint
         /// </summary>
         public abstract class WithResponseDataCollection<TApiEndpoint, TDataDto, TData>
         {
+            public abstract class WithMapper<TMapper> : IQueryWebApiEndpoint<TQueryDto, ResponseDataCollectionDto<TDataDto>, TQueryDomain, ResponseDataCollection<TApiEndpoint, TData>, TMapper, ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TMapper>>
+                where TMapper : IWebApiEndpointRequestMapper<TQueryDto, TQueryDomain>, IWebApiEndpointDataMapper<TData, TDataDto>
+            {
+                /// <inheritdoc />
+                public Task<Result<ResponseDataCollection<TApiEndpoint, TData>>> ExecuteQueryAsync(TQueryDomain query, CancellationToken cancellationToken) =>
+                    ExecuteAsync(query, cancellationToken).MapAsync(responseDataCollection => responseDataCollection.ToApiEndpoint<TApiEndpoint>());
+
+                /// <summary>
+                /// Execute the WebApiEndpoint
+                /// <para>This method is called once for each request received</para>
+                /// </summary>
+                protected abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
+            }
+            
             public abstract class WithMapper<TRequestMapper, TDataMapper> : IQueryWebApiEndpoint<TQueryDto, ResponseDataCollectionDto<TDataDto>, TQueryDomain, ResponseDataCollection<TApiEndpoint, TData>, TRequestMapper, ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TDataMapper>>
                 where TRequestMapper : IWebApiEndpointRequestMapper<TQueryDto, TQueryDomain>
                 where TDataMapper : IWebApiEndpointDataMapper<TData, TDataDto>
