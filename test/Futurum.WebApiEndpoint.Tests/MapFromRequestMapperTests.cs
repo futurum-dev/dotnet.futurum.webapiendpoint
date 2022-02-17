@@ -1,3 +1,5 @@
+using FluentAssertions;
+
 using Futurum.Core.Result;
 using Futurum.Test.Result;
 using Futurum.WebApiEndpoint.Internal;
@@ -407,11 +409,32 @@ public class MapFromRequestMapperTests
             }
         }
 
+        public class multiple_MapFrom
+        {
+            public record RequestPathString
+            {
+                [MapFromPath("Id")] public string Id { get; set; }
+                [MapFromPath("Name")] public string Name { get; set; }
+            }
+                [Fact]
+                public void success()
+                {
+                    var id = Guid.NewGuid().ToString();
+                    var name = Guid.NewGuid().ToString();
+                    
+                    var result = TestRunnerMap<RequestPathString>(httpContext =>
+                    {
+                        httpContext.Request.RouteValues.Add("Id", id);
+                        httpContext.Request.RouteValues.Add("Name", name);
+                    });
+
+                    result.ShouldBeSuccessWithValueEquivalentTo(new RequestPathString { Id = id, Name = name});
+                }
+        }
+
         private static Result<T> TestRunnerMap<T>(Action<HttpContext>? configureHttpContext = null)
             where T : class
         {
-            var mapFromRequestMapper = new MapFromRequestMapper<T>();
-
             var httpContext = new DefaultHttpContext();
             configureHttpContext?.Invoke(httpContext);
 
@@ -421,8 +444,6 @@ public class MapFromRequestMapperTests
         private static Result<T> TestRunnerCookieMap<T>(Action<HttpContextMock>? configureHttpContext = null)
             where T : class
         {
-            var mapFromRequestMapper = new MapFromRequestMapper<T>();
-
             var httpContext = new HttpContextMock();
             configureHttpContext?.Invoke(httpContext);
 
@@ -809,7 +830,7 @@ public class MapFromRequestMapperTests
                 }
             }
         }
-        
+
         private static Result<T> TestRunnerMap<T>(Action<HttpContext>? configureHttpContext = null)
             where T : class, new()
         {
@@ -832,6 +853,24 @@ public class MapFromRequestMapperTests
 
             var dto = new T();
             return MapFromRequestMapper<T>.Map(httpContext, dto);
+        }
+    }
+
+    public class when_property_is_readonly_the_fail
+    {
+        [Fact]
+        public void failure()
+        {
+            var httpContext = new DefaultHttpContext();
+
+            var action = () => MapFromRequestMapper<RequestWithReadonlyProperty>.Map(httpContext);
+            
+            action.Should().Throw<TypeInitializationException>().WithInnerException<InvalidOperationException>().WithMessage($"Property '{nameof(RequestWithReadonlyProperty.Id)}' on RequestDto type : '{typeof(RequestWithReadonlyProperty).FullName}' is readonly");
+        }
+        
+        public record RequestWithReadonlyProperty
+        {
+            [MapFromForm(Key)] public string Id { get; }
         }
     }
 }

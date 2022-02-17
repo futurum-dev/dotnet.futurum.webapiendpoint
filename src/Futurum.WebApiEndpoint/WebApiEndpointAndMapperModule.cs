@@ -99,17 +99,7 @@ public class WebApiEndpointAndMapperModule : IModule
     private static void RegisterMapper(IServiceCollection services, Assembly[] assemblies, Type apiEndpointMapperType)
     {
         services.Scan(scan => scan.FromAssemblies(assemblies)
-                                  .AddClasses(classes => classes.Where(type =>
-                                  {
-                                      var isClosedTypeOf = type.IsClosedTypeOf(apiEndpointMapperType);
-
-                                      if (isClosedTypeOf)
-                                      {
-                                          var x = 2;
-                                      }
-                                      
-                                      return isClosedTypeOf;
-                                  }))
+                                  .AddClasses(classes => classes.Where(type => type.IsClosedTypeOf(apiEndpointMapperType)))
                                   .AsSelfWithInterfaces()
                                   .WithSingletonLifetime());
     }

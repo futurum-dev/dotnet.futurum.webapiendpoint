@@ -118,6 +118,31 @@ public class WebApiEndpointHttpContextDispatcherTests
 
                 result.ShouldBeSuccessWithValue(requestDto);
             }
+
+            [Fact]
+            public async Task failure()
+            {
+                var firstName = Guid.NewGuid().ToString();
+                var age = 10;
+
+                var requestDto = new RequestDto(firstName, age);
+
+                var webApiEndpointHttpContextDispatcher = new WebApiEndpointHttpContextDispatcher(Options.Create(new JsonOptions()));
+
+                var httpContext = new DefaultHttpContext();
+
+                var json = JsonSerializer.Serialize(requestDto);
+                var stream = new MemoryStream(Encoding.Default.GetBytes(json));
+                httpContext.Request.Body = stream;
+                httpContext.Request.ContentLength = stream.Length;
+                httpContext.Request.ContentType = MediaTypeNames.Application.Json;
+
+                var result = await webApiEndpointHttpContextDispatcher.ReadRequestAsync<FailingDeserializeObject>(httpContext, null, CancellationToken.None);
+
+                result.ShouldBeFailureWithErrorContaining("Failed to deserialize request as json");
+            }
+
+            public record FailingDeserializeObject(int FirstName);
         }
 
         public class JsonAndMapFrom

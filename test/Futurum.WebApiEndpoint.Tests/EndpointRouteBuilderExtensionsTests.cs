@@ -139,6 +139,43 @@ public class EndpointRouteBuilderExtensionsTests
         testEndpointRouteOpenApiBuilder.WasCalled.Should().BeTrue();
         testEndpointRouteSecurityBuilder.WasCalled.Should().BeTrue();
     }
+    
+    [Fact]
+    public void check_MetadataRouteDefinition_ExtendedOptions_is_called()
+    {
+        var wasCalled = false;
+        
+        var extendedOptionsAction = (RouteHandlerBuilder routeHandlerBuilder) => { wasCalled = true;};
+        
+        var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route-123", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
+                                                                  extendedOptionsAction, Option<MetadataSecurityDefinition>.None);
+
+        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+                                                                typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
+                                                                typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
+                                                                typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
+                                                                new List<Type>());
+        var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
+        var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+
+
+        var builder = WebApplication.CreateBuilder();
+
+        builder.Host.ConfigureServices((_, serviceCollection) =>
+        {
+            serviceCollection.AddSingleton<IWebApiEndpointMetadataCache>(new TestWebApiEndpointMetadataCache(metadataDefinition));
+            serviceCollection.AddSingleton<IEndpointRouteOpenApiBuilder>(new TestEndpointRouteOpenApiBuilder());
+            serviceCollection.AddSingleton<IEndpointRouteSecurityBuilder>(new TestEndpointRouteSecurityBuilder());
+            serviceCollection.AddSingleton(WebApiEndpointConfiguration.Default);
+            serviceCollection.AddSingleton<IRequestOpenApiTypeCreator>(new RequestOpenApiTypeCreator());
+        });
+
+        var application = builder.Build();
+
+        application.UseWebApiEndpoints();
+
+        wasCalled.Should().BeTrue();
+    }
 
     public class HttpMethod
     {
