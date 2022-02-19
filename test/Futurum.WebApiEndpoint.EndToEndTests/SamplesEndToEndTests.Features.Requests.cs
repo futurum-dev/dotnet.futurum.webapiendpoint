@@ -7,6 +7,7 @@ using FluentAssertions;
 
 using Futurum.WebApiEndpoint.Sample.Features;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 using Xunit;
@@ -192,6 +193,35 @@ public class SamplesEndToEndFeaturesRequestsTests
             var response = await httpResponseMessage.Content.ReadFromJsonAsync<FeatureDto>();
     
             response.Name.Should().Be($"Name - 0 - hello-world.txt");
+        }
+    
+        [Fact]
+        public async Task RequestUploadFileAndJson()
+        {
+            var httpClient = CreateClient();
+    
+            await using var fileStream = File.OpenRead("./Data/hello-world.txt");
+    
+            var multipartFormDataContent = new MultipartFormDataContent();
+            multipartFormDataContent.Add(new StreamContent(fileStream), name: "hello-world.txt", fileName: "hello-world.txt");
+
+            var id = Guid.NewGuid().ToString();
+            var requestDto = new CommandWithRequestUploadSingleFileAndPayloadWithResponseScenario.PayloadDto(id);
+            multipartFormDataContent.Add(JsonContent.Create(requestDto));
+            
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri("/api/1.0/command-with-request-upload-single-file-and-json-with-response"),
+                Content = multipartFormDataContent
+            };
+    
+            var httpResponseMessage = await httpClient.SendAsync(request);
+    
+            httpResponseMessage.EnsureSuccessStatusCode();
+            var response = await httpResponseMessage.Content.ReadFromJsonAsync<FeatureDto>();
+    
+            response.Name.Should().Be($"Name - {id} - 0 - hello-world.txt");
         }
     }
 

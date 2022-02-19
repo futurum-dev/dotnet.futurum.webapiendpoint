@@ -31,7 +31,7 @@ internal class EndpointRouteOpenApiBuilder : IEndpointRouteOpenApiBuilder
 
     private void ConfigureAccepts(RouteHandlerBuilder routeHandlerBuilder, MetadataDefinition metadataDefinition)
     {
-        var (_, metadataTypeDefinition, metadataMapFromDefinition) = metadataDefinition;
+        var (_, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition) = metadataDefinition;
 
         var requestDtoType = metadataTypeDefinition.RequestDtoType;
 
@@ -40,6 +40,10 @@ internal class EndpointRouteOpenApiBuilder : IEndpointRouteOpenApiBuilder
             routeHandlerBuilder.Accepts(typeof(EmptyRequestDto), MediaTypeNames.Text.Plain);
         }
         else if (requestDtoType == typeof(RequestUploadFilesDto))
+        {
+            routeHandlerBuilder.Accepts(requestDtoType, "multipart/form-data");
+        }
+        else if (metadataMapFromMultipartDefinition != null && metadataMapFromMultipartDefinition.MapFromMultipartParameterDefinitions.Any())
         {
             routeHandlerBuilder.Accepts(requestDtoType, "multipart/form-data");
         }
@@ -63,7 +67,7 @@ internal class EndpointRouteOpenApiBuilder : IEndpointRouteOpenApiBuilder
 
     private static void ConfigureProduces(RouteHandlerBuilder routeHandlerBuilder, MetadataDefinition metadataDefinition)
     {
-        var (metadataRouteDefinition, metadataTypeDefinition, _) = metadataDefinition;
+        var (metadataRouteDefinition, metadataTypeDefinition, _, _) = metadataDefinition;
 
         var requestDtoType = metadataTypeDefinition.RequestDtoType;
         var responseDtoType = metadataDefinition.MetadataTypeDefinition.ResponseDtoType;
@@ -94,7 +98,7 @@ internal class EndpointRouteOpenApiBuilder : IEndpointRouteOpenApiBuilder
 
     private static void ConfigureTags(RouteHandlerBuilder routeHandlerBuilder, MetadataDefinition metadataDefinition)
     {
-        var (_, metadataTypeDefinition, _) = metadataDefinition;
+        var (_, metadataTypeDefinition, _, _) = metadataDefinition;
 
         var apiEndpointType = metadataTypeDefinition.WebApiEndpointType;
 

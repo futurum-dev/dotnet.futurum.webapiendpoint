@@ -27,7 +27,7 @@ internal class CommandWebApiEndpointDispatcher<TCommand, TRequestMapper> : IWebA
         var middlewareExecutorTyped = middlewareExecutor as IWebApiEndpointMiddlewareExecutor<TCommand, Unit>;
         var apiEndpointTyped = apiEndpoint as ICommandWebApiEndpoint<TCommand, TRequestMapper>;
 
-        return _httpContextDispatcher.ReadRequestAsync<EmptyRequestDto>(httpContext, metadataDefinition.MetadataMapFromDefinition, cancellationToken)
+        return _httpContextDispatcher.ReadRequestAsync<EmptyRequestDto>(httpContext, metadataDefinition.MetadataMapFromDefinition, metadataDefinition.MetadataMapFromMultipartDefinition, cancellationToken)
                                      .ThenAsync(commandDto => _requestMapper.Map(httpContext))
                                      .DoAsync(command => _logger.RequestReceived<TCommand, Unit>(command))
                                      .ThenAsync(command => middlewareExecutorTyped.ExecuteAsync(httpContext, command, (c, ct) => apiEndpointTyped.ExecuteCommandAsync(c, ct).MapAsync(Unit.Value),

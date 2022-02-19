@@ -15,11 +15,11 @@ internal static class HttpRequestExtensions
         return Result.TryAsync(Execute, () => "Failed to read request as plain text");
     }
     
-    public static Task<Result<IEnumerable<IFormFile>>> ReadUploadFilesAsync(this HttpRequest httpRequest)
+    public static Task<Result<IEnumerable<IFormFile>>> ReadUploadFilesAsync(this HttpRequest httpRequest, CancellationToken cancellationToken)
     {
         async Task<IEnumerable<IFormFile>> Execute()
         {
-            var form = await httpRequest.ReadFormAsync();
+            var form = await httpRequest.ReadFormAsync(cancellationToken);
             return form.Files.ToList();
         }
 

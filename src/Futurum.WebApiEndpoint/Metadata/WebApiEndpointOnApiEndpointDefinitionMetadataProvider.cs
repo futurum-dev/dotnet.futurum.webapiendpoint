@@ -67,8 +67,9 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForQueryWithoutRequest(apiEndpointInterfaceType, apiEndpointType);
 
             var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
+            var metadataMapFromMultipartDefinition = GetMetadataMapFromMultipartDefinition(metadataTypeDefinition.RequestDtoType);
 
-            yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
         }
 
         if (apiEndpointType.IsClosedTypeOf(typeof(IQueryWebApiEndpoint<,,,,>)))
@@ -78,8 +79,9 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForQueryWithoutRequestDto(apiEndpointInterfaceType, apiEndpointType);
 
             var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
+            var metadataMapFromMultipartDefinition = GetMetadataMapFromMultipartDefinition(metadataTypeDefinition.RequestDtoType);
 
-            yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
         }
 
         if (apiEndpointType.IsClosedTypeOf(typeof(IQueryWebApiEndpoint<,,,,,>)))
@@ -89,8 +91,9 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForQueryWithRequestDto(apiEndpointInterfaceType, apiEndpointType);
 
             var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
+            var metadataMapFromMultipartDefinition = GetMetadataMapFromMultipartDefinition(metadataTypeDefinition.RequestDtoType);
 
-            yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
         }
 
         if (apiEndpointType.IsClosedTypeOf(typeof(ICommandWebApiEndpoint<,,,,,>)))
@@ -100,8 +103,9 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForCommandWithRequestWithResponse(apiEndpointInterfaceType, apiEndpointType);
 
             var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
+            var metadataMapFromMultipartDefinition = GetMetadataMapFromMultipartDefinition(metadataTypeDefinition.RequestDtoType);
 
-            yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
         }
 
         if (apiEndpointType.IsClosedTypeOf(typeof(ICommandWebApiEndpoint<,,,,>)))
@@ -111,8 +115,9 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForCommandWithoutRequestWithResponse(apiEndpointInterfaceType, apiEndpointType);
 
             var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
+            var metadataMapFromMultipartDefinition = GetMetadataMapFromMultipartDefinition(metadataTypeDefinition.RequestDtoType);
 
-            yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
         }
 
         if (apiEndpointType.IsClosedTypeOf(typeof(ICommandWebApiEndpoint<,,>)))
@@ -122,8 +127,9 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForCommandWithoutResponse(apiEndpointInterfaceType, apiEndpointType);
 
             var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
+            var metadataMapFromMultipartDefinition = GetMetadataMapFromMultipartDefinition(metadataTypeDefinition.RequestDtoType);
 
-            yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
         }
 
         if (apiEndpointType.IsClosedTypeOf(typeof(ICommandWebApiEndpoint<,>)))
@@ -133,8 +139,9 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
             var metadataTypeDefinition = WebApiEndpointMetadataTypeService.GetForCommandWithoutRequestWithoutResponse(apiEndpointInterfaceType, apiEndpointType);
 
             var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
+            var metadataMapFromMultipartDefinition = GetMetadataMapFromMultipartDefinition(metadataTypeDefinition.RequestDtoType);
 
-            yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
         }
     }
 
@@ -147,5 +154,16 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
                                        .ToList();
 
         return parameters.Any() ? new MetadataMapFromDefinition(parameters) : null;
+    }
+
+    private static MetadataMapFromMultipartDefinition? GetMetadataMapFromMultipartDefinition(Type requestDtoType)
+    {
+        var parameters = requestDtoType.GetProperties()
+                                       .Select(propertyInfo => new { propertyInfo, mapFromAttribute = propertyInfo.GetCustomAttribute<MapFromMultipartAttribute>() })
+                                       .Where(x => x.mapFromAttribute != null)
+                                       .Select(x => new MetadataMapFromMultipartParameterDefinition(x.propertyInfo.Name, x.propertyInfo, x.mapFromAttribute))
+                                       .ToList();
+
+        return parameters.Any() ? new MetadataMapFromMultipartDefinition(parameters) : null;
     }
 }

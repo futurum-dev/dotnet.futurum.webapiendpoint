@@ -34,7 +34,7 @@ internal class QueryWebApiEndpointDispatcher<TQueryDto, TResponseDto, TQuery, TR
         var middlewareExecutorTyped = middlewareExecutor as IWebApiEndpointMiddlewareExecutor<TQuery, TResponse>;
         var apiEndpointTyped = apiEndpoint as IQueryWebApiEndpoint<TQueryDto, TResponseDto, TQuery, TResponse, TRequestMapper, TResponseMapper>;
 
-        return _httpContextDispatcher.ReadRequestAsync<TQueryDto>(httpContext, metadataDefinition.MetadataMapFromDefinition, cancellationToken)
+        return _httpContextDispatcher.ReadRequestAsync<TQueryDto>(httpContext, metadataDefinition.MetadataMapFromDefinition, metadataDefinition.MetadataMapFromMultipartDefinition, cancellationToken)
                                      .ThenAsync(commandDto => _requestValidation.ExecuteAsync(commandDto))
                                      .ThenAsync(commandDto => _requestMapper.Map(httpContext, commandDto))
                                      .DoAsync(command => _logger.RequestReceived<TQuery, TResponse>(command))

@@ -106,7 +106,8 @@ public class CommandWebApiEndpointDispatcherTests
                                                                     typeof(CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>),
                                                                     new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
-            var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
+            var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             var middlewareExecutor = new DisabledWebApiEndpointMiddlewareExecutor<Command, Response>();
 
@@ -204,7 +205,8 @@ public class CommandWebApiEndpointDispatcherTests
                                                                     typeof(CommandWebApiEndpointDispatcher<ResponseDto, Command, Response, Mapper, Mapper>),
                                                                     new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
-            var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
+            var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             var middlewareExecutor = new DisabledWebApiEndpointMiddlewareExecutor<Command, Response>();
 
@@ -301,7 +303,8 @@ public class CommandWebApiEndpointDispatcherTests
                                                                     typeof(CommandWebApiEndpointDispatcher<CommandDto, Command, Mapper>),
                                                                     new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
-            var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
+            var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             var middlewareExecutor = new DisabledWebApiEndpointMiddlewareExecutor<Command, Unit>();
 
@@ -395,7 +398,8 @@ public class CommandWebApiEndpointDispatcherTests
                                                                     typeof(CommandWebApiEndpointDispatcher<Command, Mapper>),
                                                                     new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
-            var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
+            var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             var middlewareExecutor = new DisabledWebApiEndpointMiddlewareExecutor<Command, Unit>();
 
