@@ -35,8 +35,8 @@ internal partial class WebApiEndpointHttpContextDispatcher : IWebApiEndpointHttp
         }
 
         return ReadRequestDto<TRequestDto>(httpContext, metadataMapFromDefinition, metadataMapFromMultipartDefinition, cancellationToken)
-               .ThenAsync(requestDto => ApplyMapFromMappingsAsync(httpContext, metadataMapFromDefinition, requestDto, cancellationToken))
-               .ThenAsync(requestDto => ApplyMapFromMultipartMappingsAsyncAsync(httpContext, requestDto, metadataMapFromMultipartDefinition, cancellationToken));
+            .ThenAsync(requestDto => ApplyMapFromMappingsAsync(httpContext, metadataMapFromDefinition, requestDto, cancellationToken)
+                           .ThenAsync(requestDto => ApplyMapFromMultipartMappingsAsyncAsync(httpContext, requestDto, metadataMapFromMultipartDefinition, cancellationToken)));
     }
 
     private Task<Result<TRequestDto>> ReadRequestDto<TRequestDto>(HttpContext httpContext, MetadataMapFromDefinition? metadataMapFromDefinition,
@@ -66,8 +66,8 @@ internal partial class WebApiEndpointHttpContextDispatcher : IWebApiEndpointHttp
             : requestDto.ToResultOk();
 
     private static async Task<Result<TRequestDto>> ApplyMapFromMultipartMappingsAsyncAsync<TRequestDto>(HttpContext httpContext, TRequestDto requestDto,
-                                                                                                    MetadataMapFromMultipartDefinition? metadataMapFromMultipartDefinition,
-                                                                                                    CancellationToken cancellationToken)
+                                                                                                        MetadataMapFromMultipartDefinition? metadataMapFromMultipartDefinition,
+                                                                                                        CancellationToken cancellationToken)
         where TRequestDto : class =>
         metadataMapFromMultipartDefinition != null
             ? await MapFromRequestMultipartMapper<TRequestDto>.MapAsync(httpContext, requestDto, cancellationToken)
