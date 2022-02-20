@@ -105,7 +105,8 @@ public class QueryWebApiEndpointDispatcherTests
                                                                     typeof(QueryWebApiEndpointDispatcher<ResponseDto, Query, Response, Mapper, Mapper>),
                                                                     new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
-            var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
+            var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             var middlewareExecutor = new DisabledWebApiEndpointMiddlewareExecutor<Query, Response>();
 
@@ -204,7 +205,8 @@ public class QueryWebApiEndpointDispatcherTests
                                                                     typeof(QueryWebApiEndpointDispatcher<QueryDto, ResponseDto, Query, Response, Mapper, Mapper>),
                                                                     new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
-            var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
+            var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             var middlewareExecutor = new DisabledWebApiEndpointMiddlewareExecutor<Query, Response>();
 
@@ -300,7 +302,8 @@ public class QueryWebApiEndpointDispatcherTests
                                                                     typeof(QueryWebApiEndpointDispatcher<ResponseDto, Response, Mapper>),
                                                                     new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
-            var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
+            var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             var middlewareExecutor = new DisabledWebApiEndpointMiddlewareExecutor<Unit, Response>();
 

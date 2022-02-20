@@ -18,7 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Futurum.WebApiEndpoint.Tests;
+namespace Futurum.WebApiEndpoint.Tests.Internal;
 
 public class EndpointRouteOpenApiBuilderTests
 {
@@ -35,13 +35,16 @@ public class EndpointRouteOpenApiBuilderTests
         public void RequestPlainTextDto()
         {
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestPlainTextDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestPlainTextDto, ResponseDto, Request, Response, RequestPlainTextDtoMapper, RequestPlainTextDtoMapper>),
+                                                                    typeof(ICommandWebApiEndpoint<RequestPlainTextDto, ResponseDto, Request, Response, RequestPlainTextDtoMapper,
+                                                                        RequestPlainTextDtoMapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestPlainTextDto, ResponseDto, Request, Response, RequestPlainTextDtoMapper, RequestPlainTextDtoMapper>),
+                                                                    typeof(CommandWebApiEndpointDispatcher<RequestPlainTextDto, ResponseDto, Request, Response, RequestPlainTextDtoMapper,
+                                                                        RequestPlainTextDtoMapper>),
                                                                     new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
+            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
 
-            var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition);
+            var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be<EmptyRequestDto>();
             endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Text.Plain);
@@ -60,13 +63,16 @@ public class EndpointRouteOpenApiBuilderTests
         public void RequestUploadFilesDto()
         {
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestUploadFilesDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestUploadFilesDto, ResponseDto, Request, Response, RequestUploadFilesDtoMapper, RequestUploadFilesDtoMapper>),
+                                                                    typeof(ICommandWebApiEndpoint<RequestUploadFilesDto, ResponseDto, Request, Response, RequestUploadFilesDtoMapper,
+                                                                        RequestUploadFilesDtoMapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestUploadFilesDto, ResponseDto, Request, Response, RequestUploadFilesDtoMapper, RequestUploadFilesDtoMapper>),
+                                                                    typeof(CommandWebApiEndpointDispatcher<RequestUploadFilesDto, ResponseDto, Request, Response, RequestUploadFilesDtoMapper,
+                                                                        RequestUploadFilesDtoMapper>),
                                                                     new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
+            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
 
-            var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition);
+            var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be<RequestUploadFilesDto>();
             endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be("multipart/form-data");
@@ -85,13 +91,16 @@ public class EndpointRouteOpenApiBuilderTests
         public void RequestDto_without_MapFrom()
         {
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, RequestDto_without_MapFromMapper, RequestDto_without_MapFromMapper>),
+                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, RequestDto_without_MapFromMapper,
+                                                                        RequestDto_without_MapFromMapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, RequestDto_without_MapFromMapper, RequestDto_without_MapFromMapper>),
+                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, RequestDto_without_MapFromMapper,
+                                                                        RequestDto_without_MapFromMapper>),
                                                                     new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
+            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
 
-            var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition);
+            var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be<RequestDto>();
             endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
@@ -110,9 +119,11 @@ public class EndpointRouteOpenApiBuilderTests
         public void RequestDto_with_MapFrom()
         {
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, RequestDto_with_MapFromMapper, RequestDto_with_MapFromMapper>),
+                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, RequestDto_with_MapFromMapper,
+                                                                        RequestDto_with_MapFromMapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, RequestDto_with_MapFromMapper, RequestDto_with_MapFromMapper>),
+                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, RequestDto_with_MapFromMapper,
+                                                                        RequestDto_with_MapFromMapper>),
                                                                     new List<Type>());
 
             var metadataMapFromParameterDefinition = new MetadataMapFromParameterDefinition("Id",
@@ -120,7 +131,9 @@ public class EndpointRouteOpenApiBuilderTests
                                                                                             new MapFromPathAttribute("Id"));
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition> { metadataMapFromParameterDefinition });
 
-            var (serviceProvider, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition);
+            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
+            
+            var (serviceProvider, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             var requestOpenApiTypeCreator = serviceProvider.GetService(typeof(IRequestOpenApiTypeCreator)) as IRequestOpenApiTypeCreator;
 
@@ -137,18 +150,44 @@ public class EndpointRouteOpenApiBuilderTests
                 throw new NotImplementedException();
         }
 
-        private static (IServiceProvider serviceProvider, RouteEndpoint routeEndpoint) TestRunner(MetadataTypeDefinition metadataTypeDefinition, MetadataMapFromDefinition metadataMapFromDefinition)
+        [Fact]
+        public void RequestDto_with_MapFromMultipart()
+        {
+            var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, RequestDto_with_MapFromMapper,
+                                                                        RequestDto_with_MapFromMapper>),
+                                                                    typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
+                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, RequestDto_with_MapFromMapper,
+                                                                        RequestDto_with_MapFromMapper>),
+                                                                    new List<Type>());
+
+            var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
+
+            var metadataMapFromMultipartParameterDefinition = new MetadataMapFromMultipartParameterDefinition("Id",
+                                                                                            typeof(RequestDto).GetProperties().Single(x => x.Name == nameof(RequestDto.Id)),
+                                                                                            new MapFromMultipartJsonAttribute(1));
+            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>{metadataMapFromMultipartParameterDefinition});
+            
+            var (serviceProvider, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
+
+            endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be<RequestDto>();
+            endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be("multipart/form-data");
+        }
+
+        private static (IServiceProvider serviceProvider, RouteEndpoint routeEndpoint) TestRunner(MetadataTypeDefinition metadataTypeDefinition, MetadataMapFromDefinition metadataMapFromDefinition,
+                                                                                                  MetadataMapFromMultipartDefinition metadataMapFromMultipartDefinition)
         {
             var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
-            return TestRunner(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            return TestRunner(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
         }
 
         private static (IServiceProvider serviceProvider, RouteEndpoint routeEndpoint) TestRunner(MetadataRouteDefinition metadataRouteDefinition, MetadataTypeDefinition metadataTypeDefinition,
-                                                                                                  MetadataMapFromDefinition metadataMapFromDefinition)
+                                                                                                  MetadataMapFromDefinition metadataMapFromDefinition,
+                                                                                                  MetadataMapFromMultipartDefinition metadataMapFromMultipartDefinition)
         {
-            var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             var builder = WebApplication.CreateBuilder();
 
@@ -188,19 +227,22 @@ public class EndpointRouteOpenApiBuilderTests
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(TestRequestStreamDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestDto, TestRequestStreamDto, Request, Response, IResponseStreamDtoMapper, IResponseStreamDtoMapper>),
+                                                                    typeof(ICommandWebApiEndpoint<RequestDto, TestRequestStreamDto, Request, Response, IResponseStreamDtoMapper,
+                                                                        IResponseStreamDtoMapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, TestRequestStreamDto, Request, Response, IResponseStreamDtoMapper, IResponseStreamDtoMapper>),
+                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, TestRequestStreamDto, Request, Response, IResponseStreamDtoMapper,
+                                                                        IResponseStreamDtoMapper>),
                                                                     new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
-
-            var (_, endpoint) = TestRunner(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
+            
+            var (_, endpoint) = TestRunner(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             var successProducesResponseTypeMetadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().First();
             successProducesResponseTypeMetadata.Type.Should().Be(typeof(void));
             successProducesResponseTypeMetadata.StatusCode.Should().Be(metadataRouteDefinition.SuccessStatusCode);
             successProducesResponseTypeMetadata.ContentTypes.Single().Should().Be(MediaTypeNames.Application.Octet);
-            
+
             var failedProducesResponseTypeMetadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Skip(1).First();
             failedProducesResponseTypeMetadata.Type.Should().Be(typeof(void));
             failedProducesResponseTypeMetadata.StatusCode.Should().Be(metadataRouteDefinition.FailedStatusCode);
@@ -223,19 +265,22 @@ public class EndpointRouteOpenApiBuilderTests
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseAsyncEnumerableDto<int>), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseAsyncEnumerableDto<int>, Request, Response, ResponseAsyncEnumerableDtoMapper, ResponseAsyncEnumerableDtoMapper>),
+                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseAsyncEnumerableDto<int>, Request, Response, ResponseAsyncEnumerableDtoMapper,
+                                                                        ResponseAsyncEnumerableDtoMapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseAsyncEnumerableDto<int>, Request, Response, ResponseAsyncEnumerableDtoMapper, ResponseAsyncEnumerableDtoMapper>),
+                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseAsyncEnumerableDto<int>, Request, Response,
+                                                                        ResponseAsyncEnumerableDtoMapper, ResponseAsyncEnumerableDtoMapper>),
                                                                     new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
-
-            var (_, endpoint) = TestRunner(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
+            
+            var (_, endpoint) = TestRunner(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             var successProducesResponseTypeMetadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().First();
             successProducesResponseTypeMetadata.Type.Should().Be<IEnumerable<int>>();
             successProducesResponseTypeMetadata.StatusCode.Should().Be(metadataRouteDefinition.SuccessStatusCode);
             successProducesResponseTypeMetadata.ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
-            
+
             var failedProducesResponseTypeMetadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Skip(1).First();
             failedProducesResponseTypeMetadata.Type.Should().Be(typeof(void));
             failedProducesResponseTypeMetadata.StatusCode.Should().Be(metadataRouteDefinition.FailedStatusCode);
@@ -260,17 +305,19 @@ public class EndpointRouteOpenApiBuilderTests
             var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
                                                                     typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, NotEmptyResponseDtoMapper, NotEmptyResponseDtoMapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, NotEmptyResponseDtoMapper, NotEmptyResponseDtoMapper>),
+                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, NotEmptyResponseDtoMapper,
+                                                                        NotEmptyResponseDtoMapper>),
                                                                     new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
-
-            var (_, endpoint) = TestRunner(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
+            
+            var (_, endpoint) = TestRunner(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             var successProducesResponseTypeMetadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().First();
             successProducesResponseTypeMetadata.Type.Should().Be<ResponseDto>();
             successProducesResponseTypeMetadata.StatusCode.Should().Be(metadataRouteDefinition.SuccessStatusCode);
             successProducesResponseTypeMetadata.ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
-            
+
             var failedProducesResponseTypeMetadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Skip(1).First();
             failedProducesResponseTypeMetadata.Type.Should().Be(typeof(void));
             failedProducesResponseTypeMetadata.StatusCode.Should().Be(metadataRouteDefinition.FailedStatusCode);
@@ -287,9 +334,10 @@ public class EndpointRouteOpenApiBuilderTests
         }
 
         private static (IServiceProvider serviceProvider, RouteEndpoint routeEndpoint) TestRunner(MetadataRouteDefinition metadataRouteDefinition, MetadataTypeDefinition metadataTypeDefinition,
-                                                                                                  MetadataMapFromDefinition metadataMapFromDefinition)
+                                                                                                  MetadataMapFromDefinition metadataMapFromDefinition,
+                                                                                                  MetadataMapFromMultipartDefinition metadataMapFromMultipartDefinition)
         {
-            var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             var builder = WebApplication.CreateBuilder();
 
@@ -333,18 +381,20 @@ public class EndpointRouteOpenApiBuilderTests
                                                                     typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
                                                                     new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
-
-            var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition);
+            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
+            
+            var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             endpoint.Metadata.GetMetadata<TagsAttribute>().Tags.Single().Should().Be(typeof(CommandApiEndpoint).GetSanitizedLastPartOfNamespace());
         }
 
-        private static (IServiceProvider serviceProvider, RouteEndpoint routeEndpoint) TestRunner(MetadataTypeDefinition metadataTypeDefinition, MetadataMapFromDefinition metadataMapFromDefinition)
+        private static (IServiceProvider serviceProvider, RouteEndpoint routeEndpoint) TestRunner(MetadataTypeDefinition metadataTypeDefinition, MetadataMapFromDefinition metadataMapFromDefinition, 
+                                                                                                  MetadataMapFromMultipartDefinition metadataMapFromMultipartDefinition)
         {
             var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
-            var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition);
+            var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             var builder = WebApplication.CreateBuilder();
 

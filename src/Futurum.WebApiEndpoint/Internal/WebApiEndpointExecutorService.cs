@@ -57,7 +57,7 @@ internal static class WebApiEndpointExecutorService
                      .ThenAsync(x => x.Item1.ExecuteAsync(metadataDefinition, httpContext, x.Item2, x.Item3, cancellationToken));
     }
 
-    private static Task WebApiEndpointNotFoundAsync(HttpContext httpContext, string? routePath)
+    private static Task WebApiEndpointNotFoundAsync(HttpContext httpContext, string routePath)
     {
         var eventData = new WebApiEndpointNotFoundData(routePath, httpContext.Request.Method);
         Log.Logger.Error("Unable to find WebApiEndpoint - {@eventData}", eventData);
