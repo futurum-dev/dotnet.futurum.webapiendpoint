@@ -109,7 +109,7 @@ public class WebApiEndpointAndMapperModule : IModule
         services.Scan(scan => scan.FromAssemblies(assemblies)
                                   .AddClasses(classes => classes.Where(type => type.IsClosedTypeOf(apiEndpointType)))
                                   .AsImplementedInterfaces()
-                                  .WithSingletonLifetime());
+                                  .WithScopedLifetime());
     }
 
     private static void RegisterRequestPlainTextMapper(IServiceCollection services, IEnumerable<Assembly> assemblies)
