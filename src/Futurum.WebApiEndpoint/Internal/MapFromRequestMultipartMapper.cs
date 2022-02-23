@@ -73,8 +73,9 @@ internal static class MapFromRequestMultipartMapper<TRequestDto>
             return Map(multipartSection, dto, cancellationToken);
         }
 
-        return (requestDto, multipartSection, cancellationToken) => Task.FromResult(Result.Try(() => Execute(multipartSection, requestDto, cancellationToken),
-                                                                                               () => $"Failed to Files MapMultipart for SectionPosition : '{mapFromMultipartAttribute.SectionPosition}'"));
+        return (requestDto, multipartSection, cancellationToken) => Result.Try(() => Execute(multipartSection, requestDto, cancellationToken),
+                                                                               () => $"Failed to Files MapMultipart for SectionPosition : '{mapFromMultipartAttribute.SectionPosition}'")
+                                                                          .ToResultAsync();
     }
 
     private static readonly JsonSerializerOptions JsonSerializerOptions = new(JsonSerializerDefaults.Web);
