@@ -11,6 +11,6 @@ public class FeatureMapper : IWebApiEndpointResponseMapper<Feature, FeatureDto>
         _dataMapper = dataMapper;
     }
     
-    public Result<FeatureDto> Map(Feature domain) =>
-        _dataMapper.Map(domain).ToResultOk();
+    public FeatureDto Map(Feature domain) =>
+        _dataMapper.Map(domain);
 }

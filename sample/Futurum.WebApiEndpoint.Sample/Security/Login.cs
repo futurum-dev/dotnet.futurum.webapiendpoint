@@ -77,7 +77,7 @@ public static class Login
         public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
             new Command(dto.Username, dto.Password, dto.SetPermission, dto.SetClaim, dto.SetRole).ToResultOk();
 
-        public Result<ResponseDto> Map(Response domain) =>
-            new ResponseDto(domain.JwtToken).ToResultOk();
+        public ResponseDto Map(Response domain) => 
+            new(domain.JwtToken);
     }
 }

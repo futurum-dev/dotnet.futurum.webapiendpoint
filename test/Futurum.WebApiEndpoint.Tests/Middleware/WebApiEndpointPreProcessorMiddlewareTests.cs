@@ -69,8 +69,8 @@ public class WebApiEndpointPreProcessorMiddlewareTests
         public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
             new Command().ToResultOk();
 
-        public Result<ResponseDto> Map(Response domain) =>
-            new ResponseDto().ToResultOk();
+        public ResponseDto Map(Response domain) => 
+            new();
     }
 
     public class SuccessMiddleware<TRequest, TResponse> : IWebApiEndpointPreProcessorMiddleware<TRequest>

@@ -1,3 +1,5 @@
+using FluentAssertions;
+
 using Futurum.Test.Result;
 
 using Xunit;
@@ -14,6 +16,6 @@ public class ResponseFileStreamMapperTests
 
         var result = new ResponseFileStreamMapper<object>().Map(new ResponseFileStream<object>(fileInfo, contentType));
 
-        result.ShouldBeSuccessWithValueEquivalentTo(new ResponseFileStreamDto(fileInfo, contentType));
+        result.Should().BeEquivalentTo(new ResponseFileStreamDto(fileInfo, contentType));
     }
 }

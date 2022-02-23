@@ -28,8 +28,8 @@ public static class TestWebApiEndpoint
         public Result<Query> Map(HttpContext httpContext, RequestDto dto) =>
             new Query(dto.Id, dto.FirstName, dto.LastName, dto.Age, dto.PhoneNumbers).ToResultOk();
 
-        public Result<ResponseDto> Map(Response domain) =>
-            new ResponseDto(domain.Id, domain.Name, domain.Age, domain.PhoneNumber).ToResultOk();
+        public ResponseDto Map(Response domain) => 
+            new(domain.Id, domain.Name, domain.Age, domain.PhoneNumber);
     }
 
     public class Validator : AbstractValidator<RequestDto>

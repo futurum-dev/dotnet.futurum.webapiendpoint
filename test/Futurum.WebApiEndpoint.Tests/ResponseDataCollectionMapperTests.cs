@@ -1,3 +1,5 @@
+using FluentAssertions;
+
 using Futurum.Test.Result;
 
 using Xunit;
@@ -14,7 +16,7 @@ public class ResponseDataCollectionMapperTests
 
         var result = new ResponseDataCollectionMapper<object, int, int, DataMapper>(new DataMapper()).Map(new ResponseDataCollection<object, int>(numbers));
 
-        result.ShouldBeSuccessWithValueEquivalentTo(new ResponseDataCollectionDto<int>(numbers.Select(x => x * 2).ToList()));
+        result.Should().BeEquivalentTo(new ResponseDataCollectionDto<int>(numbers.Select(x => x * 2).ToList()));
     }
 
     private class DataMapper : IWebApiEndpointDataMapper<int, int>

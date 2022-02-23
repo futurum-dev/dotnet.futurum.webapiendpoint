@@ -55,7 +55,7 @@ public class EndpointRouteOpenApiBuilderTests
             public Result<Request> Map(HttpContext httpContext, RequestPlainTextDto dto) =>
                 throw new NotImplementedException();
 
-            public Result<ResponseDto> Map(Response domain) =>
+            public ResponseDto Map(Response domain) =>
                 throw new NotImplementedException();
         }
 
@@ -83,7 +83,7 @@ public class EndpointRouteOpenApiBuilderTests
             public Result<Request> Map(HttpContext httpContext, RequestUploadFilesDto dto) =>
                 throw new NotImplementedException();
 
-            public Result<ResponseDto> Map(Response domain) =>
+            public ResponseDto Map(Response domain) =>
                 throw new NotImplementedException();
         }
 
@@ -111,7 +111,7 @@ public class EndpointRouteOpenApiBuilderTests
             public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
                 throw new NotImplementedException();
 
-            public Result<ResponseDto> Map(Response domain) =>
+            public ResponseDto Map(Response domain) =>
                 throw new NotImplementedException();
         }
 
@@ -146,7 +146,7 @@ public class EndpointRouteOpenApiBuilderTests
             public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
                 throw new NotImplementedException();
 
-            public Result<ResponseDto> Map(Response domain) =>
+            public ResponseDto Map(Response domain) =>
                 throw new NotImplementedException();
         }
 
@@ -254,7 +254,7 @@ public class EndpointRouteOpenApiBuilderTests
             public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
                 throw new NotImplementedException();
 
-            public Result<TestRequestStreamDto> Map(Response domain) =>
+            public TestRequestStreamDto Map(Response domain) =>
                 throw new NotImplementedException();
         }
 
@@ -292,7 +292,7 @@ public class EndpointRouteOpenApiBuilderTests
             public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
                 throw new NotImplementedException();
 
-            public Result<ResponseAsyncEnumerableDto<int>> Map(Response domain) =>
+            public ResponseAsyncEnumerableDto<int> Map(Response domain) =>
                 throw new NotImplementedException();
         }
 
@@ -329,7 +329,7 @@ public class EndpointRouteOpenApiBuilderTests
             public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
                 throw new NotImplementedException();
 
-            public Result<ResponseDto> Map(Response domain) =>
+            public ResponseDto Map(Response domain) =>
                 throw new NotImplementedException();
         }
 
@@ -447,7 +447,7 @@ public class EndpointRouteOpenApiBuilderTests
         public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
             new Request().ToResultOk();
 
-        public Result<ResponseDto> Map(Response domain) =>
-            new ResponseDto().ToResultOk();
+        public ResponseDto Map(Response domain) => 
+            new();
     }
 }

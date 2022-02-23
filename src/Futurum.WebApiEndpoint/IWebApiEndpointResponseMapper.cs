@@ -1,5 +1,3 @@
-using Futurum.Core.Result;
-
 namespace Futurum.WebApiEndpoint;
 
 /// <summary>
@@ -10,5 +8,5 @@ public interface IWebApiEndpointResponseMapper<TResponse, TResponseDto>
     /// <summary>
     /// Map from response domain to response dto
     /// </summary>
-    Result<TResponseDto> Map(TResponse domain);
+    TResponseDto Map(TResponse domain);
 }

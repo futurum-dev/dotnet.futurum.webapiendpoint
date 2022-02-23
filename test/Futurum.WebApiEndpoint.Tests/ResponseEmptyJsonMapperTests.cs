@@ -1,3 +1,5 @@
+using FluentAssertions;
+
 using Futurum.Test.Result;
 
 using Xunit;
@@ -11,6 +13,6 @@ public class ResponseEmptyJsonMapperTests
     {
         var result = new ResponseEmptyJsonMapper<object>().Map(new ResponseEmptyJson<object>());
 
-        result.ShouldBeSuccess();
+        result.Should().NotBeNull();
     }
 }

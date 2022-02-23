@@ -10,11 +10,8 @@ public class BlogDataMapper : IWebApiEndpointDataMapper<Blog, BlogDto>
 
 public class BlogMapper : IWebApiEndpointResponseMapper<Blog, BlogDto>
 {
-    public Result<BlogDto> Map(Blog domain) =>
-        MapToDto(domain);
-    
-    public static Result<BlogDto> MapToDto(Blog domain) => 
-        new BlogDto(domain.Id.GetValueOrDefault(x => x.Value, 0), domain.Url).ToResultOk();
+    public BlogDto Map(Blog domain) => 
+        new(domain.Id.GetValueOrDefault(x => x.Value, 0), domain.Url);
 
     public static Result<Blog> MapToDomain(BlogDto dto) => 
         new Blog(dto.Id.ToId(), dto.Url).ToResultOk();

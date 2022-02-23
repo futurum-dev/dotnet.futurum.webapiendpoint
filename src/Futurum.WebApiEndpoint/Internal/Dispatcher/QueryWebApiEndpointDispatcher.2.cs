@@ -28,7 +28,7 @@ internal class QueryWebApiEndpointDispatcher<TResponseDto, TResponse, TResponseM
         var apiEndpointTyped = apiEndpoint as IQueryWebApiEndpoint<TResponseDto, TResponse, TResponseMapper>;
 
         return middlewareExecutorTyped.ExecuteAsync(httpContext, Unit.Value, (_, ct) => apiEndpointTyped.ExecuteQueryAsync(ct), cancellationToken)
-                                      .ThenAsync(response => _responseMapper.Map(response))
+                                      .MapAsync(response => _responseMapper.Map(response))
                                       .DoWhenFailureAsync(error => _logger.Error(httpContext.Request.Path, error))
                                       .SwitchAsync(
                                           responseDto => _httpContextDispatcher.HandleSuccessResponseAsync(httpContext, responseDto, metadataDefinition.MetadataRouteDefinition, cancellationToken),
