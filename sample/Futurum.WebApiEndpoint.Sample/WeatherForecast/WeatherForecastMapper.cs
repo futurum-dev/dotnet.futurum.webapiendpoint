@@ -10,8 +10,8 @@ public class WeatherForecastDataMapper : IWebApiEndpointDataMapper<WeatherForeca
 
 public static class WeatherForecastMapper
 {
-    public static Result<WeatherForecastDto> MapToDto(WeatherForecast domain) => 
-        new WeatherForecastDto(domain.Date, domain.TemperatureC, domain.TemperatureF, domain.Summary).ToResultOk();
+    public static WeatherForecastDto MapToDto(WeatherForecast domain) => 
+        new(domain.Date, domain.TemperatureC, domain.TemperatureF, domain.Summary);
 
     public static Result<WeatherForecast> MapToDomain(WeatherForecastDto dto) =>
         new WeatherForecast(dto.Date, dto.TemperatureC, dto.Summary).ToResultOk();

@@ -22,20 +22,20 @@ public record ResponseDataCollection<TData>(IEnumerable<TData> Data)
 public static class ResponseDataCollectionExtensions
 {
     /// <summary>
-    /// Transform an <see cref="IEnumerable{T}"/> to a <see cref="ResponseDataCollection{TApiEndpoint,TData}"/>
+    /// Transform an <see cref="IEnumerable{T}"/> to a <see cref="ResponseDataCollection{TData}"/>
     /// </summary>
     public static Task<Result<ResponseDataCollection<TData>>> ToResponseDataCollectionAsync<TData>(this IEnumerable<TData> source) =>
         new ResponseDataCollection<TData>(source).ToResultOkAsync();
 
     /// <summary>
-    /// Transform an <see cref="IEnumerable{T}"/> to a <see cref="ResponseDataCollection{TApiEndpoint,TData}"/>
+    /// Transform an <see cref="IEnumerable{T}"/> to a <see cref="ResponseDataCollection{TData}"/>
     /// </summary>
     public static Task<Result<ResponseDataCollection<TData>>> ToResponseDataCollectionAsync<TData>(this Result<IEnumerable<TData>> result) =>
         result.Map(x => new ResponseDataCollection<TData>(x))
               .ToResultAsync();
 
     /// <summary>
-    /// Transform an <see cref="IEnumerable{T}"/> to a <see cref="ResponseDataCollection{TApiEndpoint,TData}"/>
+    /// Transform an <see cref="IEnumerable{T}"/> to a <see cref="ResponseDataCollection{TData}"/>
     /// </summary>
     public static Task<Result<ResponseDataCollection<TData>>> ToResponseDataCollectionAsync<TData>(this Task<Result<IEnumerable<TData>>> result) =>
         result.MapAsync(x => new ResponseDataCollection<TData>(x));
@@ -62,6 +62,6 @@ internal class ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TData
         _dataMapper = dataMapper;
     }
 
-    public Result<ResponseDataCollectionDto<TDataDto>> Map(ResponseDataCollection<TApiEndpoint, TData> domain) =>
-        new ResponseDataCollectionDto<TDataDto>(domain.Data.Select(_dataMapper.Map).AsList()).ToResultOk();
+    public ResponseDataCollectionDto<TDataDto> Map(ResponseDataCollection<TApiEndpoint, TData> domain) => 
+        new(domain.Data.Select(_dataMapper.Map).AsList());
 }

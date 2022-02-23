@@ -1,3 +1,5 @@
+using FluentAssertions;
+
 using Futurum.Test.Result;
 
 using Xunit;
@@ -15,6 +17,6 @@ public class ResponseBytesMapperTests
 
         var result = new ResponseBytesMapper<object>().Map(new ResponseBytes<object>(bytes, fileName, contentType));
 
-        result.ShouldBeSuccessWithValueEquivalentTo(new ResponseBytesDto(bytes, contentType, fileName));
+        result.Should().BeEquivalentTo(new ResponseBytesDto(bytes, contentType, fileName));
     }
 }

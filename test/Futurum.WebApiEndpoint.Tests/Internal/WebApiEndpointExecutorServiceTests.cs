@@ -65,8 +65,8 @@ public class WebApiEndpointExecutorServiceTests
         public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
             new Command().ToResultOk();
 
-        public Result<ResponseDto> Map(Response domain) =>
-            new ResponseDto(domain.FirstName, domain.Age).ToResultOk();
+        public ResponseDto Map(Response domain) => 
+            new(domain.FirstName, domain.Age);
     }
 
     [Fact]

@@ -22,6 +22,6 @@ public record ResponseEmptyJsonDto;
 
 internal class ResponseEmptyJsonMapper<TApiEndpoint> : IWebApiEndpointResponseMapper<ResponseEmptyJson<TApiEndpoint>, ResponseEmptyJsonDto>
 {
-    public Result<ResponseEmptyJsonDto> Map(ResponseEmptyJson<TApiEndpoint> domain) =>
-        new ResponseEmptyJsonDto().ToResultOk();
+    public ResponseEmptyJsonDto Map(ResponseEmptyJson<TApiEndpoint> domain) => 
+        new();
 }

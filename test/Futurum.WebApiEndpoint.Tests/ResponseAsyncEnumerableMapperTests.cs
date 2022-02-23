@@ -1,4 +1,4 @@
-using Futurum.Test.Result;
+using FluentAssertions;
 
 using Xunit;
 
@@ -16,8 +16,8 @@ public class ResponseAsyncEnumerableMapperTests
 
         var result = new ResponseAsyncEnumerableMapper<object, int, int, DataMapper>(new DataMapper()).Map(nonGeneric);
 
-        await result.ShouldBeSuccessWithValueEquivalentToAsync(x => x.AsyncEnumerable,
-                                                               new ResponseAsyncEnumerableDto<int>(AsyncEnumerable(numbers)).AsyncEnumerable);
+        var receivedNumbers = await result.AsyncEnumerable.ToListAsync();
+        receivedNumbers.Should().BeEquivalentTo(numbers);
     }
 
     private class DataMapper : IWebApiEndpointDataMapper<int, int>

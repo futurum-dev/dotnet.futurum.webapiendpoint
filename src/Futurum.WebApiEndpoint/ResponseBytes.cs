@@ -25,6 +25,6 @@ public record ResponseBytesDto(byte[] Bytes, string ContentType, string? FileNam
 
 internal class ResponseBytesMapper<TApiEndpoint> : IWebApiEndpointResponseMapper<ResponseBytes<TApiEndpoint>, ResponseBytesDto>
 {
-    public Result<ResponseBytesDto> Map(ResponseBytes<TApiEndpoint> domain) =>
-        new ResponseBytesDto(domain.Bytes, domain.ContentType, domain.FileName).ToResultOk();
+    public ResponseBytesDto Map(ResponseBytes<TApiEndpoint> domain) => 
+        new(domain.Bytes, domain.ContentType, domain.FileName);
 }
