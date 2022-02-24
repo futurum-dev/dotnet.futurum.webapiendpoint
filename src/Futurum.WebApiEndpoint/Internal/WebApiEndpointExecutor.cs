@@ -11,8 +11,7 @@ internal static class WebApiEndpointExecutor
         var routePath = ((RouteEndpoint?)endpoint)?.RoutePattern.RawText;
 
         var metadataDefinition = endpoint?.Metadata.GetMetadata<MetadataDefinition>();
-        var configuration = endpoint?.Metadata.GetMetadata<WebApiEndpointConfiguration>();
 
-        return WebApiEndpointExecutorService.ExecuteAsync(httpContext, metadataDefinition, configuration, routePath, cancellationToken);
+        return WebApiEndpointExecutorService.ExecuteAsync(httpContext, metadataDefinition, routePath, cancellationToken);
     }
 }

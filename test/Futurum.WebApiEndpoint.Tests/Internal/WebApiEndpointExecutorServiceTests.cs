@@ -77,7 +77,7 @@ public class WebApiEndpointExecutorServiceTests
 
         var routePath = string.Empty;
 
-        await WebApiEndpointExecutorService.ExecuteAsync(httpContext, null, WebApiEndpointConfiguration.Default, routePath, CancellationToken.None);
+        await WebApiEndpointExecutorService.ExecuteAsync(httpContext, null, routePath, CancellationToken.None);
 
         httpContext.Response.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
 
@@ -126,7 +126,7 @@ public class WebApiEndpointExecutorServiceTests
 
         var routePath = string.Empty;
 
-        await WebApiEndpointExecutorService.ExecuteAsync(httpContext, metadataDefinition, WebApiEndpointConfiguration.Default, routePath, CancellationToken.None);
+        await WebApiEndpointExecutorService.ExecuteAsync(httpContext, metadataDefinition, routePath, CancellationToken.None);
 
         httpContext.Response.StatusCode.Should().Be(metadataRouteDefinition.SuccessStatusCode);
 
@@ -175,7 +175,7 @@ public class WebApiEndpointExecutorServiceTests
 
         var routePath = string.Empty;
 
-        await WebApiEndpointExecutorService.ExecuteAsync(httpContext, metadataDefinition, WebApiEndpointConfiguration.Default, routePath, CancellationToken.None);
+        await WebApiEndpointExecutorService.ExecuteAsync(httpContext, metadataDefinition, routePath, CancellationToken.None);
 
         httpContext.Response.StatusCode.Should().Be(metadataRouteDefinition.FailedStatusCode);
 
@@ -214,7 +214,7 @@ public class WebApiEndpointExecutorServiceTests
 
         var routePath = string.Empty;
 
-        await WebApiEndpointExecutorService.ExecuteAsync(httpContext, metadataDefinition, WebApiEndpointConfiguration.Default, routePath, CancellationToken.None);
+        await WebApiEndpointExecutorService.ExecuteAsync(httpContext, metadataDefinition, routePath, CancellationToken.None);
 
         httpContext.Response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
 
