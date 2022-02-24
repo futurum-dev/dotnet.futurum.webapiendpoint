@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Net;
 
 using Futurum.Core.Result;
@@ -13,17 +12,14 @@ namespace Futurum.WebApiEndpoint.Internal;
 
 internal static class WebApiEndpointExecutorService
 {
-    private static readonly ConcurrentDictionary<Type, Result<IWebApiEndpointDispatcher>> WebApiEndpointDispatcherCache = new();
-    private static readonly ConcurrentDictionary<Type, Result<IWebApiEndpointMiddlewareExecutor>> WebApiEndpointMiddlewareExecutorCache = new();
-
-    public static async Task ExecuteAsync(HttpContext httpContext, MetadataDefinition? metadataDefinition, WebApiEndpointConfiguration configuration, string routePath, CancellationToken cancellationToken)
+    public static async Task ExecuteAsync(HttpContext httpContext, MetadataDefinition? metadataDefinition, string routePath, CancellationToken cancellationToken)
     {
         try
         {
             if (metadataDefinition != null)
-                await CallWebApiEndpointAsync(httpContext, metadataDefinition, configuration, cancellationToken).UnwrapAsync();
+                await CallWebApiEndpointAsync(httpContext, metadataDefinition, cancellationToken).UnwrapAsync();
             else
-                await WebApiEndpointNotFoundAsync(httpContext, routePath);
+                await WebApiEndpointNotFoundAsync(httpContext, routePath, cancellationToken);
         }
         catch (Exception exception)
         {
@@ -35,29 +31,25 @@ internal static class WebApiEndpointExecutorService
 
             httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            await httpContext.Response.WriteAsJsonAsync(errorResponse, typeof(ResultErrorStructure), CancellationToken.None);
+            await httpContext.Response.WriteAsJsonAsync(errorResponse, typeof(ResultErrorStructure), cancellationToken);
         }
     }
 
     private static Task<Result<(IWebApiEndpointDispatcher, IWebApiEndpointMiddlewareExecutor, IWebApiEndpoint)>> CallWebApiEndpointAsync(
-        HttpContext httpContext, MetadataDefinition metadataDefinition, WebApiEndpointConfiguration configuration, CancellationToken cancellationToken)
+        HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken)
     {
-        var webApiEndpointDispatcher = WebApiEndpointDispatcherCache.GetOrAdd(metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType,
-                                                                              webApiEndpointDispatcher =>
-                                                                                  httpContext.RequestServices.TryGetService<IWebApiEndpointDispatcher>(webApiEndpointDispatcher));
+        var webApiEndpointDispatcher = httpContext.RequestServices.TryGetService<IWebApiEndpointDispatcher>(metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType);
 
-        var middlewareExecutor = configuration.EnableMiddleware
-            ? httpContext.RequestServices.TryGetService<IWebApiEndpointMiddlewareExecutor>(metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType)
-            : WebApiEndpointMiddlewareExecutorCache.GetOrAdd(metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType,
-                                                             middlewareExecutorType => httpContext.RequestServices.TryGetService<IWebApiEndpointMiddlewareExecutor>(middlewareExecutorType));
+        var middlewareExecutor = httpContext.RequestServices.TryGetService<IWebApiEndpointMiddlewareExecutor>(metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType);
 
         var apiEndpoint = httpContext.RequestServices.TryGetService<IWebApiEndpoint>(metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType);
 
-        return Result.CombineAll(webApiEndpointDispatcher, middlewareExecutor, apiEndpoint)
-                     .ThenAsync(x => x.Item1.ExecuteAsync(metadataDefinition, httpContext, x.Item2, x.Item3, cancellationToken));
+        return Result.CombineAll(webApiEndpointDispatcher, middlewareExecutor, apiEndpoint,
+                         (webApiEndpointDispatcher, middlewareExecutor, apiEndpoint) => (webApiEndpointDispatcher, middlewareExecutor, apiEndpoint))
+                     .ThenAsync(x => x.webApiEndpointDispatcher.ExecuteAsync(metadataDefinition, httpContext, x.middlewareExecutor, x.apiEndpoint, cancellationToken));
     }
 
-    private static Task WebApiEndpointNotFoundAsync(HttpContext httpContext, string routePath)
+    private static Task WebApiEndpointNotFoundAsync(HttpContext httpContext, string routePath, CancellationToken cancellationToken)
     {
         var eventData = new WebApiEndpointNotFoundData(routePath, httpContext.Request.Method);
         Log.Logger.Error("Unable to find WebApiEndpoint - {@eventData}", eventData);
@@ -66,7 +58,7 @@ internal static class WebApiEndpointExecutorService
 
         httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
-        return httpContext.Response.WriteAsJsonAsync(errorResponse, typeof(ResultErrorStructure), CancellationToken.None);
+        return httpContext.Response.WriteAsJsonAsync(errorResponse, typeof(ResultErrorStructure), cancellationToken);
     }
 
     private record struct WebApiEndpointNotFoundData(string RoutePath, string HttpMethod);
