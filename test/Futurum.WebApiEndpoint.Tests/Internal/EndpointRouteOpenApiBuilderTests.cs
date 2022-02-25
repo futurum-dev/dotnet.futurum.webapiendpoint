@@ -31,147 +31,202 @@ public class EndpointRouteOpenApiBuilderTests
 
     public class ConfigureAccepts
     {
-        [Fact]
-        public void RequestPlainTextDto()
+        public class RequestPlainText
         {
-            var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestPlainTextDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestPlainTextDto, ResponseDto, Request, Response, RequestPlainTextDtoMapper,
-                                                                        RequestPlainTextDtoMapper>),
-                                                                    typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestPlainTextDto, ResponseDto, Request, Response, RequestPlainTextDtoMapper,
-                                                                        RequestPlainTextDtoMapper>),
-                                                                    new List<Type>());
-            var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
-            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
+            [Fact]
+            public void check()
+            {
+                var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestPlainTextDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+                                                                        typeof(ICommandWebApiEndpoint<RequestPlainTextDto, ResponseDto, Request, Response, RequestPlainTextDtoMapper,
+                                                                            RequestPlainTextDtoMapper>),
+                                                                        typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
+                                                                        typeof(CommandWebApiEndpointDispatcher<RequestPlainTextDto, ResponseDto, Request, Response, RequestPlainTextDtoMapper,
+                                                                            RequestPlainTextDtoMapper>),
+                                                                        new List<Type>());
+                var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
+                var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
 
-            var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
+                var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
-            endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be<EmptyRequestDto>();
-            endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Text.Plain);
+                endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be<EmptyRequestDto>();
+                endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Text.Plain);
+            }
+
+            private class RequestPlainTextDtoMapper : IWebApiEndpointRequestMapper<RequestPlainTextDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+            {
+                public Result<Request> Map(HttpContext httpContext, RequestPlainTextDto dto) =>
+                    throw new NotImplementedException();
+
+                public ResponseDto Map(Response domain) =>
+                    throw new NotImplementedException();
+            }
         }
 
-        private class RequestPlainTextDtoMapper : IWebApiEndpointRequestMapper<RequestPlainTextDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+        public class RequestUploadFiles
         {
-            public Result<Request> Map(HttpContext httpContext, RequestPlainTextDto dto) =>
-                throw new NotImplementedException();
+            [Fact]
+            public void check()
+            {
+                var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestUploadFilesDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+                                                                        typeof(ICommandWebApiEndpoint<RequestUploadFilesDto, ResponseDto, Request, Response, RequestUploadFilesDtoMapper,
+                                                                            RequestUploadFilesDtoMapper>),
+                                                                        typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
+                                                                        typeof(CommandWebApiEndpointDispatcher<RequestUploadFilesDto, ResponseDto, Request, Response, RequestUploadFilesDtoMapper,
+                                                                            RequestUploadFilesDtoMapper>),
+                                                                        new List<Type>());
+                var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
+                var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
 
-            public ResponseDto Map(Response domain) =>
-                throw new NotImplementedException();
+                var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
+
+                endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be<RequestUploadFilesDto>();
+                endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be("multipart/form-data");
+            }
+
+            public class RequestUploadFilesDtoMapper : IWebApiEndpointRequestMapper<RequestUploadFilesDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+            {
+                public Result<Request> Map(HttpContext httpContext, RequestUploadFilesDto dto) =>
+                    throw new NotImplementedException();
+
+                public ResponseDto Map(Response domain) =>
+                    throw new NotImplementedException();
+            }
         }
 
-        [Fact]
-        public void RequestUploadFilesDto()
+        public class RequestUploadFile
         {
-            var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestUploadFilesDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestUploadFilesDto, ResponseDto, Request, Response, RequestUploadFilesDtoMapper,
-                                                                        RequestUploadFilesDtoMapper>),
-                                                                    typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestUploadFilesDto, ResponseDto, Request, Response, RequestUploadFilesDtoMapper,
-                                                                        RequestUploadFilesDtoMapper>),
-                                                                    new List<Type>());
-            var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
-            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
+            [Fact]
+            public void check()
+            {
+                var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestUploadFileDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+                                                                        typeof(ICommandWebApiEndpoint<RequestUploadFileDto, ResponseDto, Request, Response, RequestUploadFileDtoMapper,
+                                                                            RequestUploadFileDtoMapper>),
+                                                                        typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
+                                                                        typeof(CommandWebApiEndpointDispatcher<RequestUploadFileDto, ResponseDto, Request, Response, RequestUploadFileDtoMapper,
+                                                                            RequestUploadFileDtoMapper>),
+                                                                        new List<Type>());
+                var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
+                var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
 
-            var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
+                var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
-            endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be<RequestUploadFilesDto>();
-            endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be("multipart/form-data");
+                endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be<RequestUploadFileDto>();
+                endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be("multipart/form-data");
+            }
+
+            public class RequestUploadFileDtoMapper : IWebApiEndpointRequestMapper<RequestUploadFileDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+            {
+                public Result<Request> Map(HttpContext httpContext, RequestUploadFileDto dto) =>
+                    throw new NotImplementedException();
+
+                public ResponseDto Map(Response domain) =>
+                    throw new NotImplementedException();
+            }
         }
 
-        public class RequestUploadFilesDtoMapper : IWebApiEndpointRequestMapper<RequestUploadFilesDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+        public class RequestDto_without_MapFrom
         {
-            public Result<Request> Map(HttpContext httpContext, RequestUploadFilesDto dto) =>
-                throw new NotImplementedException();
+            [Fact]
+            public void check()
+            {
+                var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+                                                                        typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, RequestDto_without_MapFromMapper,
+                                                                            RequestDto_without_MapFromMapper>),
+                                                                        typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
+                                                                        typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, RequestDto_without_MapFromMapper,
+                                                                            RequestDto_without_MapFromMapper>),
+                                                                        new List<Type>());
+                var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
+                var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
 
-            public ResponseDto Map(Response domain) =>
-                throw new NotImplementedException();
+                var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
+
+                endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be<RequestDto>();
+                endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
+            }
+
+            public class RequestDto_without_MapFromMapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+            {
+                public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
+                    throw new NotImplementedException();
+
+                public ResponseDto Map(Response domain) =>
+                    throw new NotImplementedException();
+            }
         }
 
-        [Fact]
-        public void RequestDto_without_MapFrom()
+        public class RequestDto_with_MapFrom
         {
-            var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, RequestDto_without_MapFromMapper,
-                                                                        RequestDto_without_MapFromMapper>),
-                                                                    typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, RequestDto_without_MapFromMapper,
-                                                                        RequestDto_without_MapFromMapper>),
-                                                                    new List<Type>());
-            var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
-            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
+            [Fact]
+            public void check()
+            {
+                var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+                                                                        typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, RequestDto_with_MapFromMapper,
+                                                                            RequestDto_with_MapFromMapper>),
+                                                                        typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
+                                                                        typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, RequestDto_with_MapFromMapper,
+                                                                            RequestDto_with_MapFromMapper>),
+                                                                        new List<Type>());
 
-            var (_, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
+                var metadataMapFromParameterDefinition = new MetadataMapFromParameterDefinition("Id",
+                                                                                                typeof(RequestDto).GetProperties().Single(x => x.Name == nameof(RequestDto.Id)),
+                                                                                                new MapFromPathAttribute("Id"));
+                var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition> { metadataMapFromParameterDefinition });
 
-            endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be<RequestDto>();
-            endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
+                var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
+
+                var (serviceProvider, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
+
+                var requestOpenApiTypeCreator = serviceProvider.GetService(typeof(IRequestOpenApiTypeCreator)) as IRequestOpenApiTypeCreator;
+
+                endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be(requestOpenApiTypeCreator.Get(typeof(RequestDto)));
+                endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
+            }
+
+            public class RequestDto_with_MapFromMapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+            {
+                public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
+                    throw new NotImplementedException();
+
+                public ResponseDto Map(Response domain) =>
+                    throw new NotImplementedException();
+            }
         }
 
-        public class RequestDto_without_MapFromMapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+        public class RequestDto_with_MapFromMultipart
         {
-            public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
-                throw new NotImplementedException();
+            [Fact]
+            public void check()
+            {
+                var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+                                                                        typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, RequestDto_with_MapFromMultipartMapper,
+                                                                            RequestDto_with_MapFromMultipartMapper>),
+                                                                        typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
+                                                                        typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, RequestDto_with_MapFromMultipartMapper,
+                                                                            RequestDto_with_MapFromMultipartMapper>),
+                                                                        new List<Type>());
 
-            public ResponseDto Map(Response domain) =>
-                throw new NotImplementedException();
-        }
+                var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
 
-        [Fact]
-        public void RequestDto_with_MapFrom()
-        {
-            var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, RequestDto_with_MapFromMapper,
-                                                                        RequestDto_with_MapFromMapper>),
-                                                                    typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, RequestDto_with_MapFromMapper,
-                                                                        RequestDto_with_MapFromMapper>),
-                                                                    new List<Type>());
+                var metadataMapFromMultipartParameterDefinition = new MetadataMapFromMultipartParameterDefinition("Id",
+                                                                                                                  typeof(RequestDto).GetProperties().Single(x => x.Name == nameof(RequestDto.Id)),
+                                                                                                                  new MapFromMultipartJsonAttribute(1));
+                var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition> { metadataMapFromMultipartParameterDefinition });
 
-            var metadataMapFromParameterDefinition = new MetadataMapFromParameterDefinition("Id",
-                                                                                            typeof(RequestDto).GetProperties().Single(x => x.Name == nameof(RequestDto.Id)),
-                                                                                            new MapFromPathAttribute("Id"));
-            var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition> { metadataMapFromParameterDefinition });
+                var (serviceProvider, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
-            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
-            
-            var (serviceProvider, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
+                endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be<RequestDto>();
+                endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be("multipart/form-data");
+            }
 
-            var requestOpenApiTypeCreator = serviceProvider.GetService(typeof(IRequestOpenApiTypeCreator)) as IRequestOpenApiTypeCreator;
+            public class RequestDto_with_MapFromMultipartMapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+            {
+                public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
+                    throw new NotImplementedException();
 
-            endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be(requestOpenApiTypeCreator.Get(typeof(RequestDto)));
-            endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
-        }
-
-        public class RequestDto_with_MapFromMapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
-        {
-            public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
-                throw new NotImplementedException();
-
-            public ResponseDto Map(Response domain) =>
-                throw new NotImplementedException();
-        }
-
-        [Fact]
-        public void RequestDto_with_MapFromMultipart()
-        {
-            var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, RequestDto_with_MapFromMapper,
-                                                                        RequestDto_with_MapFromMapper>),
-                                                                    typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, RequestDto_with_MapFromMapper,
-                                                                        RequestDto_with_MapFromMapper>),
-                                                                    new List<Type>());
-
-            var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
-
-            var metadataMapFromMultipartParameterDefinition = new MetadataMapFromMultipartParameterDefinition("Id",
-                                                                                            typeof(RequestDto).GetProperties().Single(x => x.Name == nameof(RequestDto.Id)),
-                                                                                            new MapFromMultipartJsonAttribute(1));
-            var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>{metadataMapFromMultipartParameterDefinition});
-            
-            var (serviceProvider, endpoint) = TestRunner(metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
-
-            endpoint.Metadata.OfType<IAcceptsMetadata>().Single().RequestType.Should().Be<RequestDto>();
-            endpoint.Metadata.OfType<IAcceptsMetadata>().Single().ContentTypes.Single().Should().Be("multipart/form-data");
+                public ResponseDto Map(Response domain) =>
+                    throw new NotImplementedException();
+            }
         }
 
         private static (IServiceProvider serviceProvider, RouteEndpoint routeEndpoint) TestRunner(MetadataTypeDefinition metadataTypeDefinition, MetadataMapFromDefinition metadataMapFromDefinition,

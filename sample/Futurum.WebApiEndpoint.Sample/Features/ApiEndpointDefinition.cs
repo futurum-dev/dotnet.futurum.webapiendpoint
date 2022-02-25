@@ -3,6 +3,7 @@ using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequest;
 using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestManualParameter;
 using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestParameterMapFrom;
 using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestPlainText;
+using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestUploadFile;
 using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestUploadFiles;
 using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestUploadFileWithPayload;
 using Futurum.WebApiEndpoint.Sample.Features.QueryWithoutRequest;
@@ -89,6 +90,16 @@ public class ApiEndpointDefinition : IApiEndpointDefinition
                          .Command<CommandWithRequestUploadFilesWithResponseFileStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-with-response-file-stream"))
                          .Command<CommandWithRequestUploadFilesWithResponseFileStreamWithContentTypeScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-with-response-file-stream-with-content-type"))
                          .Command<CommandWithRequestUploadFilesWithResponseStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-with-response-stream"))
+                         
+                         .Command<CommandWithRequestUploadFileWithResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-with-response"))
+                         .Command<CommandWithRequestUploadFileWithoutResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-without-response"))
+                         .Command<CommandWithRequestUploadFileWithResponseAsyncEnumerableScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-with-response-async-enumerable"))
+                         .Command<CommandWithRequestUploadFileWithResponseBytesScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-with-response-bytes"))
+                         .Command<CommandWithRequestUploadFileWithResponseDataCollectionScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-with-response-data-collection"))
+                         .Command<CommandWithRequestUploadFileWithResponseEmptyJsonScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-with-response-empty-json"))
+                         .Command<CommandWithRequestUploadFileWithResponseFileStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-with-response-file-stream"))
+                         .Command<CommandWithRequestUploadFileWithResponseFileStreamWithContentTypeScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-with-response-file-stream-with-content-type"))
+                         .Command<CommandWithRequestUploadFileWithResponseStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-with-response-stream"))
                          
                          .Command<CommandWithRequestWithResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-with-response"))
                          .Command<CommandWithRequestWithoutResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-without-response"))

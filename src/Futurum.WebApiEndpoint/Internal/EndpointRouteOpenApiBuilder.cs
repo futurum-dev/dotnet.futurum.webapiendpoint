@@ -39,7 +39,7 @@ internal class EndpointRouteOpenApiBuilder : IEndpointRouteOpenApiBuilder
         {
             routeHandlerBuilder.Accepts(typeof(EmptyRequestDto), MediaTypeNames.Text.Plain);
         }
-        else if (requestDtoType == typeof(RequestUploadFilesDto))
+        else if (requestDtoType == typeof(RequestUploadFilesDto) || requestDtoType == typeof(RequestUploadFileDto))
         {
             routeHandlerBuilder.Accepts(requestDtoType, "multipart/form-data");
         }

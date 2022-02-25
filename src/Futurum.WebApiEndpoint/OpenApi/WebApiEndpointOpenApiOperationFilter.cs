@@ -31,6 +31,10 @@ internal class WebApiEndpointOpenApiOperationFilter : IOperationFilter
                                     {
                                         ConfigureRequestUploadFilesDto(openApiOperation);
                                     }
+                                    else if (metadataDefinition.MetadataTypeDefinition.RequestDtoType == typeof(RequestUploadFileDto))
+                                    {
+                                        ConfigureRequestUploadFileDto(openApiOperation);
+                                    }
                                     else if (metadataDefinition.MetadataMapFromMultipartDefinition != null)
                                     {
                                         ConfigureMultipart(openApiOperation, metadataDefinition.MetadataMapFromMultipartDefinition);
@@ -58,6 +62,25 @@ internal class WebApiEndpointOpenApiOperationFilter : IOperationFilter
                     {
                         nameof(RequestUploadFilesDto.Files), MapDotnetTypesToOpenApiTypes(typeof(IEnumerable<IFormFile>))
                     }
+                }
+            };
+        }
+
+        openApiOperation.RequestBody.Content.TrySingle(x => x.Key == "multipart/form-data")
+                        .Do(x => x.DoSwitch(Execute, Function.DoNothing));
+    }
+
+    private static void ConfigureRequestUploadFileDto(OpenApiOperation openApiOperation)
+    {
+        void Execute(KeyValuePair<string, OpenApiMediaType> content)
+        {
+            content.Value.Schema = new OpenApiSchema
+            {
+                Type = "object",
+                Required = new HashSet<string>{"file"},
+                Properties = new Dictionary<string, OpenApiSchema>
+                {
+                    {"file", MapDotnetTypesToOpenApiTypes(typeof(IFormFile))}
                 }
             };
         }

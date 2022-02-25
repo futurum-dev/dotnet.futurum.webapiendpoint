@@ -53,45 +53,81 @@ public class WebApiEndpointHttpContextDispatcherTests
 
         public class RequestUploadFiles
         {
-            public class when_RequestUploadFilesDto
+            [Fact]
+            public async Task success()
             {
-                [Fact]
-                public async Task success()
+                await using var fileStream = File.OpenRead("./Data/hello-world.txt");
+
+                var formFile = new FormFile(fileStream, 0, fileStream.Length, "hello-world.txt", "hello-world.txt");
+
+                var webApiEndpointHttpContextDispatcher = new WebApiEndpointHttpContextDispatcher(Options.Create(new JsonOptions()));
+
+                var httpContext = new DefaultHttpContext();
+                httpContext.Request.Form = new FormCollection(null, new FormFileCollection { formFile });
+
+                var result = await webApiEndpointHttpContextDispatcher.ReadRequestAsync<RequestUploadFilesDto>(httpContext, null, null, CancellationToken.None);
+
+                result.ShouldBeSuccessWithValueAssertion(x =>
                 {
-                    await using var fileStream = File.OpenRead("./Data/hello-world.txt");
+                    x.Files.Count().Should().Be(1);
 
-                    var formFile = new FormFile(fileStream, 0, fileStream.Length, "hello-world.txt", "hello-world.txt");
+                    var formFile = x.Files.Single();
 
-                    var webApiEndpointHttpContextDispatcher = new WebApiEndpointHttpContextDispatcher(Options.Create(new JsonOptions()));
+                    formFile.Name.Should().Be("hello-world.txt");
+                    formFile.FileName.Should().Be("hello-world.txt");
+                    formFile.Length.Should().Be(fileStream.Length);
+                });
+            }
 
-                    var httpContext = new DefaultHttpContext();
-                    httpContext.Request.Form = new FormCollection(null, new FormFileCollection { formFile });
+            [Fact]
+            public async Task failure()
+            {
+                var webApiEndpointHttpContextDispatcher = new WebApiEndpointHttpContextDispatcher(Options.Create(new JsonOptions()));
 
-                    var result = await webApiEndpointHttpContextDispatcher.ReadRequestAsync<RequestUploadFilesDto>(httpContext, null, null, CancellationToken.None);
+                var httpContext = new DefaultHttpContext();
 
-                    result.ShouldBeSuccessWithValueAssertion(x =>
-                    {
-                        x.Files.Count().Should().Be(1);
+                var result = await webApiEndpointHttpContextDispatcher.ReadRequestAsync<RequestUploadFilesDto>(httpContext, null, null, CancellationToken.None);
 
-                        var formFile = x.Files.Single();
+                result.ShouldBeFailureWithError("Failed to read upload files");
+            }
+        }
 
-                        formFile.Name.Should().Be("hello-world.txt");
-                        formFile.FileName.Should().Be("hello-world.txt");
-                        formFile.Length.Should().Be(fileStream.Length);
-                    });
-                }
+        public class RequestUploadFile
+        {
+            [Fact]
+            public async Task success()
+            {
+                await using var fileStream = File.OpenRead("./Data/hello-world.txt");
 
-                [Fact]
-                public async Task failure()
+                var formFile = new FormFile(fileStream, 0, fileStream.Length, "hello-world.txt", "hello-world.txt");
+
+                var webApiEndpointHttpContextDispatcher = new WebApiEndpointHttpContextDispatcher(Options.Create(new JsonOptions()));
+
+                var httpContext = new DefaultHttpContext();
+                httpContext.Request.Form = new FormCollection(null, new FormFileCollection { formFile });
+
+                var result = await webApiEndpointHttpContextDispatcher.ReadRequestAsync<RequestUploadFileDto>(httpContext, null, null, CancellationToken.None);
+
+                result.ShouldBeSuccessWithValueAssertion(x =>
                 {
-                    var webApiEndpointHttpContextDispatcher = new WebApiEndpointHttpContextDispatcher(Options.Create(new JsonOptions()));
+                    x.File.Should().NotBeNull();
 
-                    var httpContext = new DefaultHttpContext();
+                    x.File.Name.Should().Be("hello-world.txt");
+                    x.File.FileName.Should().Be("hello-world.txt");
+                    x.File.Length.Should().Be(fileStream.Length);
+                });
+            }
 
-                    var result = await webApiEndpointHttpContextDispatcher.ReadRequestAsync<RequestUploadFilesDto>(httpContext, null, null, CancellationToken.None);
+            [Fact]
+            public async Task failure()
+            {
+                var webApiEndpointHttpContextDispatcher = new WebApiEndpointHttpContextDispatcher(Options.Create(new JsonOptions()));
 
-                    result.ShouldBeFailureWithError("Failed to read upload files");
-                }
+                var httpContext = new DefaultHttpContext();
+
+                var result = await webApiEndpointHttpContextDispatcher.ReadRequestAsync<RequestUploadFileDto>(httpContext, null, null, CancellationToken.None);
+
+                result.ShouldBeFailureWithErrorContaining("Failed to read upload file");
             }
         }
 
