@@ -4,7 +4,7 @@ using Futurum.Core.Result;
 
 using Microsoft.Extensions.Primitives;
 
-namespace Futurum.WebApiEndpoint.Internal.AspNetCore;
+namespace Futurum.WebApiEndpoint;
 
 /// <summary>
 /// Extension methods for <see cref="HttpContext"/>

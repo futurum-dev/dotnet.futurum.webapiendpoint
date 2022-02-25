@@ -2,7 +2,7 @@ using Futurum.Core.Linq;
 using Futurum.Core.Option;
 using Futurum.Core.Result;
 
-namespace Futurum.WebApiEndpoint.Internal.AspNetCore;
+namespace Futurum.WebApiEndpoint;
 
 /// <summary>
 /// Extension methods for <see cref="HttpContext"/>
