@@ -59,15 +59,3 @@ public sealed class MapFromHeaderAttribute : MapFromAttribute
     {
     }
 }
-
-/// <summary>
-/// Specify property value should be mapped from Form
-/// </summary>
-[AttributeUsage(AttributeTargets.Property)]
-public sealed class MapFromFormAttribute : MapFromAttribute
-{
-    public MapFromFormAttribute(string name)
-        : base(name, MapFrom.Form)
-    {
-    }
-}

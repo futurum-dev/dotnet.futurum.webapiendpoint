@@ -169,7 +169,6 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
                 MapFrom.Query  => MetadataRouteParameterDefinitionType.Query,
                 MapFrom.Header => MetadataRouteParameterDefinitionType.Header,
                 MapFrom.Cookie => MetadataRouteParameterDefinitionType.Cookie,
-                MapFrom.Form   => MetadataRouteParameterDefinitionType.Form,
                 _              => throw new ArgumentOutOfRangeException(nameof(mapFrom), mapFrom, null)
             };
 

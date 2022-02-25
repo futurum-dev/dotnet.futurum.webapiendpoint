@@ -20,9 +20,5 @@ public enum MapFrom
     /// <summary>
     /// MapFrom Cookie
     /// </summary>
-    Cookie,
-    /// <summary>
-    /// MapFrom Form
-    /// </summary>
-    Form
+    Cookie
 }

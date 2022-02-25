@@ -51,7 +51,6 @@ internal class WebApiEndpointOpenApiOperationFilter : IOperationFilter
             };
 
         return metadataDefinition.MetadataRouteDefinition.ParameterDefinitions
-                                 .Where(parameterDefinition => parameterDefinition.ParameterDefinitionType != MetadataRouteParameterDefinitionType.Form)
                                  .Select(parameterDefinition => new OpenApiParameter
                                  {
                                      Name = parameterDefinition.Name,
