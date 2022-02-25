@@ -39,15 +39,22 @@ public static partial class HttpContextExtensions
     public static Result<long> GetRequestCookieFirstParameterAsLong(this HttpContext httpContext, string parameterName) =>
         GetRequestCookieFirstParameter(httpContext, parameterName,
                                       value => value.TryParseLong(() => $"Unable to parse Request Cookie Parameter - '{parameterName}' to Long: '{value}'"));
+
+    /// <summary>
+    /// Get <see cref="DateTime"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Cookies"/> for <paramref name="parameterName"/>
+    /// </summary>
+    public static Result<DateTime> GetRequestCookieFirstParameterAsDateTime(this HttpContext httpContext, string parameterName) =>
+        GetRequestCookieFirstParameter(httpContext, parameterName,
+                                      value => value.TryParseDateTime(() => $"Unable to parse Request Cookie Parameter - '{parameterName}' to DateTime: '{value}'"));
     
     private static Option<StringValues> TryGetValue(this IRequestCookieCollection source, string key) =>
         source.TryGetValue(key, out var value) ? Option<StringValues>.From(value) : Option<StringValues>.None;
     
-    private static Result<TR> GetRequestCookieParameter<TR>(this HttpContext httpContext, string parameterName, Func<StringValues, Result<TR>> nextResult) =>
+    public static Result<TR> GetRequestCookieParameter<TR>(this HttpContext httpContext, string parameterName, Func<StringValues, Result<TR>> nextResult) =>
         GetRequestCookieParameterAsStringValues(httpContext, parameterName)
             .Then(nextResult);
 
-    private static Result<TR> GetRequestCookieFirstParameter<TR>(this HttpContext httpContext, string parameterName, Func<string, Result<TR>> nextResult) =>
+    public static Result<TR> GetRequestCookieFirstParameter<TR>(this HttpContext httpContext, string parameterName, Func<string, Result<TR>> nextResult) =>
         GetRequestCookieFirstParameterAsString(httpContext, parameterName)
             .Then(nextResult);
 }

@@ -30,7 +30,14 @@ public static partial class HttpContextExtensions
         GetRequestPathParameter(httpContext, parameterName,
                                 value => value.TryParseLong(() => $"Unable to parse Request Path Parameter - '{parameterName}' to Long: '{value}'"));
 
-    private static Result<TR> GetRequestPathParameter<TR>(this HttpContext httpContext, string parameterName, Func<string?, Result<TR>> nextResult) =>
+    /// <summary>
+    /// Get <see cref="DateTime"/> from <see cref="HttpContext"/> <see cref="HttpRequest.RouteValues"/> for <paramref name="parameterName"/>
+    /// </summary>
+    public static Result<DateTime> GetRequestPathParameterAsDateTime(this HttpContext httpContext, string parameterName) =>
+        GetRequestPathParameter(httpContext, parameterName,
+                                value => value.TryParseDateTime(() => $"Unable to parse Request Path Parameter - '{parameterName}' to DateTime: '{value}'"));
+
+    public static Result<TR> GetRequestPathParameter<TR>(this HttpContext httpContext, string parameterName, Func<string?, Result<TR>> nextResult) =>
         GetRequestPathParameterAsString(httpContext, parameterName)
             .Then(nextResult);
 }

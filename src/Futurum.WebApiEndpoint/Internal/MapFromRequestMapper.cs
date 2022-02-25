@@ -56,6 +56,8 @@ internal static class MapFromRequestMapper<TRequestDto>
             return (requestDto, httpContext, _) => httpContext.GetRequestPathParameterAsInt(mapFromAttribute.Name).Do(value => typeAccessor[requestDto, propertyInfo.Name] = value);
         if (propertyInfo.PropertyType == typeof(long))
             return (requestDto, httpContext, _) => httpContext.GetRequestPathParameterAsLong(mapFromAttribute.Name).Do(value => typeAccessor[requestDto, propertyInfo.Name] = value);
+        if (propertyInfo.PropertyType == typeof(DateTime))
+            return (requestDto, httpContext, _) => httpContext.GetRequestPathParameterAsDateTime(mapFromAttribute.Name).Do(value => typeAccessor[requestDto, propertyInfo.Name] = value);
 
         return (_, _, _) => Result.Fail($"Failed to MapFromPath property : '{propertyInfo.Name}', unknown PropertyType : '{propertyInfo.PropertyType}'");
     }
@@ -68,6 +70,8 @@ internal static class MapFromRequestMapper<TRequestDto>
             return (requestDto, httpContext, _) => httpContext.GetRequestQueryFirstParameterAsInt(mapFromAttribute.Name).Do(value => typeAccessor[requestDto, propertyInfo.Name] = value);
         if (propertyInfo.PropertyType == typeof(long))
             return (requestDto, httpContext, _) => httpContext.GetRequestQueryFirstParameterAsLong(mapFromAttribute.Name).Do(value => typeAccessor[requestDto, propertyInfo.Name] = value);
+        if (propertyInfo.PropertyType == typeof(DateTime))
+            return (requestDto, httpContext, _) => httpContext.GetRequestQueryFirstParameterAsDateTime(mapFromAttribute.Name).Do(value => typeAccessor[requestDto, propertyInfo.Name] = value);
 
         return (_, _, _) => Result.Fail($"Failed to MapFromQuery property : '{propertyInfo.Name}', unknown PropertyType : '{propertyInfo.PropertyType}'");
     }
@@ -80,6 +84,8 @@ internal static class MapFromRequestMapper<TRequestDto>
             return (requestDto, httpContext, _) => httpContext.GetRequestHeaderFirstParameterAsInt(mapFromAttribute.Name).Do(value => typeAccessor[requestDto, propertyInfo.Name] = value);
         if (propertyInfo.PropertyType == typeof(long))
             return (requestDto, httpContext, _) => httpContext.GetRequestHeaderFirstParameterAsLong(mapFromAttribute.Name).Do(value => typeAccessor[requestDto, propertyInfo.Name] = value);
+        if (propertyInfo.PropertyType == typeof(DateTime))
+            return (requestDto, httpContext, _) => httpContext.GetRequestHeaderFirstParameterAsDateTime(mapFromAttribute.Name).Do(value => typeAccessor[requestDto, propertyInfo.Name] = value);
 
         return (_, _, _) => Result.Fail($"Failed to MapFromHeader property : '{propertyInfo.Name}', unknown PropertyType : '{propertyInfo.PropertyType}'");
     }
@@ -92,6 +98,8 @@ internal static class MapFromRequestMapper<TRequestDto>
             return (requestDto, httpContext, _) => httpContext.GetRequestCookieFirstParameterAsInt(mapFromAttribute.Name).Do(value => typeAccessor[requestDto, propertyInfo.Name] = value);
         if (propertyInfo.PropertyType == typeof(long))
             return (requestDto, httpContext, _) => httpContext.GetRequestCookieFirstParameterAsLong(mapFromAttribute.Name).Do(value => typeAccessor[requestDto, propertyInfo.Name] = value);
+        if (propertyInfo.PropertyType == typeof(DateTime))
+            return (requestDto, httpContext, _) => httpContext.GetRequestCookieFirstParameterAsDateTime(mapFromAttribute.Name).Do(value => typeAccessor[requestDto, propertyInfo.Name] = value);
 
         return (_, _, _) => Result.Fail($"Failed to MapFromCookie property : '{propertyInfo.Name}', unknown PropertyType : '{propertyInfo.PropertyType}'");
     }
@@ -104,6 +112,8 @@ internal static class MapFromRequestMapper<TRequestDto>
             return (requestDto, httpContext, _) => httpContext.GetRequestFormFirstParameterAsInt(mapFromAttribute.Name).Do(value => typeAccessor[requestDto, propertyInfo.Name] = value);
         if (propertyInfo.PropertyType == typeof(long))
             return (requestDto, httpContext, _) => httpContext.GetRequestFormFirstParameterAsLong(mapFromAttribute.Name).Do(value => typeAccessor[requestDto, propertyInfo.Name] = value);
+        if (propertyInfo.PropertyType == typeof(DateTime))
+            return (requestDto, httpContext, _) => httpContext.GetRequestFormFirstParameterAsDateTime(mapFromAttribute.Name).Do(value => typeAccessor[requestDto, propertyInfo.Name] = value);
 
         return (_, _, _) => Result.Fail($"Failed to MapFromForm property : '{propertyInfo.Name}', unknown PropertyType : '{propertyInfo.PropertyType}'");
     }

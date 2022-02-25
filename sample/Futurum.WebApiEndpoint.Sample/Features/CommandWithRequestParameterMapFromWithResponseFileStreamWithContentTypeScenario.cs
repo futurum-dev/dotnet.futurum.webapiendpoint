@@ -2,7 +2,7 @@ using Futurum.Core.Result;
 
 namespace Futurum.WebApiEndpoint.Sample.Features;
 
-public static class CommandWithRequestParameterWithResponseMapFromFileStreamWithContentTypeScenario
+public static class CommandWithRequestParameterMapFromWithResponseFileStreamWithContentTypeScenario
 {
     public record CommandDto
     {
