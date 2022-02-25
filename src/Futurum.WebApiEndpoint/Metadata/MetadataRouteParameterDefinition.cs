@@ -10,6 +10,5 @@ public enum MetadataRouteParameterDefinitionType
     Path,
     Query,
     Header,
-    Cookie,
-    Form
+    Cookie
 }

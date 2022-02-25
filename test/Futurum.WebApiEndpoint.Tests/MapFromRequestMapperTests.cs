@@ -441,81 +441,6 @@ public class MapFromRequestMapperTests
         }
     }
 
-    public class Form
-    {
-        public record RequestFormString
-        {
-            [MapFromForm(Key)] public string Id { get; set; }
-        }
-
-        public record RequestFormInt
-        {
-            [MapFromForm(Key)] public int Id { get; set; }
-        }
-
-        public record RequestFormLong
-        {
-            [MapFromForm(Key)] public long Id { get; set; }
-        }
-
-        public class String
-        {
-            [Fact]
-            public void success()
-            {
-                var result = TestRunnerMap<RequestFormString>(httpContext => httpContext.Request.Form = new FormCollection(new Dictionary<string, StringValues> { { Key, StringValue } }));
-
-                result.ShouldBeSuccessWithValueEquivalentTo(new RequestFormString { Id = StringValue });
-            }
-
-            [Fact]
-            public void failure()
-            {
-                var result = TestRunnerMap<RequestFormString>(httpContext => httpContext.Request.Form = new FormCollection(new Dictionary<string, StringValues> { }));
-
-                result.ShouldBeFailureWithError($"Unable to get Request Form Parameter - '{Key}'. Request Form Parameters available are ''");
-            }
-        }
-
-        public class Int
-        {
-            [Fact]
-            public void success()
-            {
-                var result = TestRunnerMap<RequestFormInt>(httpContext => httpContext.Request.Form = new FormCollection(new Dictionary<string, StringValues> { { Key, IntValue.ToString() } }));
-
-                result.ShouldBeSuccessWithValueEquivalentTo(new RequestFormInt { Id = IntValue });
-            }
-
-            [Fact]
-            public void failure()
-            {
-                var result = TestRunnerMap<RequestFormInt>(httpContext => httpContext.Request.Form = new FormCollection(new Dictionary<string, StringValues> { }));
-
-                result.ShouldBeFailureWithError($"Unable to get Request Form Parameter - '{Key}'. Request Form Parameters available are ''");
-            }
-        }
-
-        public class Long
-        {
-            [Fact]
-            public void success()
-            {
-                var result = TestRunnerMap<RequestFormLong>(httpContext => httpContext.Request.Form = new FormCollection(new Dictionary<string, StringValues> { { Key, LongValue.ToString() } }));
-
-                result.ShouldBeSuccessWithValueEquivalentTo(new RequestFormLong { Id = LongValue });
-            }
-
-            [Fact]
-            public void failure()
-            {
-                var result = TestRunnerMap<RequestFormLong>(httpContext => httpContext.Request.Form = new FormCollection(new Dictionary<string, StringValues> { }));
-
-                result.ShouldBeFailureWithError($"Unable to get Request Form Parameter - '{Key}'. Request Form Parameters available are ''");
-            }
-        }
-    }
-
     private static Result<T> TestRunnerMap<T>(Action<HttpContext>? configureHttpContext = null)
         where T : class, new()
     {
@@ -551,7 +476,7 @@ public class MapFromRequestMapperTests
 
         public record RequestWithReadonlyProperty
         {
-            [MapFromForm(Key)] public string Id { get; }
+            [MapFromPath(Key)] public string Id { get; }
         }
     }
 }
