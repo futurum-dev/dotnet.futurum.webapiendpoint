@@ -39,15 +39,22 @@ public static partial class HttpContextExtensions
     public static Result<long> GetRequestHeaderFirstParameterAsLong(this HttpContext httpContext, string parameterName) =>
         GetRequestHeaderFirstParameter(httpContext, parameterName,
                                       value => value.TryParseLong(() => $"Unable to parse Request Header Parameter - '{parameterName}' to Long: '{value}'"));
+
+    /// <summary>
+    /// Get <see cref="DateTime"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Headers"/> for <paramref name="parameterName"/>
+    /// </summary>
+    public static Result<DateTime> GetRequestHeaderFirstParameterAsDateTime(this HttpContext httpContext, string parameterName) =>
+        GetRequestHeaderFirstParameter(httpContext, parameterName,
+                                      value => value.TryParseDateTime(() => $"Unable to parse Request Header Parameter - '{parameterName}' to DateTime: '{value}'"));
     
     private static Option<StringValues> TryGetValue(this IHeaderDictionary source, string key) =>
         source.TryGetValue(key, out var value) ? Option<StringValues>.From(value) : Option<StringValues>.None;
 
-    private static Result<TR> GetRequestHeaderParameter<TR>(this HttpContext httpContext, string parameterName, Func<StringValues, Result<TR>> nextResult) =>
+    public static Result<TR> GetRequestHeaderParameter<TR>(this HttpContext httpContext, string parameterName, Func<StringValues, Result<TR>> nextResult) =>
         GetRequestHeaderParameterAsStringValues(httpContext, parameterName)
             .Then(nextResult);
 
-    private static Result<TR> GetRequestHeaderFirstParameter<TR>(this HttpContext httpContext, string parameterName, Func<string, Result<TR>> nextResult) =>
+    public static Result<TR> GetRequestHeaderFirstParameter<TR>(this HttpContext httpContext, string parameterName, Func<string, Result<TR>> nextResult) =>
         GetRequestHeaderFirstParameterAsString(httpContext, parameterName)
             .Then(nextResult);
 }

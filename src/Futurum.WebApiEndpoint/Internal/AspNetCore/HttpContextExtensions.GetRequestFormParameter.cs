@@ -39,15 +39,22 @@ public static partial class HttpContextExtensions
     public static Result<long> GetRequestFormFirstParameterAsLong(this HttpContext httpContext, string parameterName) =>
         GetRequestFormFirstParameter(httpContext, parameterName,
                                       value => value.TryParseLong(() => $"Unable to parse Request Form Parameter - '{parameterName}' to Long: '{value}'"));
+
+    /// <summary>
+    /// Get <see cref="DateTime"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Form"/> for <paramref name="parameterName"/>
+    /// </summary>
+    public static Result<DateTime> GetRequestFormFirstParameterAsDateTime(this HttpContext httpContext, string parameterName) =>
+        GetRequestFormFirstParameter(httpContext, parameterName,
+                                      value => value.TryParseDateTime(() => $"Unable to parse Request Form Parameter - '{parameterName}' to DateTime: '{value}'"));
     
     private static Option<StringValues> TryGetValue(this IFormCollection source, string key) =>
         source.TryGetValue(key, out var value) ? Option<StringValues>.From(value) : Option<StringValues>.None;
 
-    private static Result<TR> GetRequestFormParameter<TR>(this HttpContext httpContext, string parameterName, Func<StringValues, Result<TR>> nextResult) =>
+    public static Result<TR> GetRequestFormParameter<TR>(this HttpContext httpContext, string parameterName, Func<StringValues, Result<TR>> nextResult) =>
         GetRequestFormParameterAsStringValues(httpContext, parameterName)
             .Then(nextResult);
 
-    private static Result<TR> GetRequestFormFirstParameter<TR>(this HttpContext httpContext, string parameterName, Func<string, Result<TR>> nextResult) =>
+    public static Result<TR> GetRequestFormFirstParameter<TR>(this HttpContext httpContext, string parameterName, Func<string, Result<TR>> nextResult) =>
         GetRequestFormFirstParameterAsString(httpContext, parameterName)
             .Then(nextResult);
 }

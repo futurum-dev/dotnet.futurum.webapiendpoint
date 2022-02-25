@@ -46,6 +46,11 @@ public class MapFromRequestMapperTests
             [MapFromPath(Key)] public long Id { get; set; }
         }
 
+        public record RequestPathDateTime
+        {
+            [MapFromPath(Key)] public System.DateTime Id { get; set; }
+        }
+
         public class String
         {
             [Fact]
@@ -102,6 +107,28 @@ public class MapFromRequestMapperTests
                 result.ShouldBeFailureWithError($"Unable to get Request Path Parameter - '{Key}'. Request Path Parameters available are ''");
             }
         }
+
+        public class DateTime
+        {
+            [Fact]
+            public void success()
+            {
+                var dateTimeNow = System.DateTime.Now;
+                var dateTimeValue = new System.DateTime(dateTimeNow.Year, dateTimeNow.Month, dateTimeNow.Day, dateTimeNow.Hour, dateTimeNow.Minute, dateTimeNow.Second, dateTimeNow.Kind);
+            
+                var result = TestRunnerMap<RequestPathDateTime>(httpContext => httpContext.Request.RouteValues.Add(Key, dateTimeValue));
+
+                result.ShouldBeSuccessWithValueEquivalentTo(new RequestPathDateTime { Id = dateTimeValue });
+            }
+
+            [Fact]
+            public void failure()
+            {
+                var result = TestRunnerMap<RequestPathDateTime>();
+
+                result.ShouldBeFailureWithError($"Unable to get Request Path Parameter - '{Key}'. Request Path Parameters available are ''");
+            }
+        }
     }
 
     public class Query
@@ -119,6 +146,11 @@ public class MapFromRequestMapperTests
         public record RequestQueryLong
         {
             [MapFromQuery(Key)] public long Id { get; set; }
+        }
+
+        public record RequestQueryDateTime
+        {
+            [MapFromQuery(Key)] public System.DateTime Id { get; set; }
         }
 
         public class String
@@ -180,6 +212,29 @@ public class MapFromRequestMapperTests
                 result.ShouldBeFailureWithError($"Unable to get Request Query Parameter - '{Key}'. Request Query Parameters available are ''");
             }
         }
+
+        public class DateTime
+        {
+            [Fact]
+            public void success()
+            {
+                var dateTimeNow = System.DateTime.Now;
+                var dateTimeValue = new System.DateTime(dateTimeNow.Year, dateTimeNow.Month, dateTimeNow.Day, dateTimeNow.Hour, dateTimeNow.Minute, dateTimeNow.Second, dateTimeNow.Kind);
+
+                var result = TestRunnerMap<RequestQueryDateTime>(httpContext =>
+                                                                     httpContext.Request.Query = new QueryCollection(new Dictionary<string, StringValues> { { Key, dateTimeValue.ToString() } }));
+
+                result.ShouldBeSuccessWithValueEquivalentTo(new RequestQueryDateTime { Id = dateTimeValue });
+            }
+
+            [Fact]
+            public void failure()
+            {
+                var result = TestRunnerMap<RequestQueryDateTime>();
+
+                result.ShouldBeFailureWithError($"Unable to get Request Query Parameter - '{Key}'. Request Query Parameters available are ''");
+            }
+        }
     }
 
     public class Header
@@ -197,6 +252,11 @@ public class MapFromRequestMapperTests
         public record RequestHeaderLong
         {
             [MapFromHeader(Key)] public long Id { get; set; }
+        }
+
+        public record RequestHeaderDateTime
+        {
+            [MapFromHeader(Key)] public System.DateTime Id { get; set; }
         }
 
         public class String
@@ -255,6 +315,28 @@ public class MapFromRequestMapperTests
                 result.ShouldBeFailureWithError($"Unable to get Request Header Parameter - '{Key}'. Request Header Parameters available are ''");
             }
         }
+
+        public class DateTime
+        {
+            [Fact]
+            public void success()
+            {
+                var dateTimeNow = System.DateTime.Now;
+                var dateTimeValue = new System.DateTime(dateTimeNow.Year, dateTimeNow.Month, dateTimeNow.Day, dateTimeNow.Hour, dateTimeNow.Minute, dateTimeNow.Second, dateTimeNow.Kind);
+
+                var result = TestRunnerMap<RequestHeaderDateTime>(httpContext => httpContext.Request.Headers.Add(Key, dateTimeValue.ToString()));
+
+                result.ShouldBeSuccessWithValueEquivalentTo(new RequestHeaderDateTime { Id = dateTimeValue });
+            }
+
+            [Fact]
+            public void failure()
+            {
+                var result = TestRunnerMap<RequestHeaderDateTime>();
+
+                result.ShouldBeFailureWithError($"Unable to get Request Header Parameter - '{Key}'. Request Header Parameters available are ''");
+            }
+        }
     }
 
     public class Cookie
@@ -272,6 +354,11 @@ public class MapFromRequestMapperTests
         public record RequestCookieLong
         {
             [MapFromCookie(Key)] public long Id { get; set; }
+        }
+
+        public record RequestCookieDateTime
+        {
+            [MapFromCookie(Key)] public System.DateTime Id { get; set; }
         }
 
         public class String
@@ -326,6 +413,28 @@ public class MapFromRequestMapperTests
             public void failure()
             {
                 var result = TestRunnerCookieMap<RequestCookieLong>(httpContext => httpContext.SetupRequestCookies(new Dictionary<string, string> { }));
+
+                result.ShouldBeFailureWithError($"Unable to get Request Cookie Parameter - '{Key}'. Request Cookie Parameters available are ''");
+            }
+        }
+
+        public class DateTime
+        {
+            [Fact]
+            public void success()
+            {
+                var dateTimeNow = System.DateTime.Now;
+                var dateTimeValue = new System.DateTime(dateTimeNow.Year, dateTimeNow.Month, dateTimeNow.Day, dateTimeNow.Hour, dateTimeNow.Minute, dateTimeNow.Second, dateTimeNow.Kind);
+
+                var result = TestRunnerCookieMap<RequestCookieDateTime>(httpContext => httpContext.SetupRequestCookies(new Dictionary<string, string> { { Key, dateTimeValue.ToString() } }));
+
+                result.ShouldBeSuccessWithValueEquivalentTo(new RequestCookieDateTime { Id = dateTimeValue });
+            }
+
+            [Fact]
+            public void failure()
+            {
+                var result = TestRunnerCookieMap<RequestCookieDateTime>(httpContext => httpContext.SetupRequestCookies(new Dictionary<string, string> { }));
 
                 result.ShouldBeFailureWithError($"Unable to get Request Cookie Parameter - '{Key}'. Request Cookie Parameters available are ''");
             }
