@@ -369,9 +369,9 @@ public class EndpointRouteOpenApiBuilderTests
             var (_, endpoint) = TestRunner(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
             var successProducesResponseTypeMetadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().First();
-            successProducesResponseTypeMetadata.Type.Should().Be<ResponseDto>();
+            successProducesResponseTypeMetadata.Type.Should().Be(typeof(void));
             successProducesResponseTypeMetadata.StatusCode.Should().Be(metadataRouteDefinition.SuccessStatusCode);
-            successProducesResponseTypeMetadata.ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
+            successProducesResponseTypeMetadata.ContentTypes.Should().BeEmpty();
 
             var failedProducesResponseTypeMetadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Skip(1).First();
             failedProducesResponseTypeMetadata.Type.Should().Be(typeof(void));
