@@ -29,7 +29,7 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
         metadataRouteDefinition.HttpMethod.Should().Be(MetadataRouteHttpMethod.Post);
         metadataRouteDefinition.SuccessStatusCode.Should().Be(201);
         metadataRouteDefinition.FailedStatusCode.Should().Be(400);
-        metadataRouteDefinition.ParameterDefinitions.Should().BeEmpty();;
+        metadataRouteDefinition.ManualParameterDefinitions.Should().BeEmpty();;
     }
 
     [Fact]
@@ -52,10 +52,10 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
         metadataRouteDefinition.HttpMethod.Should().Be(MetadataRouteHttpMethod.Post);
         metadataRouteDefinition.SuccessStatusCode.Should().Be(201);
         metadataRouteDefinition.FailedStatusCode.Should().Be(400);
-        metadataRouteDefinition.ParameterDefinitions.Count.Should().Be(1);
-        metadataRouteDefinition.ParameterDefinitions[0].Name.Should().Be(parameterName);
-        metadataRouteDefinition.ParameterDefinitions[0].ParameterDefinitionType.Should().Be(parameterDefinitionType);
-        metadataRouteDefinition.ParameterDefinitions[0].Type.Should().Be(parameterType);
+        metadataRouteDefinition.ManualParameterDefinitions.Count.Should().Be(1);
+        metadataRouteDefinition.ManualParameterDefinitions[0].Name.Should().Be(parameterName);
+        metadataRouteDefinition.ManualParameterDefinitions[0].ParameterDefinitionType.Should().Be(parameterDefinitionType);
+        metadataRouteDefinition.ManualParameterDefinitions[0].Type.Should().Be(parameterType);
     }
 
     [Fact]
@@ -75,7 +75,7 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
         metadataRouteDefinition.HttpMethod.Should().Be(MetadataRouteHttpMethod.Put);
         metadataRouteDefinition.SuccessStatusCode.Should().Be(201);
         metadataRouteDefinition.FailedStatusCode.Should().Be(404);
-        metadataRouteDefinition.ParameterDefinitions.Should().BeEmpty();
+        metadataRouteDefinition.ManualParameterDefinitions.Should().BeEmpty();
     }
 
     [Fact]
@@ -98,10 +98,10 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
         metadataRouteDefinition.HttpMethod.Should().Be(MetadataRouteHttpMethod.Put);
         metadataRouteDefinition.SuccessStatusCode.Should().Be(201);
         metadataRouteDefinition.FailedStatusCode.Should().Be(404);
-        metadataRouteDefinition.ParameterDefinitions.Count.Should().Be(1);
-        metadataRouteDefinition.ParameterDefinitions[0].Name.Should().Be(parameterName);
-        metadataRouteDefinition.ParameterDefinitions[0].ParameterDefinitionType.Should().Be(parameterDefinitionType);
-        metadataRouteDefinition.ParameterDefinitions[0].Type.Should().Be(parameterType);
+        metadataRouteDefinition.ManualParameterDefinitions.Count.Should().Be(1);
+        metadataRouteDefinition.ManualParameterDefinitions[0].Name.Should().Be(parameterName);
+        metadataRouteDefinition.ManualParameterDefinitions[0].ParameterDefinitionType.Should().Be(parameterDefinitionType);
+        metadataRouteDefinition.ManualParameterDefinitions[0].Type.Should().Be(parameterType);
     }
 
     [Fact]
@@ -121,7 +121,7 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
         metadataRouteDefinition.HttpMethod.Should().Be(MetadataRouteHttpMethod.Patch);
         metadataRouteDefinition.SuccessStatusCode.Should().Be(200);
         metadataRouteDefinition.FailedStatusCode.Should().Be(404);
-        metadataRouteDefinition.ParameterDefinitions.Should().BeEmpty();
+        metadataRouteDefinition.ManualParameterDefinitions.Should().BeEmpty();
     }
 
     [Fact]
@@ -144,10 +144,10 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
         metadataRouteDefinition.HttpMethod.Should().Be(MetadataRouteHttpMethod.Patch);
         metadataRouteDefinition.SuccessStatusCode.Should().Be(200);
         metadataRouteDefinition.FailedStatusCode.Should().Be(404);
-        metadataRouteDefinition.ParameterDefinitions.Count.Should().Be(1);
-        metadataRouteDefinition.ParameterDefinitions[0].Name.Should().Be(parameterName);
-        metadataRouteDefinition.ParameterDefinitions[0].ParameterDefinitionType.Should().Be(parameterDefinitionType);
-        metadataRouteDefinition.ParameterDefinitions[0].Type.Should().Be(parameterType);
+        metadataRouteDefinition.ManualParameterDefinitions.Count.Should().Be(1);
+        metadataRouteDefinition.ManualParameterDefinitions[0].Name.Should().Be(parameterName);
+        metadataRouteDefinition.ManualParameterDefinitions[0].ParameterDefinitionType.Should().Be(parameterDefinitionType);
+        metadataRouteDefinition.ManualParameterDefinitions[0].Type.Should().Be(parameterType);
     }
 
     [Fact]
@@ -167,7 +167,7 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
         metadataRouteDefinition.HttpMethod.Should().Be(MetadataRouteHttpMethod.Delete);
         metadataRouteDefinition.SuccessStatusCode.Should().Be(200);
         metadataRouteDefinition.FailedStatusCode.Should().Be(404);
-        metadataRouteDefinition.ParameterDefinitions.Should().BeEmpty();
+        metadataRouteDefinition.ManualParameterDefinitions.Should().BeEmpty();
     }
 
     [Fact]
@@ -190,9 +190,9 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
         metadataRouteDefinition.HttpMethod.Should().Be(MetadataRouteHttpMethod.Delete);
         metadataRouteDefinition.SuccessStatusCode.Should().Be(200);
         metadataRouteDefinition.FailedStatusCode.Should().Be(404);
-        metadataRouteDefinition.ParameterDefinitions.Count.Should().Be(1);
-        metadataRouteDefinition.ParameterDefinitions[0].Name.Should().Be(parameterName);
-        metadataRouteDefinition.ParameterDefinitions[0].ParameterDefinitionType.Should().Be(parameterDefinitionType);
-        metadataRouteDefinition.ParameterDefinitions[0].Type.Should().Be(parameterType);
+        metadataRouteDefinition.ManualParameterDefinitions.Count.Should().Be(1);
+        metadataRouteDefinition.ManualParameterDefinitions[0].Name.Should().Be(parameterName);
+        metadataRouteDefinition.ManualParameterDefinitions[0].ParameterDefinitionType.Should().Be(parameterDefinitionType);
+        metadataRouteDefinition.ManualParameterDefinitions[0].Type.Should().Be(parameterType);
     }
 }

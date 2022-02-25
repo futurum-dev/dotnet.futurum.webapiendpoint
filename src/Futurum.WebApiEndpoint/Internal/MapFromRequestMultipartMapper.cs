@@ -5,6 +5,7 @@ using System.Text.Json;
 using FastMember;
 
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.WebUtilities;
@@ -19,20 +20,16 @@ internal static class MapFromRequestMultipartMapper<TRequestDto>
     {
         var typeAccessor = TypeAccessor.Create(typeof(TRequestDto));
 
-        var propertiesWithMapFromStreamAttribute = typeof(TRequestDto).GetProperties()
-                                                                      .Where(propertyInfo => propertyInfo.GetCustomAttribute<MapFromMultipartAttribute>() != null)
-                                                                      .ToList();
+        var propertiesWithMapFromMultipartAttribute = WebApiEndpointMetadataTypeService.GetMapFromMultipartProperties(typeof(TRequestDto));
 
-        foreach (var propertyInfo in propertiesWithMapFromStreamAttribute)
+        foreach (var (propertyInfo, mapFromMultipartAttribute) in propertiesWithMapFromMultipartAttribute)
         {
-            var mapFromStreamAttribute = propertyInfo.GetCustomAttribute<MapFromMultipartAttribute>();
-
             if (!propertyInfo.CanWrite)
             {
                 throw new InvalidOperationException($"Property '{propertyInfo.Name}' on RequestDto type : '{typeof(TRequestDto).FullName}' is readonly");
             }
 
-            PropertiesToMap.Add(mapFromStreamAttribute.SectionPosition, GetMapper(propertyInfo, typeAccessor, mapFromStreamAttribute));
+            PropertiesToMap.Add(mapFromMultipartAttribute.SectionPosition, GetMapper(propertyInfo, typeAccessor, mapFromMultipartAttribute));
         }
     }
 

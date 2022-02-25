@@ -8,6 +8,6 @@ namespace Futurum.WebApiEndpoint.Metadata;
 /// <summary>
 /// Metadata definition for a WebApiEndpoint Route
 /// </summary>
-public record MetadataRouteDefinition(MetadataRouteHttpMethod HttpMethod, string RouteTemplate, ApiVersion? ApiVersion, List<MetadataRouteParameterDefinition> ParameterDefinitions,
+public record MetadataRouteDefinition(MetadataRouteHttpMethod HttpMethod, string RouteTemplate, ApiVersion? ApiVersion, List<MetadataRouteParameterDefinition> ManualParameterDefinitions,
                                       MetadataRouteOpenApiOperation? OpenApiOperation, int SuccessStatusCode, int FailedStatusCode, 
                                       Option<Action<RouteHandlerBuilder>> ExtendedOptions, Option<MetadataSecurityDefinition> SecurityDefinition) : IMetadataDefinition;

@@ -15,20 +15,20 @@ public static class CommandWithRequestUploadSingleFileAndPayloadWithResponseScen
 
     public record PayloadDto(string Id);
 
-    public record Request(string Id, IFormFile Files);
+    public record Command(string Id, IFormFile Files);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Request>.WithResponse<FeatureDto, Feature>.WithMapper<Mapper, FeatureMapper>
+    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<FeatureDto, Feature>.WithMapper<Mapper, FeatureMapper>
     {
-        protected override Task<Result<Feature>> ExecuteAsync(Request command, CancellationToken cancellationToken) =>
+        protected override Task<Result<Feature>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             Enumerable.Range(0, 10)
                       .Select(i => new Feature($"Name - {command.Id} - {i} - {command.Files.FileName}"))
                       .First()
                       .ToResultOkAsync();
     }
 
-    public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Request>
+    public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>
     {
-        public Result<Request> Map(HttpContext httpContext, CommandDto dto) =>
-            new Request(dto.Payload.Id, dto.File).ToResultOk();
+        public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
+            new Command(dto.Payload.Id, dto.File).ToResultOk();
     }
 }
