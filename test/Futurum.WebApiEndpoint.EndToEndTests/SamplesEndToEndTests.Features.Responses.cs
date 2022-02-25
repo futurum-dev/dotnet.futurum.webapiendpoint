@@ -7,6 +7,7 @@ using System.Text.Json.Nodes;
 using FluentAssertions;
 
 using Futurum.WebApiEndpoint.Sample.Features;
+using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequest;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
@@ -51,7 +52,7 @@ public class SamplesEndToEndFeaturesResponsesTests
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri("/api/1.0/command-with-request-parameter-with-response-async-enumerable/2"),
+            RequestUri = new Uri("/api/1.0/command-with-request-manual-parameter-with-response-async-enumerable/2"),
             Content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json)
         };
 
@@ -74,7 +75,7 @@ public class SamplesEndToEndFeaturesResponsesTests
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri("/api/1.0/command-with-request-parameter-with-response-bytes/2"),
+            RequestUri = new Uri("/api/1.0/command-with-request-manual-parameter-with-response-bytes/2"),
             Content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json)
         };
 
@@ -105,7 +106,7 @@ public class SamplesEndToEndFeaturesResponsesTests
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri("/api/1.0/command-with-request-parameter-with-response-data-collection/2"),
+            RequestUri = new Uri("/api/1.0/command-with-request-manual-parameter-with-response-data-collection/2"),
             Content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json)
         };
 
@@ -129,7 +130,7 @@ public class SamplesEndToEndFeaturesResponsesTests
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri("/api/1.0/command-with-request-parameter-with-response-empty-json/2"),
+            RequestUri = new Uri("/api/1.0/command-with-request-manual-parameter-with-response-empty-json/2"),
             Content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json)
         };
 
@@ -153,7 +154,7 @@ public class SamplesEndToEndFeaturesResponsesTests
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri("/api/1.0/command-with-request-parameter-with-response-file-stream/2"),
+            RequestUri = new Uri("/api/1.0/command-with-request-manual-parameter-with-response-file-stream/2"),
             Content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json)
         };
 
@@ -184,7 +185,7 @@ public class SamplesEndToEndFeaturesResponsesTests
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri("/api/1.0/command-with-request-parameter-with-response-stream/2"),
+            RequestUri = new Uri("/api/1.0/command-with-request-manual-parameter-with-response-stream/2"),
             Content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json)
         };
 
