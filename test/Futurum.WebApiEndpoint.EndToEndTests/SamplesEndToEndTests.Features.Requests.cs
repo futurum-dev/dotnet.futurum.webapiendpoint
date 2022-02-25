@@ -6,6 +6,9 @@ using System.Text.Json;
 using FluentAssertions;
 
 using Futurum.WebApiEndpoint.Sample.Features;
+using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequest;
+using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestParameterMapFrom;
+using Futurum.WebApiEndpoint.Sample.Features.QueryWithRequestParameterMapFrom;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
@@ -72,14 +75,14 @@ public class SamplesEndToEndFeaturesRequestsTests
             
             var request = new HttpRequestMessage
             {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri($"/api/1.0/command-with-request-parameter-map-from-supported-types/{stringValue}/{intValue}/{longValue}/{dateTimeValue.ToString(dateTimeStringFormat)}"),
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"/api/1.0/query-with-request-parameter-map-from-supported-types/{stringValue}/{intValue}/{longValue}/{dateTimeValue.ToString(dateTimeStringFormat)}"),
             };
         
             var httpResponseMessage = await httpClient.SendAsync(request);
         
             httpResponseMessage.EnsureSuccessStatusCode();
-            var response = await httpResponseMessage.Content.ReadFromJsonAsync<CommandWithRequestParameterMapFromSupportedTypesScenario.ResponseDto>();
+            var response = await httpResponseMessage.Content.ReadFromJsonAsync<QueryWithRequestParameterMapFromSupportedTypesScenario.ResponseDto>();
         
             response.String.Should().Be(stringValue);
             response.Int.Should().Be(intValue);
@@ -97,7 +100,7 @@ public class SamplesEndToEndFeaturesRequestsTests
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"/api/1.0/query-with-request-parameter-with-response/{input}"),
+                RequestUri = new Uri($"/api/1.0/query-with-request-manual-parameter-with-response/{input}"),
             };
         
             var httpResponseMessage = await httpClient.SendAsync(request);
@@ -155,6 +158,35 @@ public class SamplesEndToEndFeaturesRequestsTests
     
             response.Name.Should().Be($"Name - {input}");
         }
+
+        [Fact]
+        public async Task RequestParameterMapFromSupportedTypes()
+        {
+            var httpClient = CreateClient();
+        
+            var stringValue = Guid.NewGuid().ToString();
+            var intValue = int.MaxValue;
+            var longValue = long.MaxValue;
+            var dateTimeValue = DateTime.Now;
+
+            const string dateTimeStringFormat = "yyyy-MM-ddTHH:mm:ss";
+            
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri($"/api/1.0/command-with-request-parameter-map-from-supported-types/{stringValue}/{intValue}/{longValue}/{dateTimeValue.ToString(dateTimeStringFormat)}"),
+            };
+        
+            var httpResponseMessage = await httpClient.SendAsync(request);
+        
+            httpResponseMessage.EnsureSuccessStatusCode();
+            var response = await httpResponseMessage.Content.ReadFromJsonAsync<CommandWithRequestParameterMapFromSupportedTypesScenario.ResponseDto>();
+        
+            response.String.Should().Be(stringValue);
+            response.Int.Should().Be(intValue);
+            response.Long.Should().Be(longValue);
+            response.DateTime.ToString(dateTimeStringFormat).Should().Be(dateTimeValue.ToString(dateTimeStringFormat));
+        }
     
         [Fact]
         public async Task RequestParameter()
@@ -166,7 +198,7 @@ public class SamplesEndToEndFeaturesRequestsTests
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri($"/api/1.0/command-with-request-parameter-with-response/{input}"),
+                RequestUri = new Uri($"/api/1.0/command-with-request-manual-parameter-with-response/{input}"),
             };
     
             var httpResponseMessage = await httpClient.SendAsync(request);
@@ -234,7 +266,7 @@ public class SamplesEndToEndFeaturesRequestsTests
             multipartFormDataContent.Add(new StreamContent(fileStream), name: "hello-world.txt", fileName: "hello-world.txt");
 
             var id = Guid.NewGuid().ToString();
-            var requestDto = new CommandWithRequestUploadSingleFileAndPayloadWithResponseScenario.PayloadDto(id);
+            var requestDto = new PayloadDto(id);
             multipartFormDataContent.Add(JsonContent.Create(requestDto));
             
             var request = new HttpRequestMessage
