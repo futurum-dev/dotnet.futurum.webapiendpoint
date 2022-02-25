@@ -29,6 +29,13 @@ internal partial class WebApiEndpointHttpContextDispatcher : IWebApiEndpointHttp
                               .MapAsync(files => new RequestUploadFilesDto(files) as TRequestDto);
         }
 
+        if (typeof(TRequestDto) == typeof(RequestUploadFileDto))
+        {
+            return httpContext.Request.ReadUploadFilesAsync(cancellationToken)
+                              .MapAsync(files => new RequestUploadFileDto(files.FirstOrDefault()) as TRequestDto)
+                              .EnhanceWithErrorAsync(() => "Failed to read upload file");
+        }
+
         if (typeof(TRequestDto) == typeof(EmptyRequestDto))
         {
             return (new EmptyRequestDto() as TRequestDto).ToResultOkAsync();
