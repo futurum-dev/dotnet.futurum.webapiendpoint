@@ -7,36 +7,13 @@ namespace Futurum.WebApiEndpoint.Tests;
 
 public class ResponseAsyncEnumerableExtensionsTests
 {
-    public class ToResponseAsyncEnumerable
+    [Fact]
+    public void Result()
     {
-        [Fact]
-        public async Task IEnumerable()
-        {
-            var numbers = Enumerable.Range(0, 100);
+        var numbers = AsyncEnumerable.Range(0, 100);
 
-            var result = await numbers.ToResponseDataCollectionAsync();
+        var result = numbers.ToResultOk().ToResponseAsyncEnumerable();
 
-            result.ShouldBeSuccessWithValue(new ResponseDataCollection<int>(numbers));
-        }
-        
-        [Fact]
-        public async Task Result()
-        {
-            var numbers = Enumerable.Range(0, 100);
-
-            var result = await numbers.ToResultOk().ToResponseDataCollectionAsync();
-
-            result.ShouldBeSuccessWithValue(new ResponseDataCollection<int>(numbers));
-        }
-        
-        [Fact]
-        public async Task ResultAsync()
-        {
-            var numbers = Enumerable.Range(0, 100);
-
-            var result = await numbers.ToResultOkAsync().ToResponseDataCollectionAsync();
-
-            result.ShouldBeSuccessWithValue(new ResponseDataCollection<int>(numbers));
-        }
+        result.ShouldBeSuccessWithValue(new ResponseAsyncEnumerable<int>(numbers));
     }
 }
