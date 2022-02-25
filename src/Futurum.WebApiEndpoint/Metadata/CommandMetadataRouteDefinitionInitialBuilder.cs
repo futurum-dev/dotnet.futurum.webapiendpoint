@@ -32,11 +32,12 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
 
     /// <summary>
     /// Configure Post <paramref name="route"/> with <paramref name="parameterDefinitions"/>
+    /// <para>You only need to specify the parameters that DO NOT use <see cref="MapFromAttribute"/></para>
     /// </summary>
-    public MetadataRouteDefinitionBuilder Post(string route, params (string name, Type type)[] parameterDefinitions)
+    public MetadataRouteDefinitionBuilder Post(string route, params (string name, MetadataRouteParameterDefinitionType parameterDefinitionType, Type type)[] parameterDefinitions)
     {
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Post, route, null,
-                                                                  parameterDefinitions.Select(x => new MetadataRouteParameterDefinition(x.name, x.type)).ToList(),
+                                                                  parameterDefinitions.Select(x => new MetadataRouteParameterDefinition(x.name, x.parameterDefinitionType, x.type)).ToList(),
                                                                   null, 201, 400, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
         
         var metadataRouteDefinitionBuilder = new MetadataRouteDefinitionBuilder(_apiEndpointType, metadataRouteDefinition);
@@ -59,11 +60,12 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
 
     /// <summary>
     /// Configure Put <paramref name="route"/> with <paramref name="parameterDefinitions"/>
+    /// <para>You only need to specify the parameters that DO NOT use <see cref="MapFromAttribute"/></para>
     /// </summary>
-    public MetadataRouteDefinitionBuilder Put(string route, params (string name, Type type)[] parameterDefinitions)
+    public MetadataRouteDefinitionBuilder Put(string route, params (string name, MetadataRouteParameterDefinitionType parameterDefinitionType, Type type)[] parameterDefinitions)
     {
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Put, route, null,
-                                                                  parameterDefinitions.Select(x => new MetadataRouteParameterDefinition(x.name, x.type)).ToList(),
+                                                                  parameterDefinitions.Select(x => new MetadataRouteParameterDefinition(x.name, x.parameterDefinitionType, x.type)).ToList(),
                                                                   null, 201, 404, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
         
         var metadataRouteDefinitionBuilder = new MetadataRouteDefinitionBuilder(_apiEndpointType, metadataRouteDefinition);
@@ -86,11 +88,12 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
 
     /// <summary>
     /// Configure Patch <paramref name="route"/> with <paramref name="parameterDefinitions"/>
+    /// <para>You only need to specify the parameters that DO NOT use <see cref="MapFromAttribute"/></para>
     /// </summary>
-    public MetadataRouteDefinitionBuilder Patch(string route, params (string name, Type type)[] parameterDefinitions)
+    public MetadataRouteDefinitionBuilder Patch(string route, params (string name, MetadataRouteParameterDefinitionType parameterDefinitionType, Type type)[] parameterDefinitions)
     {
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Patch, route, null,
-                                                                  parameterDefinitions.Select(x => new MetadataRouteParameterDefinition(x.name, x.type)).ToList(),
+                                                                  parameterDefinitions.Select(x => new MetadataRouteParameterDefinition(x.name, x.parameterDefinitionType, x.type)).ToList(),
                                                                   null, 200, 404, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
         
         var metadataRouteDefinitionBuilder = new MetadataRouteDefinitionBuilder(_apiEndpointType, metadataRouteDefinition);
@@ -113,11 +116,12 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
 
     /// <summary>
     /// Configure Delete <paramref name="route"/> with <paramref name="parameterDefinitions"/>
+    /// <para>You only need to specify the parameters that DO NOT use <see cref="MapFromAttribute"/></para>
     /// </summary>
-    public MetadataRouteDefinitionBuilder Delete(string route, params (string name, Type type)[] parameterDefinitions)
+    public MetadataRouteDefinitionBuilder Delete(string route, params (string name, MetadataRouteParameterDefinitionType parameterDefinitionType, Type type)[] parameterDefinitions)
     {
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Delete, route, null,
-                                                                  parameterDefinitions.Select(x => new MetadataRouteParameterDefinition(x.name, x.type)).ToList(),
+                                                                  parameterDefinitions.Select(x => new MetadataRouteParameterDefinition(x.name, x.parameterDefinitionType, x.type)).ToList(),
                                                                   null, 200, 404, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
         
         var metadataRouteDefinitionBuilder = new MetadataRouteDefinitionBuilder(_apiEndpointType, metadataRouteDefinition);

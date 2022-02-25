@@ -4,6 +4,7 @@ using FastMember;
 
 using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Internal.AspNetCore;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Internal;
 
@@ -15,17 +16,13 @@ internal static class MapFromRequestMapper<TRequestDto>
     {
         var typeAccessor = TypeAccessor.Create(typeof(TRequestDto));
 
-        var propertiesWithMapFromAttribute = typeof(TRequestDto).GetProperties()
-                                                                .Where(propertyInfo => propertyInfo.GetCustomAttribute<MapFromAttribute>() != null)
-                                                                .ToList();
+        var propertiesWithMapFromAttribute = WebApiEndpointMetadataTypeService.GetMapFromProperties(typeof(TRequestDto));
 
         PropertiesToMap = new Func<TRequestDto, HttpContext, CancellationToken, Result>[propertiesWithMapFromAttribute.Count];
 
         var count = 0;
-        foreach (var propertyInfo in propertiesWithMapFromAttribute)
+        foreach (var (propertyInfo, mapFromAttribute) in propertiesWithMapFromAttribute)
         {
-            var mapFromAttribute = propertyInfo.GetCustomAttribute<MapFromAttribute>();
-
             if (!propertyInfo.CanWrite)
             {
                 throw new InvalidOperationException($"Property '{propertyInfo.Name}' on RequestDto type : '{typeof(TRequestDto).FullName}' is readonly");

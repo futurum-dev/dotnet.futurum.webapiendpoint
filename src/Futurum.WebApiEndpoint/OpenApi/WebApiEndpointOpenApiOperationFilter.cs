@@ -38,15 +38,28 @@ internal class WebApiEndpointOpenApiOperationFilter : IOperationFilter
                                 Function.DoNothing);
     }
 
-    private static IEnumerable<OpenApiParameter> GetOpenApiParametersFromRoute(MetadataDefinition metadataDefinition) =>
-        metadataDefinition.MetadataRouteDefinition.ParameterDefinitions
-                          .Select(parameterDefinition => new OpenApiParameter
-                          {
-                              Name = parameterDefinition.Name,
-                              Schema = MapDotnetTypesToOpenApiTypes(parameterDefinition.Type),
-                              Required = true,
-                              In = ParameterLocation.Path
-                          });
+    private static IEnumerable<OpenApiParameter> GetOpenApiParametersFromRoute(MetadataDefinition metadataDefinition)
+    {
+        ParameterLocation TransformMetadataRouteParameterDefinitionTypeToOpenApiParameterLocation(MetadataRouteParameterDefinitionType parameterDefinitionType) =>
+            parameterDefinitionType switch
+            {
+                MetadataRouteParameterDefinitionType.Path   => ParameterLocation.Path,
+                MetadataRouteParameterDefinitionType.Query  => ParameterLocation.Query,
+                MetadataRouteParameterDefinitionType.Cookie => ParameterLocation.Cookie,
+                MetadataRouteParameterDefinitionType.Header => ParameterLocation.Header,
+                _                                           => throw new ArgumentOutOfRangeException(nameof(parameterDefinitionType), parameterDefinitionType, null)
+            };
+
+        return metadataDefinition.MetadataRouteDefinition.ParameterDefinitions
+                                 .Where(parameterDefinition => parameterDefinition.ParameterDefinitionType != MetadataRouteParameterDefinitionType.Form)
+                                 .Select(parameterDefinition => new OpenApiParameter
+                                 {
+                                     Name = parameterDefinition.Name,
+                                     Schema = MapDotnetTypesToOpenApiTypes(parameterDefinition.Type),
+                                     Required = true,
+                                     In = TransformMetadataRouteParameterDefinitionTypeToOpenApiParameterLocation(parameterDefinition.ParameterDefinitionType)
+                                 });
+    }
 
     private static void UpdateOpenApiOperationInformation(OpenApiOperation openApiOperation, MetadataDefinition metadataDefinition)
     {

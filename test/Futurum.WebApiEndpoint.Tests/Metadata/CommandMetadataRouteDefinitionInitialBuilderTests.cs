@@ -38,9 +38,10 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
         var route = Guid.NewGuid().ToString();
         var parameterName = "parameter1";
         var parameterType = typeof(int);
-
+        var parameterDefinitionType = MetadataRouteParameterDefinitionType.Path;
+        
         IMetadataRouteDefinitionBuilder builder = new CommandMetadataRouteDefinitionInitialBuilder(typeof(ApiEndpoint))
-                                                  .Post(route, (parameterName, parameterType));
+                                                  .Post(route, (parameterName, parameterDefinitionType, parameterType));
 
         var metadataRouteDefinitions = builder.Build();
 
@@ -53,6 +54,7 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
         metadataRouteDefinition.FailedStatusCode.Should().Be(400);
         metadataRouteDefinition.ParameterDefinitions.Count.Should().Be(1);
         metadataRouteDefinition.ParameterDefinitions[0].Name.Should().Be(parameterName);
+        metadataRouteDefinition.ParameterDefinitions[0].ParameterDefinitionType.Should().Be(parameterDefinitionType);
         metadataRouteDefinition.ParameterDefinitions[0].Type.Should().Be(parameterType);
     }
 
@@ -82,9 +84,10 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
         var route = Guid.NewGuid().ToString();
         var parameterName = "parameter1";
         var parameterType = typeof(int);
+        var parameterDefinitionType = MetadataRouteParameterDefinitionType.Path;
 
         IMetadataRouteDefinitionBuilder builder = new CommandMetadataRouteDefinitionInitialBuilder(typeof(ApiEndpoint))
-                                                  .Put(route, (parameterName, parameterType));
+                                                  .Put(route, (parameterName, parameterDefinitionType, parameterType));
 
         var metadataRouteDefinitions = builder.Build();
 
@@ -97,6 +100,7 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
         metadataRouteDefinition.FailedStatusCode.Should().Be(404);
         metadataRouteDefinition.ParameterDefinitions.Count.Should().Be(1);
         metadataRouteDefinition.ParameterDefinitions[0].Name.Should().Be(parameterName);
+        metadataRouteDefinition.ParameterDefinitions[0].ParameterDefinitionType.Should().Be(parameterDefinitionType);
         metadataRouteDefinition.ParameterDefinitions[0].Type.Should().Be(parameterType);
     }
 
@@ -126,9 +130,10 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
         var route = Guid.NewGuid().ToString();
         var parameterName = "parameter1";
         var parameterType = typeof(int);
+        var parameterDefinitionType = MetadataRouteParameterDefinitionType.Path;
 
         IMetadataRouteDefinitionBuilder builder = new CommandMetadataRouteDefinitionInitialBuilder(typeof(ApiEndpoint))
-                                                  .Patch(route, (parameterName, parameterType));
+                                                  .Patch(route, (parameterName, parameterDefinitionType, parameterType));
 
         var metadataRouteDefinitions = builder.Build();
 
@@ -141,6 +146,7 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
         metadataRouteDefinition.FailedStatusCode.Should().Be(404);
         metadataRouteDefinition.ParameterDefinitions.Count.Should().Be(1);
         metadataRouteDefinition.ParameterDefinitions[0].Name.Should().Be(parameterName);
+        metadataRouteDefinition.ParameterDefinitions[0].ParameterDefinitionType.Should().Be(parameterDefinitionType);
         metadataRouteDefinition.ParameterDefinitions[0].Type.Should().Be(parameterType);
     }
 
@@ -170,9 +176,10 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
         var route = Guid.NewGuid().ToString();
         var parameterName = "parameter1";
         var parameterType = typeof(int);
+        var parameterDefinitionType = MetadataRouteParameterDefinitionType.Path;
 
         IMetadataRouteDefinitionBuilder builder = new CommandMetadataRouteDefinitionInitialBuilder(typeof(ApiEndpoint))
-                                                  .Delete(route, (parameterName, parameterType));
+                                                  .Delete(route, (parameterName, parameterDefinitionType, parameterType));
 
         var metadataRouteDefinitions = builder.Build();
 
@@ -185,6 +192,7 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
         metadataRouteDefinition.FailedStatusCode.Should().Be(404);
         metadataRouteDefinition.ParameterDefinitions.Count.Should().Be(1);
         metadataRouteDefinition.ParameterDefinitions[0].Name.Should().Be(parameterName);
+        metadataRouteDefinition.ParameterDefinitions[0].ParameterDefinitionType.Should().Be(parameterDefinitionType);
         metadataRouteDefinition.ParameterDefinitions[0].Type.Should().Be(parameterType);
     }
 }
