@@ -88,6 +88,11 @@ internal class WebApiEndpointOpenApiOperationFilter : IOperationFilter
         {
             return new OpenApiSchema { Type = "number", Format = "double" };
         }
+        
+        if (parameterType == typeof(DateTime))
+        {
+            return new OpenApiSchema { Type = "string", Format = "date-time"};
+        }
 
         return null;
     }
