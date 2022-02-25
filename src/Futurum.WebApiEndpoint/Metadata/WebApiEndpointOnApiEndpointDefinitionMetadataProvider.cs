@@ -70,8 +70,6 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
             var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
             var metadataMapFromMultipartDefinition = GetMetadataMapFromMultipartDefinition(metadataTypeDefinition.RequestDtoType);
 
-            metadataRouteDefinition = EnrichMetadataRouteDefinitionWithParameterDefinitions(metadataTypeDefinition, metadataRouteDefinition);
-
             yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
         }
 
@@ -83,8 +81,6 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
 
             var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
             var metadataMapFromMultipartDefinition = GetMetadataMapFromMultipartDefinition(metadataTypeDefinition.RequestDtoType);
-
-            metadataRouteDefinition = EnrichMetadataRouteDefinitionWithParameterDefinitions(metadataTypeDefinition, metadataRouteDefinition);
 
             yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
         }
@@ -98,8 +94,6 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
             var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
             var metadataMapFromMultipartDefinition = GetMetadataMapFromMultipartDefinition(metadataTypeDefinition.RequestDtoType);
 
-            metadataRouteDefinition = EnrichMetadataRouteDefinitionWithParameterDefinitions(metadataTypeDefinition, metadataRouteDefinition);
-
             yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
         }
 
@@ -111,8 +105,6 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
 
             var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
             var metadataMapFromMultipartDefinition = GetMetadataMapFromMultipartDefinition(metadataTypeDefinition.RequestDtoType);
-
-            metadataRouteDefinition = EnrichMetadataRouteDefinitionWithParameterDefinitions(metadataTypeDefinition, metadataRouteDefinition);
 
             yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
         }
@@ -126,8 +118,6 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
             var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
             var metadataMapFromMultipartDefinition = GetMetadataMapFromMultipartDefinition(metadataTypeDefinition.RequestDtoType);
 
-            metadataRouteDefinition = EnrichMetadataRouteDefinitionWithParameterDefinitions(metadataTypeDefinition, metadataRouteDefinition);
-
             yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
         }
 
@@ -139,8 +129,6 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
 
             var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
             var metadataMapFromMultipartDefinition = GetMetadataMapFromMultipartDefinition(metadataTypeDefinition.RequestDtoType);
-
-            metadataRouteDefinition = EnrichMetadataRouteDefinitionWithParameterDefinitions(metadataTypeDefinition, metadataRouteDefinition);
 
             yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
         }
@@ -154,54 +142,24 @@ internal static class WebApiEndpointOnApiEndpointDefinitionMetadataProvider
             var metadataMapFromDefinition = GetMetadataMapFromDefinition(metadataTypeDefinition.RequestDtoType);
             var metadataMapFromMultipartDefinition = GetMetadataMapFromMultipartDefinition(metadataTypeDefinition.RequestDtoType);
 
-            metadataRouteDefinition = EnrichMetadataRouteDefinitionWithParameterDefinitions(metadataTypeDefinition, metadataRouteDefinition);
-
             yield return new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
         }
     }
 
-    private static MetadataRouteDefinition EnrichMetadataRouteDefinitionWithParameterDefinitions(MetadataTypeDefinition metadataTypeDefinition, MetadataRouteDefinition? metadataRouteDefinition)
-    {
-        MetadataRouteParameterDefinitionType TransformMapFromToParameterDefinitionType(MapFrom mapFrom) =>
-            mapFrom switch
-            {
-                MapFrom.Path   => MetadataRouteParameterDefinitionType.Path,
-                MapFrom.Query  => MetadataRouteParameterDefinitionType.Query,
-                MapFrom.Header => MetadataRouteParameterDefinitionType.Header,
-                MapFrom.Cookie => MetadataRouteParameterDefinitionType.Cookie,
-                _              => throw new ArgumentOutOfRangeException(nameof(mapFrom), mapFrom, null)
-            };
-
-        var routePathParameterDefinitions = WebApiEndpointMetadataTypeService.GetMapFromProperties(metadataTypeDefinition.RequestDtoType)
-                                                                             .Select(x => new MetadataRouteParameterDefinition(x.propertyInfo.Name, TransformMapFromToParameterDefinitionType(x.mapFromAttribute.MapFrom), x.propertyInfo.PropertyType))
-                                                                             .ToList();
-
-        var allRoutePathParameterDefinitions = metadataRouteDefinition.ParameterDefinitions.OrEmptyIfNull().Concat(routePathParameterDefinitions).ToList();
-        
-        return metadataRouteDefinition with
-        {
-            ParameterDefinitions = allRoutePathParameterDefinitions
-        };
-    }
-
     private static MetadataMapFromDefinition? GetMetadataMapFromDefinition(Type requestDtoType)
     {
-        var parameters = requestDtoType.GetProperties()
-                                       .Select(propertyInfo => new { propertyInfo, mapFromAttribute = propertyInfo.GetCustomAttribute<MapFromAttribute>() })
-                                       .Where(x => x.mapFromAttribute != null)
-                                       .Select(x => new MetadataMapFromParameterDefinition(x.propertyInfo.Name, x.propertyInfo, x.mapFromAttribute))
-                                       .ToList();
+        var parameters = WebApiEndpointMetadataTypeService.GetMapFromProperties(requestDtoType)
+                         .Select(x => new MetadataMapFromParameterDefinition(x.propertyInfo.Name, x.propertyInfo, x.mapFromAttribute))
+                         .ToList();
 
         return parameters.Any() ? new MetadataMapFromDefinition(parameters) : null;
     }
 
     private static MetadataMapFromMultipartDefinition? GetMetadataMapFromMultipartDefinition(Type requestDtoType)
     {
-        var parameters = requestDtoType.GetProperties()
-                                       .Select(propertyInfo => new { propertyInfo, mapFromAttribute = propertyInfo.GetCustomAttribute<MapFromMultipartAttribute>() })
-                                       .Where(x => x.mapFromAttribute != null)
-                                       .Select(x => new MetadataMapFromMultipartParameterDefinition(x.propertyInfo.Name, x.propertyInfo, x.mapFromAttribute))
-                                       .ToList();
+        var parameters = WebApiEndpointMetadataTypeService.GetMapFromMultipartProperties(requestDtoType)
+                         .Select(x => new MetadataMapFromMultipartParameterDefinition(x.propertyInfo.Name, x.propertyInfo, x.mapFromMultipartAttribute))
+                         .ToList();
 
         return parameters.Any() ? new MetadataMapFromMultipartDefinition(parameters) : null;
     }

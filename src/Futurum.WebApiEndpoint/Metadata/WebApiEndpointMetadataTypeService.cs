@@ -123,4 +123,10 @@ internal static class WebApiEndpointMetadataTypeService
                   .Where(propertyInfo => propertyInfo.GetCustomAttribute<MapFromAttribute>() != null)
                   .Select(propertyInfo => (propertyInfo, mapFromAttribute: propertyInfo.GetCustomAttribute<MapFromAttribute>()!))
                   .ToList();
+
+    public static List<(PropertyInfo propertyInfo, MapFromMultipartAttribute mapFromMultipartAttribute)> GetMapFromMultipartProperties(Type requestDto) =>
+        requestDto.GetProperties()
+                  .Where(propertyInfo => propertyInfo.GetCustomAttribute<MapFromMultipartAttribute>() != null)
+                  .Select(propertyInfo => (propertyInfo, mapFromAttribute: propertyInfo.GetCustomAttribute<MapFromMultipartAttribute>()!))
+                  .ToList();
 }
