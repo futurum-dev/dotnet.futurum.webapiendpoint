@@ -37,8 +37,8 @@ public abstract partial class QueryWebApiEndpoint
         /// </summary>
         public abstract class WithResponseAsyncEnumerable<TApiEndpoint, TDataDto, TData>
         {
-            public abstract class WithMapper<TDataMapper> : IQueryWebApiEndpoint<ResponseAsyncEnumerableDto<TDataDto>, ResponseAsyncEnumerable<TApiEndpoint, TData>, ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TDataMapper>>
-                where TDataMapper : IWebApiEndpointDataMapper<TData, TDataDto>
+            public abstract class WithMapper<TResponseDataMapper> : IQueryWebApiEndpoint<ResponseAsyncEnumerableDto<TDataDto>, ResponseAsyncEnumerable<TApiEndpoint, TData>, ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TResponseDataMapper>>
+                where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
                 public Task<Result<ResponseAsyncEnumerable<TApiEndpoint, TData>>> ExecuteQueryAsync(CancellationToken cancellationToken) =>
@@ -73,8 +73,8 @@ public abstract partial class QueryWebApiEndpoint
         /// </summary>
         public abstract class WithResponseDataCollection<TApiEndpoint, TDataDto, TData>
         {
-            public abstract class WithMapper<TDataMapper> : IQueryWebApiEndpoint<ResponseDataCollectionDto<TDataDto>, ResponseDataCollection<TApiEndpoint, TData>, ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TDataMapper>>
-                where TDataMapper : IWebApiEndpointDataMapper<TData, TDataDto>
+            public abstract class WithMapper<TResponseDataMapper> : IQueryWebApiEndpoint<ResponseDataCollectionDto<TDataDto>, ResponseDataCollection<TApiEndpoint, TData>, ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TResponseDataMapper>>
+                where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
                 public Task<Result<ResponseDataCollection<TApiEndpoint, TData>>> ExecuteQueryAsync(CancellationToken cancellationToken) =>

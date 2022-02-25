@@ -70,7 +70,7 @@ public abstract partial class CommandWebApiEndpoint
         public abstract class WithResponseAsyncEnumerable<TApiEndpoint, TDataDto, TData>
         {
             public abstract class WithMapper<TMapper> : ICommandWebApiEndpoint<TCommandDto, ResponseAsyncEnumerableDto<TDataDto>, TCommandDomain, ResponseAsyncEnumerable<TApiEndpoint, TData>, TMapper, ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TMapper>>
-                where TMapper : IWebApiEndpointRequestMapper<TCommandDto, TCommandDomain>, IWebApiEndpointDataMapper<TData, TDataDto>
+                where TMapper : IWebApiEndpointRequestMapper<TCommandDto, TCommandDomain>, IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
                 public Task<Result<ResponseAsyncEnumerable<TApiEndpoint, TData>>> ExecuteCommandAsync(TCommandDomain command, CancellationToken cancellationToken) =>
@@ -83,9 +83,9 @@ public abstract partial class CommandWebApiEndpoint
                 protected abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(TCommandDomain command, CancellationToken cancellationToken);
             }
             
-            public abstract class WithMapper<TRequestMapper, TDataMapper> : ICommandWebApiEndpoint<TCommandDto, ResponseAsyncEnumerableDto<TDataDto>, TCommandDomain, ResponseAsyncEnumerable<TApiEndpoint, TData>, TRequestMapper, ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TDataMapper>>
+            public abstract class WithMapper<TRequestMapper, TResponseDataMapper> : ICommandWebApiEndpoint<TCommandDto, ResponseAsyncEnumerableDto<TDataDto>, TCommandDomain, ResponseAsyncEnumerable<TApiEndpoint, TData>, TRequestMapper, ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TResponseDataMapper>>
                 where TRequestMapper : IWebApiEndpointRequestMapper<TCommandDto, TCommandDomain>
-                where TDataMapper : IWebApiEndpointDataMapper<TData, TDataDto>
+                where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
                 public Task<Result<ResponseAsyncEnumerable<TApiEndpoint, TData>>> ExecuteCommandAsync(TCommandDomain command, CancellationToken cancellationToken) =>
@@ -125,7 +125,7 @@ public abstract partial class CommandWebApiEndpoint
         public abstract class WithResponseDataCollection<TApiEndpoint, TDataDto, TData>
         {
             public abstract class WithMapper<TMapper> : ICommandWebApiEndpoint<TCommandDto, ResponseDataCollectionDto<TDataDto>, TCommandDomain, ResponseDataCollection<TApiEndpoint, TData>, TMapper, ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TMapper>>
-                where TMapper : IWebApiEndpointRequestMapper<TCommandDto, TCommandDomain>, IWebApiEndpointDataMapper<TData, TDataDto>
+                where TMapper : IWebApiEndpointRequestMapper<TCommandDto, TCommandDomain>, IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
                 public Task<Result<ResponseDataCollection<TApiEndpoint, TData>>> ExecuteCommandAsync(TCommandDomain command, CancellationToken cancellationToken) =>
@@ -138,9 +138,9 @@ public abstract partial class CommandWebApiEndpoint
                 protected abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(TCommandDomain command, CancellationToken cancellationToken);
             }
             
-            public abstract class WithMapper<TRequestMapper, TDataMapper> : ICommandWebApiEndpoint<TCommandDto, ResponseDataCollectionDto<TDataDto>, TCommandDomain, ResponseDataCollection<TApiEndpoint, TData>, TRequestMapper, ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TDataMapper>>
+            public abstract class WithMapper<TRequestMapper, TResponseDataMapper> : ICommandWebApiEndpoint<TCommandDto, ResponseDataCollectionDto<TDataDto>, TCommandDomain, ResponseDataCollection<TApiEndpoint, TData>, TRequestMapper, ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TResponseDataMapper>>
                 where TRequestMapper : IWebApiEndpointRequestMapper<TCommandDto, TCommandDomain>
-                where TDataMapper : IWebApiEndpointDataMapper<TData, TDataDto>
+                where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
                 public Task<Result<ResponseDataCollection<TApiEndpoint, TData>>> ExecuteCommandAsync(TCommandDomain command, CancellationToken cancellationToken) =>

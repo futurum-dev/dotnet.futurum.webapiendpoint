@@ -2,7 +2,7 @@ using Futurum.Core.Result;
 
 namespace Futurum.WebApiEndpoint.Sample.Blog;
 
-public class BlogDataMapper : IWebApiEndpointDataMapper<Blog, BlogDto>
+public class BlogDataMapper : IWebApiEndpointResponseDataMapper<Blog, BlogDto>
 {
     public BlogDto Map(Blog data) => 
         new(data.Id.GetValueOrDefault(x => x.Value, 0), data.Url);

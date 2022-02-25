@@ -2,7 +2,6 @@ using System.Reflection;
 
 using Futurum.ApiEndpoint;
 using Futurum.ApiEndpoint.DebugLogger;
-using Futurum.Core.Linq;
 using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Internal;
 

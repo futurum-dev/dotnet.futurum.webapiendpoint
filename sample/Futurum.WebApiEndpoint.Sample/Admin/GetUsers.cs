@@ -1,5 +1,4 @@
 using Futurum.Core.Result;
-using Futurum.WebApiEndpoint.Sample.Features;
 
 namespace Futurum.WebApiEndpoint.Sample.Admin;
 
@@ -17,7 +16,7 @@ public static class GetUsers
                       .ToResponseDataCollectionAsync();
     }
 
-    public class Mapper : IWebApiEndpointDataMapper<User, UserDto>
+    public class Mapper : IWebApiEndpointResponseDataMapper<User, UserDto>
     {
         public UserDto Map(User data) =>
             new(data.FirstName, data.LastName);

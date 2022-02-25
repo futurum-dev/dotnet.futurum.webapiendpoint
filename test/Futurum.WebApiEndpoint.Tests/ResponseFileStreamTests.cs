@@ -16,7 +16,7 @@ public class ResponseFileStreamTests
 
         var generic = nonGeneric.ToApiEndpoint<object>();
 
-        nonGeneric.FileInfo.Should().Be(generic.FileInfo);
-        nonGeneric.ContentType.Should().Be(generic.ContentType);
+        generic.FileInfo.Should().Be(nonGeneric.FileInfo);
+        generic.ContentType.Should().Be(nonGeneric.ContentType);
     }
 }

@@ -50,9 +50,9 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class WithResponseAsyncEnumerable<TDataDto, TData>
         {
-            public abstract class WithMapper<TDataMapper> : ICommandWebApiEndpoint<RequestUploadFilesDto, ResponseAsyncEnumerableDto<TDataDto>, RequestUploadFiles<TApiEndpoint>,
-                                                                     ResponseAsyncEnumerable<TApiEndpoint, TData>, RequestUploadFilesMapper<TApiEndpoint>, ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TDataMapper>>
-                where TDataMapper : IWebApiEndpointDataMapper<TData, TDataDto>
+            public abstract class WithMapper<TResponseDataMapper> : ICommandWebApiEndpoint<RequestUploadFilesDto, ResponseAsyncEnumerableDto<TDataDto>, RequestUploadFiles<TApiEndpoint>,
+                                                                     ResponseAsyncEnumerable<TApiEndpoint, TData>, RequestUploadFilesMapper<TApiEndpoint>, ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TResponseDataMapper>>
+                where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
                 public Task<Result<ResponseAsyncEnumerable<TApiEndpoint, TData>>> ExecuteCommandAsync(RequestUploadFiles<TApiEndpoint> command, CancellationToken cancellationToken) =>
@@ -88,9 +88,9 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class WithResponseDataCollection<TDataDto, TData>
         {
-            public abstract class WithMapper<TDataMapper> : ICommandWebApiEndpoint<RequestUploadFilesDto, ResponseDataCollectionDto<TDataDto>, RequestUploadFiles<TApiEndpoint>,
-                                                                     ResponseDataCollection<TApiEndpoint, TData>, RequestUploadFilesMapper<TApiEndpoint>, ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TDataMapper>>
-                where TDataMapper : IWebApiEndpointDataMapper<TData, TDataDto>
+            public abstract class WithMapper<TResponseDataMapper> : ICommandWebApiEndpoint<RequestUploadFilesDto, ResponseDataCollectionDto<TDataDto>, RequestUploadFiles<TApiEndpoint>,
+                                                                     ResponseDataCollection<TApiEndpoint, TData>, RequestUploadFilesMapper<TApiEndpoint>, ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TResponseDataMapper>>
+                where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
                 public Task<Result<ResponseDataCollection<TApiEndpoint, TData>>> ExecuteCommandAsync(RequestUploadFiles<TApiEndpoint> command, CancellationToken cancellationToken) =>
