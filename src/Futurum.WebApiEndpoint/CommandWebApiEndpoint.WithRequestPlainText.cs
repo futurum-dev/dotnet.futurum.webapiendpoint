@@ -50,9 +50,9 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class WithResponseAsyncEnumerable<TDataDto, TData>
         {
-            public abstract class WithMapper<TDataMapper> : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseAsyncEnumerableDto<TDataDto>, RequestPlainText<TApiEndpoint>,
-                ResponseAsyncEnumerable<TApiEndpoint, TData>, RequestPlainTextMapper<TApiEndpoint>, ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TDataMapper>>
-                where TDataMapper : IWebApiEndpointDataMapper<TData, TDataDto>
+            public abstract class WithMapper<TResponseDataMapper> : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseAsyncEnumerableDto<TDataDto>, RequestPlainText<TApiEndpoint>,
+                ResponseAsyncEnumerable<TApiEndpoint, TData>, RequestPlainTextMapper<TApiEndpoint>, ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TResponseDataMapper>>
+                where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
                 public Task<Result<ResponseAsyncEnumerable<TApiEndpoint, TData>>> ExecuteCommandAsync(RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
@@ -88,9 +88,9 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class WithResponseDataCollection<TDataDto, TData>
         {
-            public abstract class WithMapper<TDataMapper> : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseDataCollectionDto<TDataDto>, RequestPlainText<TApiEndpoint>,
-                                                                     ResponseDataCollection<TApiEndpoint, TData>, RequestPlainTextMapper<TApiEndpoint>, ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TDataMapper>>
-                where TDataMapper : IWebApiEndpointDataMapper<TData, TDataDto>
+            public abstract class WithMapper<TResponseDataMapper> : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseDataCollectionDto<TDataDto>, RequestPlainText<TApiEndpoint>,
+                                                                     ResponseDataCollection<TApiEndpoint, TData>, RequestPlainTextMapper<TApiEndpoint>, ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TResponseDataMapper>>
+                where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
                 public Task<Result<ResponseDataCollection<TApiEndpoint, TData>>> ExecuteCommandAsync(RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>

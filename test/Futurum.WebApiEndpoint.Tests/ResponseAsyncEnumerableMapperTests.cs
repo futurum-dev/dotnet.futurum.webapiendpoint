@@ -12,15 +12,15 @@ public class ResponseAsyncEnumerableMapperTests
         var numbers = Enumerable.Range(0, 100)
                                 .ToList();
 
-        var nonGeneric = new ResponseAsyncEnumerable<object, int>(AsyncEnumerable(numbers));
+        var domain = new ResponseAsyncEnumerable<object, int>(AsyncEnumerable(numbers));
 
-        var result = new ResponseAsyncEnumerableMapper<object, int, int, DataMapper>(new DataMapper()).Map(nonGeneric);
+        var result = new ResponseAsyncEnumerableMapper<object, int, int, DataMapper>(new DataMapper()).Map(domain);
 
         var receivedNumbers = await result.AsyncEnumerable.ToListAsync();
         receivedNumbers.Should().BeEquivalentTo(numbers);
     }
 
-    private class DataMapper : IWebApiEndpointDataMapper<int, int>
+    private class DataMapper : IWebApiEndpointResponseDataMapper<int, int>
     {
         public int Map(int data) =>
             data;

@@ -16,7 +16,7 @@ public class ResponseAsyncEnumerableTests
 
         var generic = nonGeneric.ToApiEndpoint<object>();
 
-        nonGeneric.Data.Should().BeSameAs(generic.Data);
+        generic.Data.Should().BeSameAs(nonGeneric.Data);
 
         async IAsyncEnumerable<int> AsyncEnumerable(IEnumerable<int> numbers)
         {

@@ -1,12 +1,10 @@
-using Futurum.Core.Result;
-
 namespace Futurum.WebApiEndpoint.Sample.Features;
 
 public class FeatureMapper : IWebApiEndpointResponseMapper<Feature, FeatureDto>
 {
-    private readonly IWebApiEndpointDataMapper<Feature, FeatureDto> _dataMapper;
+    private readonly IWebApiEndpointResponseDataMapper<Feature, FeatureDto> _dataMapper;
 
-    public FeatureMapper(IWebApiEndpointDataMapper<Feature, FeatureDto> dataMapper)
+    public FeatureMapper(IWebApiEndpointResponseDataMapper<Feature, FeatureDto> dataMapper)
     {
         _dataMapper = dataMapper;
     }

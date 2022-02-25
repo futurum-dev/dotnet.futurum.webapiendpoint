@@ -19,246 +19,42 @@ public class WebApiEndpointAndMapperModule : IModule
 
     public void Load(IServiceCollection services)
     {
-        RegisterQueryWithoutRequestWebApiEndpoints(services, _assemblies);
+        var metadataDefinitions = WebApiEndpointOnApiEndpointDefinitionMetadataProvider.GetMetadata(_assemblies);
 
-        RegisterQueryWithoutRequestDtoWebApiEndpoints(services, _assemblies);
+        RegisterWebApiEndpoints(services, metadataDefinitions);
 
-        RegisterQueryWithRequestDtoWebApiEndpoints(services, _assemblies);
-
-        RegisterCommandWithResponseWebApiEndpoints(services, _assemblies);
-
-        RegisterCommandWithoutRequestWithResponseWebApiEndpoints(services, _assemblies);
-
-        RegisterCommandWithoutResponseWebApiEndpoints(services, _assemblies);
-
-        RegisterCommandWithoutRequestWithoutResponseWebApiEndpoints(services, _assemblies);
-
-        RegisterMappers(services, _assemblies);
+        RegisterMappers(services, metadataDefinitions, _assemblies);
     }
 
-    private static void RegisterQueryWithoutRequestWebApiEndpoints(IServiceCollection services, Assembly[] assemblies)
+    private static void RegisterWebApiEndpoints(IServiceCollection services, IEnumerable<MetadataDefinition> metadataDefinitions)
     {
-        RegisterApiEndpoints(services, assemblies, typeof(IQueryWebApiEndpoint<,,>));
+        services.Scan(scan => scan.AddTypes(metadataDefinitions.Select(metadataDefinition => metadataDefinition.MetadataTypeDefinition)
+                                                               .Select(metadataTypeDefinition => metadataTypeDefinition.WebApiEndpointType))
+                                  .AsImplementedInterfaces()
+                                  .WithScopedLifetime());
     }
 
-    private static void RegisterQueryWithoutRequestDtoWebApiEndpoints(IServiceCollection services, Assembly[] assemblies)
-    {
-        RegisterApiEndpoints(services, assemblies, typeof(IQueryWebApiEndpoint<,,,,>));
-    }
-
-    private static void RegisterQueryWithRequestDtoWebApiEndpoints(IServiceCollection services, Assembly[] assemblies)
-    {
-        RegisterApiEndpoints(services, assemblies, typeof(IQueryWebApiEndpoint<,,,,,>));
-    }
-
-    private static void RegisterCommandWithResponseWebApiEndpoints(IServiceCollection services, Assembly[] assemblies)
-    {
-        RegisterApiEndpoints(services, assemblies, typeof(ICommandWebApiEndpoint<,,,,,>));
-    }
-
-    private static void RegisterCommandWithoutRequestWithResponseWebApiEndpoints(IServiceCollection services, Assembly[] assemblies)
-    {
-        RegisterApiEndpoints(services, assemblies, typeof(ICommandWebApiEndpoint<,,,,>));
-    }
-
-    private static void RegisterCommandWithoutResponseWebApiEndpoints(IServiceCollection services, Assembly[] assemblies)
-    {
-        RegisterApiEndpoints(services, assemblies, typeof(ICommandWebApiEndpoint<,,>));
-    }
-
-    private static void RegisterCommandWithoutRequestWithoutResponseWebApiEndpoints(IServiceCollection services, Assembly[] assemblies)
-    {
-        RegisterApiEndpoints(services, assemblies, typeof(ICommandWebApiEndpoint<,>));
-    }
-
-    private static void RegisterMappers(IServiceCollection services, Assembly[] assemblies)
+    private static void RegisterMappers(IServiceCollection services, IEnumerable<MetadataDefinition> metadataDefinitions, IEnumerable<Assembly> assemblies)
     {
         var assembliesIncludingLibrary = assemblies.Concat(new[] { typeof(WebApiEndpointAssemblyHook).Assembly }).ToArray();
-        RegisterMapper(services, assembliesIncludingLibrary, typeof(IWebApiEndpointRequestMapper<>));
-        RegisterMapper(services, assembliesIncludingLibrary, typeof(IWebApiEndpointRequestMapper<,>));
-        RegisterMapper(services, assembliesIncludingLibrary, typeof(IWebApiEndpointResponseMapper<,>));
-        RegisterMapper(services, assembliesIncludingLibrary, typeof(IWebApiEndpointDataMapper<,>));
+        RegisterMappersOfType(services, assembliesIncludingLibrary, typeof(IWebApiEndpointRequestMapper<>));
+        RegisterMappersOfType(services, assembliesIncludingLibrary, typeof(IWebApiEndpointRequestMapper<,>));
+        RegisterMappersOfType(services, assembliesIncludingLibrary, typeof(IWebApiEndpointResponseMapper<,>));
+        RegisterMappersOfType(services, assembliesIncludingLibrary, typeof(IWebApiEndpointResponseDataMapper<,>));
+        RegisterMappersOfType(services, assembliesIncludingLibrary, typeof(IWebApiEndpointRequestPayloadMapper<,>));
 
-        RegisterRequestPlainTextMapper(services, assemblies);
-        
-        RegisterRequestUploadFilesMapper(services, assemblies);
-
-        RegisterResponseAsyncEnumerableMapper(services, assemblies);
-
-        RegisterResponseBytesMapper(services, assemblies);
-
-        RegisterResponseDataCollectionMapper(services, assemblies);
-
-        RegisterResponseEmptyJsonMapper(services, assemblies);
-
-        RegisterResponseFileStreamMapper(services, assemblies);
-
-        RegisterResponseStreamMapper(services, assemblies);
+        foreach (var mapperType in metadataDefinitions.Select(metadataDefinition => metadataDefinition.MetadataTypeDefinition)
+                                                      .SelectMany(metadataTypeDefinition => metadataTypeDefinition.MapperTypes))
+        {
+            services.AddSingleton(mapperType);
+        }
     }
 
-    private static void RegisterMapper(IServiceCollection services, Assembly[] assemblies, Type apiEndpointMapperType)
+    private static void RegisterMappersOfType(IServiceCollection services, Assembly[] assemblies, Type apiEndpointMapperType)
     {
         services.Scan(scan => scan.FromAssemblies(assemblies)
                                   .AddClasses(classes => classes.Where(type => type.IsClosedTypeOf(apiEndpointMapperType)))
                                   .AsSelfWithInterfaces()
                                   .WithSingletonLifetime());
-    }
-
-    private static void RegisterApiEndpoints(IServiceCollection services, Assembly[] assemblies, Type apiEndpointType)
-    {
-        services.Scan(scan => scan.FromAssemblies(assemblies)
-                                  .AddClasses(classes => classes.Where(type => type.IsClosedTypeOf(apiEndpointType)))
-                                  .AsImplementedInterfaces()
-                                  .WithScopedLifetime());
-    }
-
-    private static void RegisterRequestPlainTextMapper(IServiceCollection services, IEnumerable<Assembly> assemblies)
-    {
-        var metadataTypeDefinitions = assemblies.SelectMany(assembly => assembly.GetTypes())
-                                                .SelectMany(GetApiEndpointMetadataTypeDefinitions)
-                                                .Where(metadataTypeDefinition => metadataTypeDefinition.RequestDtoType == typeof(RequestPlainTextDto));
-
-        foreach (var mapperType in metadataTypeDefinitions.SelectMany(x => x.MapperTypes))
-        {
-            services.AddSingleton(mapperType);
-        }
-    }
-
-    private static void RegisterRequestUploadFilesMapper(IServiceCollection services, IEnumerable<Assembly> assemblies)
-    {
-        var metadataTypeDefinitions = assemblies.SelectMany(assembly => assembly.GetTypes())
-                                                .SelectMany(GetApiEndpointMetadataTypeDefinitions)
-                                                .Where(metadataTypeDefinition => metadataTypeDefinition.RequestDtoType == typeof(RequestUploadFilesDto));
-
-        foreach (var mapperType in metadataTypeDefinitions.SelectMany(x => x.MapperTypes))
-        {
-            services.AddSingleton(mapperType);
-        }
-    }
-
-    private static void RegisterResponseAsyncEnumerableMapper(IServiceCollection services, IEnumerable<Assembly> assemblies)
-    {
-        var metadataTypeDefinitions = assemblies.SelectMany(assembly => assembly.GetTypes())
-                                                .SelectMany(GetApiEndpointMetadataTypeDefinitions)
-                                                .Where(metadataTypeDefinition => metadataTypeDefinition.ResponseDtoType.IsGenericType &&
-                                                                                 metadataTypeDefinition.ResponseDtoType.GetGenericTypeDefinition() == typeof(ResponseAsyncEnumerableDto<>));
-
-        foreach (var mapperType in metadataTypeDefinitions.SelectMany(x => x.MapperTypes))
-        {
-            services.AddSingleton(mapperType);
-        }
-    }
-
-    private static void RegisterResponseBytesMapper(IServiceCollection services, IEnumerable<Assembly> assemblies)
-    {
-        var metadataTypeDefinitions = assemblies.SelectMany(assembly => assembly.GetTypes())
-                                                .SelectMany(GetApiEndpointMetadataTypeDefinitions)
-                                                .Where(metadataTypeDefinition => metadataTypeDefinition.ResponseDtoType == typeof(ResponseBytesDto));
-
-        foreach (var mapperType in metadataTypeDefinitions.SelectMany(x => x.MapperTypes))
-        {
-            services.AddSingleton(mapperType);
-        }
-    }
-
-    private static void RegisterResponseDataCollectionMapper(IServiceCollection services, IEnumerable<Assembly> assemblies)
-    {
-        var metadataTypeDefinitions = assemblies.SelectMany(assembly => assembly.GetTypes())
-                                                .SelectMany(GetApiEndpointMetadataTypeDefinitions)
-                                                .Where(metadataTypeDefinition => metadataTypeDefinition.ResponseDtoType.IsGenericType &&
-                                                                                 metadataTypeDefinition.ResponseDtoType.GetGenericTypeDefinition() == typeof(ResponseDataCollectionDto<>));
-
-        foreach (var mapperType in metadataTypeDefinitions.SelectMany(x => x.MapperTypes))
-        {
-            services.AddSingleton(mapperType);
-        }
-    }
-
-    private static void RegisterResponseEmptyJsonMapper(IServiceCollection services, IEnumerable<Assembly> assemblies)
-    {
-        var metadataTypeDefinitions = assemblies.SelectMany(assembly => assembly.GetTypes())
-                                                .SelectMany(GetApiEndpointMetadataTypeDefinitions)
-                                                .Where(metadataTypeDefinition => metadataTypeDefinition.ResponseDtoType == typeof(ResponseEmptyJsonDto));
-
-        foreach (var mapperType in metadataTypeDefinitions.SelectMany(x => x.MapperTypes))
-        {
-            services.AddSingleton(mapperType);
-        }
-    }
-
-    private static void RegisterResponseFileStreamMapper(IServiceCollection services, IEnumerable<Assembly> assemblies)
-    {
-        var metadataTypeDefinitions = assemblies.SelectMany(assembly => assembly.GetTypes())
-                                                .SelectMany(GetApiEndpointMetadataTypeDefinitions)
-                                                .Where(metadataTypeDefinition => metadataTypeDefinition.ResponseDtoType == typeof(ResponseFileStreamDto));
-
-        foreach (var mapperType in metadataTypeDefinitions.SelectMany(x => x.MapperTypes))
-        {
-            services.AddSingleton(mapperType);
-        }
-    }
-
-    private static void RegisterResponseStreamMapper(IServiceCollection services, IEnumerable<Assembly> assemblies)
-    {
-        var metadataTypeDefinitions = assemblies.SelectMany(assembly => assembly.GetTypes())
-                                                .SelectMany(GetApiEndpointMetadataTypeDefinitions)
-                                                .Where(metadataTypeDefinition => metadataTypeDefinition.ResponseDtoType == typeof(ResponseStreamDto));
-
-        foreach (var mapperType in metadataTypeDefinitions.SelectMany(x => x.MapperTypes))
-        {
-            services.AddSingleton(mapperType);
-        }
-    }
-
-    private static IEnumerable<MetadataTypeDefinition> GetApiEndpointMetadataTypeDefinitions(Type type)
-    {
-        if (type.IsClosedTypeOf(typeof(IQueryWebApiEndpoint<,,>)))
-        {
-            var apiEndpointInterfaceType = type.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IQueryWebApiEndpoint<,,>));
-
-            yield return WebApiEndpointMetadataTypeService.GetForQueryWithoutRequest(apiEndpointInterfaceType, type);
-        }
-
-        if (type.IsClosedTypeOf(typeof(IQueryWebApiEndpoint<,,,,>)))
-        {
-            var apiEndpointInterfaceType = type.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IQueryWebApiEndpoint<,,,,>));
-
-            yield return WebApiEndpointMetadataTypeService.GetForQueryWithoutRequestDto(apiEndpointInterfaceType, type);
-        }
-
-        if (type.IsClosedTypeOf(typeof(IQueryWebApiEndpoint<,,,,,>)))
-        {
-            var apiEndpointInterfaceType = type.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IQueryWebApiEndpoint<,,,,,>));
-
-            yield return WebApiEndpointMetadataTypeService.GetForQueryWithRequestDto(apiEndpointInterfaceType, type);
-        }
-
-        if (type.IsClosedTypeOf(typeof(ICommandWebApiEndpoint<,,,,,>)))
-        {
-            var apiEndpointInterfaceType = type.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(ICommandWebApiEndpoint<,,,,,>));
-
-            yield return WebApiEndpointMetadataTypeService.GetForCommandWithRequestWithResponse(apiEndpointInterfaceType, type);
-        }
-
-        if (type.IsClosedTypeOf(typeof(ICommandWebApiEndpoint<,,,,>)))
-        {
-            var apiEndpointInterfaceType = type.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(ICommandWebApiEndpoint<,,,,>));
-
-            yield return WebApiEndpointMetadataTypeService.GetForCommandWithoutRequestWithResponse(apiEndpointInterfaceType, type);
-        }
-
-        if (type.IsClosedTypeOf(typeof(ICommandWebApiEndpoint<,,>)))
-        {
-            var apiEndpointInterfaceType = type.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(ICommandWebApiEndpoint<,,>));
-
-            yield return WebApiEndpointMetadataTypeService.GetForCommandWithoutResponse(apiEndpointInterfaceType, type);
-        }
-
-        if (type.IsClosedTypeOf(typeof(ICommandWebApiEndpoint<,>)))
-        {
-            var apiEndpointInterfaceType = type.GetInterfaces().Single(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(ICommandWebApiEndpoint<,>));
-
-            yield return WebApiEndpointMetadataTypeService.GetForCommandWithoutRequestWithoutResponse(apiEndpointInterfaceType, type);
-        }
     }
 }

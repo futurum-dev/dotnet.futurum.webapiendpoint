@@ -1,7 +1,5 @@
 using FluentAssertions;
 
-using Futurum.Test.Result;
-
 using Xunit;
 
 namespace Futurum.WebApiEndpoint.Tests;
@@ -19,7 +17,7 @@ public class ResponseDataCollectionMapperTests
         result.Should().BeEquivalentTo(new ResponseDataCollectionDto<int>(numbers.Select(x => x * 2).ToList()));
     }
 
-    private class DataMapper : IWebApiEndpointDataMapper<int, int>
+    private class DataMapper : IWebApiEndpointResponseDataMapper<int, int>
     {
         public int Map(int data) =>
             data * 2;

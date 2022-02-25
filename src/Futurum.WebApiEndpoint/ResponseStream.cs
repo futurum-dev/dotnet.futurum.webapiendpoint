@@ -1,6 +1,5 @@
 using System.Net.Mime;
 
-using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Internal;
 
 namespace Futurum.WebApiEndpoint;

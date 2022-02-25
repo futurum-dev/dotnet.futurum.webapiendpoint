@@ -32,12 +32,12 @@ public static class ResponseAsyncEnumerableExtensions
 /// </summary>
 public record ResponseAsyncEnumerableDto<T>(IAsyncEnumerable<T> AsyncEnumerable);
 
-internal class ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TDataMapper> : IWebApiEndpointResponseMapper<ResponseAsyncEnumerable<TApiEndpoint, TData>, ResponseAsyncEnumerableDto<TDataDto>>
-    where TDataMapper : IWebApiEndpointDataMapper<TData, TDataDto>
+internal class ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TResponseDataMapper> : IWebApiEndpointResponseMapper<ResponseAsyncEnumerable<TApiEndpoint, TData>, ResponseAsyncEnumerableDto<TDataDto>>
+    where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
 {
-    private readonly TDataMapper _dataMapper;
+    private readonly TResponseDataMapper _dataMapper;
 
-    public ResponseAsyncEnumerableMapper(TDataMapper dataMapper)
+    public ResponseAsyncEnumerableMapper(TResponseDataMapper dataMapper)
     {
         _dataMapper = dataMapper;
     }

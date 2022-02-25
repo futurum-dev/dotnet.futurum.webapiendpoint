@@ -7,7 +7,6 @@ using FluentAssertions;
 
 using Futurum.WebApiEndpoint.Sample.Features;
 
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 using Xunit;

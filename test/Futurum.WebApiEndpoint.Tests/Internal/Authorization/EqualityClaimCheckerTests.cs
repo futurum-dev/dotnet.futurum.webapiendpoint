@@ -3,7 +3,6 @@ using System.Security.Claims;
 using FluentAssertions;
 
 using Futurum.WebApiEndpoint.Internal.Authorization;
-using Futurum.WebApiEndpoint.Metadata;
 
 using Microsoft.AspNetCore.Authorization;
 

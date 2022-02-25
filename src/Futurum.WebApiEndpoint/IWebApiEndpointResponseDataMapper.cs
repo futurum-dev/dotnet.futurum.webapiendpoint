@@ -1,9 +1,9 @@
 namespace Futurum.WebApiEndpoint;
 
 /// <summary>
-/// <see cref="WebApiEndpoint"/> data mapper
+/// <see cref="WebApiEndpoint"/> response data mapper
 /// </summary>
-public interface IWebApiEndpointDataMapper<TData, TDataDto>
+public interface IWebApiEndpointResponseDataMapper<TData, TDataDto>
 {
     /// <summary>
     /// Map from data domain to data dto

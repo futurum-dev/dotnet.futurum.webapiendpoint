@@ -17,8 +17,8 @@ public class ResponseBytesTests
 
         var generic = nonGeneric.ToApiEndpoint<object>();
 
-        nonGeneric.Bytes.Should().BeSameAs(generic.Bytes);
-        nonGeneric.FileName.Should().Be(generic.FileName);
-        nonGeneric.ContentType.Should().Be(generic.ContentType);
+        generic.Bytes.Should().BeSameAs(nonGeneric.Bytes);
+        generic.FileName.Should().Be(nonGeneric.FileName);
+        generic.ContentType.Should().Be(nonGeneric.ContentType);
     }
 }

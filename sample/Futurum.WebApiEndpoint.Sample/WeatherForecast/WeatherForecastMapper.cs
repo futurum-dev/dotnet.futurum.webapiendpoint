@@ -2,7 +2,7 @@ using Futurum.Core.Result;
 
 namespace Futurum.WebApiEndpoint.Sample.WeatherForecast;
 
-public class WeatherForecastDataMapper : IWebApiEndpointDataMapper<WeatherForecast, WeatherForecastDto>
+public class WeatherForecastDataMapper : IWebApiEndpointResponseDataMapper<WeatherForecast, WeatherForecastDto>
 {
     public WeatherForecastDto Map(WeatherForecast data) => 
         new(data.Date, data.TemperatureC, data.TemperatureF, data.Summary);

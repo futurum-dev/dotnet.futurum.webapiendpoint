@@ -1,7 +1,5 @@
 using FluentAssertions;
 
-using Futurum.Test.Result;
-
 using Xunit;
 
 namespace Futurum.WebApiEndpoint.Tests;
