@@ -32,11 +32,12 @@ public class QueryMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefiniti
 
     /// <summary>
     /// Configure <paramref name="route"/> with <paramref name="parameterDefinitions"/>
+    /// <para>You only need to specify the parameters that DO NOT use <see cref="MapFromAttribute"/></para>
     /// </summary>
-    public MetadataRouteDefinitionBuilder Route(string route, params (string name, Type type)[] parameterDefinitions)
+    public MetadataRouteDefinitionBuilder Route(string route, params (string name, MetadataRouteParameterDefinitionType parameterDefinitionType, Type type)[] parameterDefinitions)
     {
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, route, null,
-                                                                  parameterDefinitions.Select(x => new MetadataRouteParameterDefinition(x.name, x.type)).ToList(),
+                                                                  parameterDefinitions.Select(x => new MetadataRouteParameterDefinition(x.name, x.parameterDefinitionType, x.type)).ToList(),
                                                                   null, 200, 404, Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
         
         var metadataRouteDefinitionBuilder = new MetadataRouteDefinitionBuilder(_apiEndpointType, metadataRouteDefinition);

@@ -1,3 +1,5 @@
+using System.Reflection;
+
 using Futurum.Core.Functional;
 using Futurum.WebApiEndpoint.Internal;
 using Futurum.WebApiEndpoint.Internal.Dispatcher;
@@ -115,4 +117,10 @@ internal static class WebApiEndpointMetadataTypeService
         return new MetadataTypeDefinition(typeof(EmptyRequestDto), typeof(EmptyResponseDto), apiEndpointType, apiEndpointInterfaceType, middlewareExecutorType, apiEndpointExecutorServiceType,
                                           new[] { mapperType });
     }
+
+    public static List<(PropertyInfo propertyInfo, MapFromAttribute mapFromAttribute)> GetMapFromProperties(Type requestDto) =>
+        requestDto.GetProperties()
+                  .Where(propertyInfo => propertyInfo.GetCustomAttribute<MapFromAttribute>() != null)
+                  .Select(propertyInfo => (propertyInfo, mapFromAttribute: propertyInfo.GetCustomAttribute<MapFromAttribute>()!))
+                  .ToList();
 }
