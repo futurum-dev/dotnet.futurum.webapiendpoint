@@ -6,6 +6,7 @@ namespace Futurum.WebApiEndpoint.Sample.Blog;
 public interface IBlogStorageBroker
 {
     Task<Result<IEnumerable<Blog>>> GetAsync();
+    Result<IAsyncEnumerable<Blog>> GetAsAsyncEnumerable();
     Task<Result<Blog>> GetByIdAsync(Id id);
 
     Task<Result<Blog>> AddAsync(Blog blog);
@@ -22,6 +23,9 @@ public class BlogStorageBroker : IBlogStorageBroker
 
     public async Task<Result<IEnumerable<Blog>>> GetAsync() =>
         _items.AsReadOnly().AsEnumerable().ToResultOk();
+
+    public Result<IAsyncEnumerable<Blog>> GetAsAsyncEnumerable() =>
+        _items.AsReadOnly().ToAsyncEnumerable().ToResultOk();
 
     public async Task<Result<Blog>> GetByIdAsync(Id id) =>
         _items.TrySingle(x => x.Id == id)

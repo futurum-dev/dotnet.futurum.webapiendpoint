@@ -13,20 +13,8 @@ public static class BlogGetAsyncEnumerable
             _storageBroker = storageBroker;
         }
 
-        protected override Task<Result<ResponseAsyncEnumerable<Blog>>> ExecuteAsync(CancellationToken cancellationToken)
-        {
-            return _storageBroker.GetAsync()
-                                 .MapAsync(xs => new ResponseAsyncEnumerable<Blog>(AsyncEnumerable(xs)));
-
-            async IAsyncEnumerable<Blog> AsyncEnumerable(IEnumerable<Blog> dtos)
-            {
-                await Task.Yield();
-
-                foreach (var dto in dtos)
-                {
-                    yield return dto;
-                }
-            }
-        }
+        protected override async Task<Result<ResponseAsyncEnumerable<Blog>>> ExecuteAsync(CancellationToken cancellationToken) =>
+            _storageBroker.GetAsAsyncEnumerable()
+                          .ToResponseAsyncEnumerable();
     }
 }
