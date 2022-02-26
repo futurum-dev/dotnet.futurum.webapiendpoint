@@ -39,10 +39,9 @@ internal class QueryWebApiEndpointDispatcher<TQueryDto, TResponseDto, TQuery, TR
                                      .ThenAsync(commandDto => _requestMapper.Map(httpContext, commandDto))
                                      .DoAsync(command => _logger.RequestReceived<TQuery, TResponse>(command))
                                      .ThenAsync(query => middlewareExecutorTyped.ExecuteAsync(httpContext, query, (q, ct) => apiEndpointTyped.ExecuteQueryAsync(q, ct), cancellationToken))
-                                     .MapAsync(response => _responseMapper.Map(response))
+                                     .MapAsync(response => _responseMapper.Map(httpContext, response))
                                      .DoWhenFailureAsync(error => _logger.Error(httpContext.Request.Path, error))
-                                     .SwitchAsync(
-                                         responseDto => _httpContextDispatcher.HandleSuccessResponseAsync(httpContext, responseDto, metadataDefinition.MetadataRouteDefinition, cancellationToken),
-                                         error => _httpContextDispatcher.HandleFailedResponseAsync(httpContext, error, metadataDefinition.MetadataRouteDefinition, cancellationToken));
+                                     .SwitchAsync(responseDto => _httpContextDispatcher.HandleSuccessResponseAsync(httpContext, responseDto, metadataDefinition.MetadataRouteDefinition, cancellationToken),
+                                                  error => _httpContextDispatcher.HandleFailedResponseAsync(httpContext, error, metadataDefinition.MetadataRouteDefinition, cancellationToken));
     }
 }

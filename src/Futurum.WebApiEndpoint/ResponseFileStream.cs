@@ -24,6 +24,6 @@ public record ResponseFileStreamDto(FileInfo FileInfo, string ContentType) : IRe
 
 internal class ResponseFileStreamMapper<TApiEndpoint> : IWebApiEndpointResponseMapper<ResponseFileStream<TApiEndpoint>, ResponseFileStreamDto>
 {
-    public ResponseFileStreamDto Map(ResponseFileStream<TApiEndpoint> domain) => 
+    public ResponseFileStreamDto Map(HttpContext httpContext, ResponseFileStream<TApiEndpoint> domain) => 
         new(domain.FileInfo, domain.ContentType);
 }

@@ -308,7 +308,7 @@ public class EndpointRouteBuilderExtensionsTests
         public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
             new Request().ToResultOk();
 
-        public ResponseDto Map(Response domain) => 
+        public ResponseDto Map(HttpContext httpContext, Response domain) => 
             new();
     }
 }

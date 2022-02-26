@@ -52,7 +52,7 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
 
             public class Mapper : IWebApiEndpointResponseMapper<Response, ResponseDto>
             {
-                public ResponseDto Map(Response domain) =>
+                public ResponseDto Map(HttpContext httpContext, Response domain) =>
                     throw new NotImplementedException();
             }
 
@@ -104,7 +104,7 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
                 public Result<Request> Map(HttpContext httpContext) =>
                     throw new NotImplementedException();
 
-                public ResponseDto Map(Response domain) =>
+                public ResponseDto Map(HttpContext httpContext, Response domain) =>
                     throw new NotImplementedException();
             }
 
@@ -158,7 +158,7 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
                 public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
                     throw new NotImplementedException();
 
-                public ResponseDto Map(Response domain) =>
+                public ResponseDto Map(HttpContext httpContext, Response domain) =>
                     throw new NotImplementedException();
             }
 
@@ -215,7 +215,7 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
                 public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
                     throw new NotImplementedException();
 
-                public ResponseDto Map(Response domain) =>
+                public ResponseDto Map(HttpContext httpContext, Response domain) =>
                     throw new NotImplementedException();
             }
 
@@ -267,7 +267,7 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
                 public Result<Request> Map(HttpContext httpContext) =>
                     throw new NotImplementedException();
 
-                public ResponseDto Map(Response domain) =>
+                public ResponseDto Map(HttpContext httpContext, Response domain) =>
                     throw new NotImplementedException();
             }
 

@@ -1,5 +1,7 @@
 using FluentAssertions;
 
+using Microsoft.AspNetCore.Http;
+
 using Xunit;
 
 namespace Futurum.WebApiEndpoint.Tests;
@@ -14,7 +16,8 @@ public class ResponseAsyncEnumerableMapperTests
 
         var domain = new ResponseAsyncEnumerable<object, int>(AsyncEnumerable(numbers));
 
-        var result = new ResponseAsyncEnumerableMapper<object, int, int, DataMapper>(new DataMapper()).Map(domain);
+        var result = new ResponseAsyncEnumerableMapper<object, int, int, DataMapper>(new DataMapper())
+            .Map(new DefaultHttpContext(), domain);
 
         var receivedNumbers = await result.AsyncEnumerable.ToListAsync();
         receivedNumbers.Should().BeEquivalentTo(numbers);

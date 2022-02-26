@@ -20,6 +20,6 @@ public record ResponseEmptyJsonDto;
 
 internal class ResponseEmptyJsonMapper<TApiEndpoint> : IWebApiEndpointResponseMapper<ResponseEmptyJson<TApiEndpoint>, ResponseEmptyJsonDto>
 {
-    public ResponseEmptyJsonDto Map(ResponseEmptyJson<TApiEndpoint> domain) => 
+    public ResponseEmptyJsonDto Map(HttpContext httpContext, ResponseEmptyJson<TApiEndpoint> domain) => 
         new();
 }

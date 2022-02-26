@@ -57,7 +57,7 @@ public class EndpointRouteOpenApiBuilderTests
                 public Result<Request> Map(HttpContext httpContext, RequestPlainTextDto dto) =>
                     throw new NotImplementedException();
 
-                public ResponseDto Map(Response domain) =>
+                public ResponseDto Map(HttpContext httpContext, Response domain) =>
                     throw new NotImplementedException();
             }
         }
@@ -88,7 +88,7 @@ public class EndpointRouteOpenApiBuilderTests
                 public Result<Request> Map(HttpContext httpContext, RequestUploadFilesDto dto) =>
                     throw new NotImplementedException();
 
-                public ResponseDto Map(Response domain) =>
+                public ResponseDto Map(HttpContext httpContext, Response domain) =>
                     throw new NotImplementedException();
             }
         }
@@ -119,7 +119,7 @@ public class EndpointRouteOpenApiBuilderTests
                 public Result<Request> Map(HttpContext httpContext, RequestUploadFileDto dto) =>
                     throw new NotImplementedException();
 
-                public ResponseDto Map(Response domain) =>
+                public ResponseDto Map(HttpContext httpContext, Response domain) =>
                     throw new NotImplementedException();
             }
         }
@@ -150,7 +150,7 @@ public class EndpointRouteOpenApiBuilderTests
                 public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
                     throw new NotImplementedException();
 
-                public ResponseDto Map(Response domain) =>
+                public ResponseDto Map(HttpContext httpContext, Response domain) =>
                     throw new NotImplementedException();
             }
         }
@@ -188,7 +188,7 @@ public class EndpointRouteOpenApiBuilderTests
                 public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
                     throw new NotImplementedException();
 
-                public ResponseDto Map(Response domain) =>
+                public ResponseDto Map(HttpContext httpContext, Response domain) =>
                     throw new NotImplementedException();
             }
         }
@@ -224,7 +224,7 @@ public class EndpointRouteOpenApiBuilderTests
                 public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
                     throw new NotImplementedException();
 
-                public ResponseDto Map(Response domain) =>
+                public ResponseDto Map(HttpContext httpContext, Response domain) =>
                     throw new NotImplementedException();
             }
         }
@@ -309,7 +309,7 @@ public class EndpointRouteOpenApiBuilderTests
             public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
                 throw new NotImplementedException();
 
-            public TestRequestStreamDto Map(Response domain) =>
+            public TestRequestStreamDto Map(HttpContext httpContext, Response domain) =>
                 throw new NotImplementedException();
         }
 
@@ -347,7 +347,7 @@ public class EndpointRouteOpenApiBuilderTests
             public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
                 throw new NotImplementedException();
 
-            public ResponseAsyncEnumerableDto<int> Map(Response domain) =>
+            public ResponseAsyncEnumerableDto<int> Map(HttpContext httpContext, Response domain) =>
                 throw new NotImplementedException();
         }
 
@@ -384,7 +384,7 @@ public class EndpointRouteOpenApiBuilderTests
             public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
                 throw new NotImplementedException();
 
-            public ResponseDto Map(Response domain) =>
+            public ResponseDto Map(HttpContext httpContext, Response domain) =>
                 throw new NotImplementedException();
         }
 
@@ -502,7 +502,7 @@ public class EndpointRouteOpenApiBuilderTests
         public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
             new Request().ToResultOk();
 
-        public ResponseDto Map(Response domain) => 
+        public ResponseDto Map(HttpContext httpContext, Response domain) => 
             new();
     }
 }

@@ -27,7 +27,7 @@ public static class WeatherForecastGetById
         public Result<Query> Map(HttpContext httpContext, QueryDto dto) =>
             new Query(dto.Id).ToResultOk();
 
-        public WeatherForecastDto Map(WeatherForecast domain) =>
+        public WeatherForecastDto Map(HttpContext httpContext, WeatherForecast domain) =>
             WeatherForecastMapper.MapToDto(domain);
     }
 }
