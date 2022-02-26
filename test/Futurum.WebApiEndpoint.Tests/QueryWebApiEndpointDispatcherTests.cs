@@ -144,7 +144,7 @@ public class QueryWebApiEndpointDispatcherTests
             public Result<Query> Map(HttpContext httpContext) =>
                 new Query().ToResultOk();
 
-            public ResponseDto Map(Response domain) => 
+            public ResponseDto Map(HttpContext httpContext, Response domain) => 
                 new();
         }
     }
@@ -243,7 +243,7 @@ public class QueryWebApiEndpointDispatcherTests
             public Result<Query> Map(HttpContext httpContext, QueryDto dto) =>
                 new Query().ToResultOk();
 
-            public ResponseDto Map(Response domain) => 
+            public ResponseDto Map(HttpContext httpContext, Response domain) => 
                 new();
         }
     }
@@ -338,7 +338,7 @@ public class QueryWebApiEndpointDispatcherTests
 
         public class Mapper : IWebApiEndpointResponseMapper<Response, ResponseDto>
         {
-            public ResponseDto Map(Response domain) => 
+            public ResponseDto Map(HttpContext httpContext, Response domain) => 
                 new();
         }
     }

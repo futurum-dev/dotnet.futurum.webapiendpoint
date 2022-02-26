@@ -54,7 +54,7 @@ public class DisabledWebApiEndpointMiddlewareExecutorTests
         public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
             throw new NotImplementedException();
 
-        public ResponseDto Map(Response domain) =>
+        public ResponseDto Map(HttpContext httpContext, Response domain) =>
             throw new NotImplementedException();
     }
 

@@ -24,6 +24,6 @@ public record ResponseStreamDto(Stream Stream, string ContentType, string? FileN
 
 internal class ResponseStreamMapper<TApiEndpoint> : IWebApiEndpointResponseMapper<ResponseStream<TApiEndpoint>, ResponseStreamDto>
 {
-    public ResponseStreamDto Map(ResponseStream<TApiEndpoint> domain) => 
+    public ResponseStreamDto Map(HttpContext httpContext, ResponseStream<TApiEndpoint> domain) => 
         new(domain.Stream, domain.ContentType, domain.FileName, domain.FileLengthBytes);
 }

@@ -24,7 +24,7 @@ public static class CommandWithRequestUploadFileWithPayloadSupportedTypesScenari
         public Result<CustomPayload> Map(CustomPayloadDto dto) =>
             new CustomPayload(dto.String, dto.Int, dto.Long, dto.DateTime, dto.Boolean, dto.Guid).ToResultOk();
 
-        public ResponseDto Map(Response domain) => 
+        public ResponseDto Map(HttpContext httpContext, Response domain) => 
             new(domain.FileName, domain.String, domain.Int, domain.Long, domain.DateTime, domain.Boolean, domain.Guid);
     }
 }

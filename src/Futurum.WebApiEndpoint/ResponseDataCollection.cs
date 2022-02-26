@@ -62,6 +62,6 @@ internal class ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TResp
         _dataMapper = dataMapper;
     }
 
-    public ResponseDataCollectionDto<TDataDto> Map(ResponseDataCollection<TApiEndpoint, TData> domain) => 
+    public ResponseDataCollectionDto<TDataDto> Map(HttpContext httpContext, ResponseDataCollection<TApiEndpoint, TData> domain) => 
         new(domain.Data.Select(_dataMapper.Map).AsList());
 }

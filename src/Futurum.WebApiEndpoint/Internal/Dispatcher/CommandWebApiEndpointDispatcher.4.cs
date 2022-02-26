@@ -39,10 +39,9 @@ internal class CommandWebApiEndpointDispatcher<TCommandDto, TResponseDto, TComma
                                      .ThenAsync(commandDto => _requestMapper.Map(httpContext, commandDto))
                                      .DoAsync(command => _logger.RequestReceived<TCommand, TResponse>(command))
                                      .ThenAsync(command => middlewareExecutorTyped.ExecuteAsync(httpContext, command, (c, ct) => apiEndpointTyped.ExecuteCommandAsync(c, ct), cancellationToken))
-                                     .MapAsync(response => _responseMapper.Map(response))
+                                     .MapAsync(response => _responseMapper.Map(httpContext, response))
                                      .DoWhenFailureAsync(error => _logger.Error(httpContext.Request.Path, error))
-                                     .SwitchAsync(
-                                         responseDto => _httpContextDispatcher.HandleSuccessResponseAsync(httpContext, responseDto, metadataDefinition.MetadataRouteDefinition, cancellationToken),
-                                         error => _httpContextDispatcher.HandleFailedResponseAsync(httpContext, error, metadataDefinition.MetadataRouteDefinition, cancellationToken));
+                                     .SwitchAsync(responseDto => _httpContextDispatcher.HandleSuccessResponseAsync(httpContext, responseDto, metadataDefinition.MetadataRouteDefinition, cancellationToken),
+                                                  error => _httpContextDispatcher.HandleFailedResponseAsync(httpContext, error, metadataDefinition.MetadataRouteDefinition, cancellationToken));
     }
 }

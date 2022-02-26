@@ -1,5 +1,7 @@
 using FluentAssertions;
 
+using Microsoft.AspNetCore.Http;
+
 using Xunit;
 
 namespace Futurum.WebApiEndpoint.Tests;
@@ -14,7 +16,8 @@ public class ResponseStreamMapperTests
         var fileLengthBytes = 10;
         var contentType = Guid.NewGuid().ToString();
 
-        var result = new ResponseStreamMapper<object>().Map(new ResponseStream<object>(stream, fileName, fileLengthBytes, contentType));
+        var result = new ResponseStreamMapper<object>()
+            .Map(new DefaultHttpContext(), new ResponseStream<object>(stream, fileName, fileLengthBytes, contentType));
 
         result.Should().BeEquivalentTo(new ResponseStreamDto(stream, contentType, fileName, fileLengthBytes));
     }

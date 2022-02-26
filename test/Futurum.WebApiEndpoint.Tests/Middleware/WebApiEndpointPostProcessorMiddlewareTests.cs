@@ -69,7 +69,7 @@ public class WebApiEndpointPostProcessorMiddlewareTests
         public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
             new Command().ToResultOk();
 
-        public ResponseDto Map(Response domain) => 
+        public ResponseDto Map(HttpContext httpContext, Response domain) => 
             new();
     }
 

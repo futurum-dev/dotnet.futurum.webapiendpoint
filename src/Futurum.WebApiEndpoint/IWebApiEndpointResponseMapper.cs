@@ -8,5 +8,5 @@ public interface IWebApiEndpointResponseMapper<TResponse, TResponseDto>
     /// <summary>
     /// Map from response domain to response dto
     /// </summary>
-    TResponseDto Map(TResponse domain);
+    TResponseDto Map(HttpContext httpContext, TResponse domain);
 }

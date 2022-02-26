@@ -42,7 +42,7 @@ internal class ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TRes
         _dataMapper = dataMapper;
     }
 
-    public ResponseAsyncEnumerableDto<TDataDto> Map(ResponseAsyncEnumerable<TApiEndpoint, TData> domain) => 
+    public ResponseAsyncEnumerableDto<TDataDto> Map(HttpContext httpContext, ResponseAsyncEnumerable<TApiEndpoint, TData> domain) => 
         new(Map(domain.Data));
 
     private async IAsyncEnumerable<TDataDto> Map(IAsyncEnumerable<TData> domain)

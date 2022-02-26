@@ -28,7 +28,7 @@ public static class TestWebApiEndpoint
         public Result<Query> Map(HttpContext httpContext, RequestDto dto) =>
             new Query(dto.Id, dto.FirstName, dto.LastName, dto.Age, dto.PhoneNumbers).ToResultOk();
 
-        public ResponseDto Map(Response domain) => 
+        public ResponseDto Map(HttpContext httpContext, Response domain) => 
             new(domain.Id, domain.Name, domain.Age, domain.PhoneNumber);
     }
 

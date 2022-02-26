@@ -9,6 +9,6 @@ public class FeatureMapper : IWebApiEndpointResponseMapper<Feature, FeatureDto>
         _dataMapper = dataMapper;
     }
     
-    public FeatureDto Map(Feature domain) =>
+    public FeatureDto Map(HttpContext httpContext, Feature domain) =>
         _dataMapper.Map(domain);
 }

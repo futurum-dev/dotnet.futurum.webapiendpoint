@@ -183,7 +183,7 @@ public class EndpointRouteSecurityBuilderTests
         public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
             throw new NotImplementedException();
 
-        public ResponseDto Map(Response domain) =>
+        public ResponseDto Map(HttpContext httpContext, Response domain) =>
             throw new NotImplementedException();
     }
 }

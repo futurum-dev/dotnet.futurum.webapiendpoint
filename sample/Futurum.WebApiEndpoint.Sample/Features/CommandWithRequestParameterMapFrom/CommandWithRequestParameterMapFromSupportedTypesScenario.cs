@@ -32,7 +32,7 @@ public static class CommandWithRequestParameterMapFromSupportedTypesScenario
         public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
             new Command(dto.String, dto.Int, dto.Long, dto.DateTime, dto.Boolean, dto.Guid).ToResultOk();
 
-        public ResponseDto Map(Response domain) => 
+        public ResponseDto Map(HttpContext httpContext, Response domain) => 
             new(domain.String, domain.Int, domain.Long, domain.DateTime, domain.Boolean, domain.Guid);
     }
 }
