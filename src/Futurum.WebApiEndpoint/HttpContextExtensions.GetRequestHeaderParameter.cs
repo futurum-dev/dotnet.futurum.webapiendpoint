@@ -46,6 +46,20 @@ public static partial class HttpContextExtensions
     public static Result<DateTime> GetRequestHeaderFirstParameterAsDateTime(this HttpContext httpContext, string parameterName) =>
         GetRequestHeaderFirstParameter(httpContext, parameterName,
                                       value => value.TryParseDateTime(() => $"Unable to parse Request Header Parameter - '{parameterName}' to DateTime: '{value}'"));
+
+    /// <summary>
+    /// Get <see cref="bool"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Headers"/> for <paramref name="parameterName"/>
+    /// </summary>
+    public static Result<bool> GetRequestHeaderFirstParameterAsBool(this HttpContext httpContext, string parameterName) =>
+        GetRequestHeaderFirstParameter(httpContext, parameterName,
+                                      value => value.TryParseBool(() => $"Unable to parse Request Header Parameter - '{parameterName}' to Bool: '{value}'"));
+
+    /// <summary>
+    /// Get <see cref="Guid"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Headers"/> for <paramref name="parameterName"/>
+    /// </summary>
+    public static Result<Guid> GetRequestHeaderFirstParameterAsGuid(this HttpContext httpContext, string parameterName) =>
+        GetRequestHeaderFirstParameter(httpContext, parameterName,
+                                      value => value.TryParseGuid(() => $"Unable to parse Request Header Parameter - '{parameterName}' to Guid: '{value}'"));
     
     private static Option<StringValues> TryGetValue(this IHeaderDictionary source, string key) =>
         source.TryGetValue(key, out var value) ? Option<StringValues>.From(value) : Option<StringValues>.None;

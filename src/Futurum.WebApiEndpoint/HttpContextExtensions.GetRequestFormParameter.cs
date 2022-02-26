@@ -46,6 +46,20 @@ public static partial class HttpContextExtensions
     public static Result<DateTime> GetRequestFormFirstParameterAsDateTime(this HttpContext httpContext, string parameterName) =>
         GetRequestFormFirstParameter(httpContext, parameterName,
                                       value => value.TryParseDateTime(() => $"Unable to parse Request Form Parameter - '{parameterName}' to DateTime: '{value}'"));
+
+    /// <summary>
+    /// Get <see cref="bool"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Form"/> for <paramref name="parameterName"/>
+    /// </summary>
+    public static Result<bool> GetRequestFormFirstParameterAsBool(this HttpContext httpContext, string parameterName) =>
+        GetRequestFormFirstParameter(httpContext, parameterName,
+                                      value => value.TryParseBool(() => $"Unable to parse Request Form Parameter - '{parameterName}' to Bool: '{value}'"));
+
+    /// <summary>
+    /// Get <see cref="Guid"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Form"/> for <paramref name="parameterName"/>
+    /// </summary>
+    public static Result<Guid> GetRequestFormFirstParameterAsGuid(this HttpContext httpContext, string parameterName) =>
+        GetRequestFormFirstParameter(httpContext, parameterName,
+                                      value => value.TryParseGuid(() => $"Unable to parse Request Form Parameter - '{parameterName}' to Guid: '{value}'"));
     
     private static Option<StringValues> TryGetValue(this IFormCollection source, string key) =>
         source.TryGetValue(key, out var value) ? Option<StringValues>.From(value) : Option<StringValues>.None;

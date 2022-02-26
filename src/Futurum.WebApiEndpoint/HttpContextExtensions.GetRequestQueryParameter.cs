@@ -46,6 +46,20 @@ public static partial class HttpContextExtensions
     public static Result<DateTime> GetRequestQueryFirstParameterAsDateTime(this HttpContext httpContext, string parameterName) =>
         GetRequestQueryFirstParameter(httpContext, parameterName,
                                       value => value.TryParseDateTime(() => $"Unable to parse Request Query Parameter - '{parameterName}' to DateTime: '{value}'"));
+
+    /// <summary>
+    /// Get <see cref="bool"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Query"/> for <paramref name="parameterName"/>
+    /// </summary>
+    public static Result<bool> GetRequestQueryFirstParameterAsBool(this HttpContext httpContext, string parameterName) =>
+        GetRequestQueryFirstParameter(httpContext, parameterName,
+                                      value => value.TryParseBool(() => $"Unable to parse Request Query Parameter - '{parameterName}' to Bool: '{value}'"));
+
+    /// <summary>
+    /// Get <see cref="Guid"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Query"/> for <paramref name="parameterName"/>
+    /// </summary>
+    public static Result<Guid> GetRequestQueryFirstParameterAsGuid(this HttpContext httpContext, string parameterName) =>
+        GetRequestQueryFirstParameter(httpContext, parameterName,
+                                      value => value.TryParseGuid(() => $"Unable to parse Request Query Parameter - '{parameterName}' to Guid: '{value}'"));
     
     private static Option<StringValues> TryGetValue(this IQueryCollection source, string key) =>
         source.TryGetValue(key, out var value) ? Option<StringValues>.From(value) : Option<StringValues>.None;

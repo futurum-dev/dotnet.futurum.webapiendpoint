@@ -37,6 +37,20 @@ public static partial class HttpContextExtensions
         GetRequestPathParameter(httpContext, parameterName,
                                 value => value.TryParseDateTime(() => $"Unable to parse Request Path Parameter - '{parameterName}' to DateTime: '{value}'"));
 
+    /// <summary>
+    /// Get <see cref="bool"/> from <see cref="HttpContext"/> <see cref="HttpRequest.RouteValues"/> for <paramref name="parameterName"/>
+    /// </summary>
+    public static Result<bool> GetRequestPathParameterAsBool(this HttpContext httpContext, string parameterName) =>
+        GetRequestPathParameter(httpContext, parameterName,
+                                value => value.TryParseBool(() => $"Unable to parse Request Path Parameter - '{parameterName}' to Bool: '{value}'"));
+
+    /// <summary>
+    /// Get <see cref="Guid"/> from <see cref="HttpContext"/> <see cref="HttpRequest.RouteValues"/> for <paramref name="parameterName"/>
+    /// </summary>
+    public static Result<Guid> GetRequestPathParameterAsGuid(this HttpContext httpContext, string parameterName) =>
+        GetRequestPathParameter(httpContext, parameterName,
+                                value => value.TryParseGuid(() => $"Unable to parse Request Path Parameter - '{parameterName}' to Guid: '{value}'"));
+
     public static Result<TR> GetRequestPathParameter<TR>(this HttpContext httpContext, string parameterName, Func<string?, Result<TR>> nextResult) =>
         GetRequestPathParameterAsString(httpContext, parameterName)
             .Then(nextResult);

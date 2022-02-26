@@ -13,7 +13,7 @@ using Microsoft.Extensions.Primitives;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Futurum.WebApiEndpoint.Tests;
+namespace Futurum.WebApiEndpoint.Tests.Internal;
 
 public class MapFromRequestMapperTests
 {
@@ -21,6 +21,8 @@ public class MapFromRequestMapperTests
     private const string StringValue = "Id";
     private const int IntValue = 0;
     private const long LongValue = 0L;
+    private const bool BoolValue = true;
+    private static Guid GuidValue = Guid.NewGuid();
 
     private readonly ITestOutputHelper _output;
 
@@ -49,6 +51,16 @@ public class MapFromRequestMapperTests
         public record RequestPathDateTime
         {
             [MapFromPath(Key)] public System.DateTime Id { get; set; }
+        }
+
+        public record RequestPathBool
+        {
+            [MapFromPath(Key)] public bool Id { get; set; }
+        }
+
+        public record RequestPathGuid
+        {
+            [MapFromPath(Key)] public System.Guid Id { get; set; }
         }
 
         public class String
@@ -129,6 +141,44 @@ public class MapFromRequestMapperTests
                 result.ShouldBeFailureWithError($"Unable to get Request Path Parameter - '{Key}'. Request Path Parameters available are ''");
             }
         }
+
+        public class Bool
+        {
+            [Fact]
+            public void success()
+            {
+                var result = TestRunnerMap<RequestPathBool>(httpContext => httpContext.Request.RouteValues.Add(Key, BoolValue));
+
+                result.ShouldBeSuccessWithValueEquivalentTo(new RequestPathBool { Id = BoolValue });
+            }
+
+            [Fact]
+            public void failure()
+            {
+                var result = TestRunnerMap<RequestPathBool>();
+
+                result.ShouldBeFailureWithError($"Unable to get Request Path Parameter - '{Key}'. Request Path Parameters available are ''");
+            }
+        }
+
+        public class Guid
+        {
+            [Fact]
+            public void success()
+            {
+                var result = TestRunnerMap<RequestPathGuid>(httpContext => httpContext.Request.RouteValues.Add(Key, GuidValue));
+
+                result.ShouldBeSuccessWithValueEquivalentTo(new RequestPathGuid { Id = GuidValue });
+            }
+
+            [Fact]
+            public void failure()
+            {
+                var result = TestRunnerMap<RequestPathGuid>();
+
+                result.ShouldBeFailureWithError($"Unable to get Request Path Parameter - '{Key}'. Request Path Parameters available are ''");
+            }
+        }
     }
 
     public class Query
@@ -151,6 +201,16 @@ public class MapFromRequestMapperTests
         public record RequestQueryDateTime
         {
             [MapFromQuery(Key)] public System.DateTime Id { get; set; }
+        }
+
+        public record RequestQueryBool
+        {
+            [MapFromQuery(Key)] public bool Id { get; set; }
+        }
+
+        public record RequestQueryGuid
+        {
+            [MapFromQuery(Key)] public System.Guid Id { get; set; }
         }
 
         public class String
@@ -235,6 +295,46 @@ public class MapFromRequestMapperTests
                 result.ShouldBeFailureWithError($"Unable to get Request Query Parameter - '{Key}'. Request Query Parameters available are ''");
             }
         }
+
+        public class Bool
+        {
+            [Fact]
+            public void success()
+            {
+                var result = TestRunnerMap<RequestQueryBool>(httpContext =>
+                                                                 httpContext.Request.Query = new QueryCollection(new Dictionary<string, StringValues> { { Key, BoolValue.ToString() } }));
+
+                result.ShouldBeSuccessWithValueEquivalentTo(new RequestQueryBool { Id = BoolValue });
+            }
+
+            [Fact]
+            public void failure()
+            {
+                var result = TestRunnerMap<RequestQueryBool>();
+
+                result.ShouldBeFailureWithError($"Unable to get Request Query Parameter - '{Key}'. Request Query Parameters available are ''");
+            }
+        }
+
+        public class Guid
+        {
+            [Fact]
+            public void success()
+            {
+                var result = TestRunnerMap<RequestQueryGuid>(httpContext =>
+                                                                 httpContext.Request.Query = new QueryCollection(new Dictionary<string, StringValues> { { Key, GuidValue.ToString() } }));
+
+                result.ShouldBeSuccessWithValueEquivalentTo(new RequestQueryGuid { Id = GuidValue });
+            }
+
+            [Fact]
+            public void failure()
+            {
+                var result = TestRunnerMap<RequestQueryGuid>();
+
+                result.ShouldBeFailureWithError($"Unable to get Request Query Parameter - '{Key}'. Request Query Parameters available are ''");
+            }
+        }
     }
 
     public class Header
@@ -257,6 +357,16 @@ public class MapFromRequestMapperTests
         public record RequestHeaderDateTime
         {
             [MapFromHeader(Key)] public System.DateTime Id { get; set; }
+        }
+
+        public record RequestHeaderBool
+        {
+            [MapFromHeader(Key)] public bool Id { get; set; }
+        }
+
+        public record RequestHeaderGuid
+        {
+            [MapFromHeader(Key)] public System.Guid Id { get; set; }
         }
 
         public class String
@@ -337,6 +447,44 @@ public class MapFromRequestMapperTests
                 result.ShouldBeFailureWithError($"Unable to get Request Header Parameter - '{Key}'. Request Header Parameters available are ''");
             }
         }
+
+        public class Bool
+        {
+            [Fact]
+            public void success()
+            {
+                var result = TestRunnerMap<RequestHeaderBool>(httpContext => httpContext.Request.Headers.Add(Key, BoolValue.ToString()));
+
+                result.ShouldBeSuccessWithValueEquivalentTo(new RequestHeaderBool { Id = BoolValue });
+            }
+
+            [Fact]
+            public void failure()
+            {
+                var result = TestRunnerMap<RequestHeaderBool>();
+
+                result.ShouldBeFailureWithError($"Unable to get Request Header Parameter - '{Key}'. Request Header Parameters available are ''");
+            }
+        }
+
+        public class Guid
+        {
+            [Fact]
+            public void success()
+            {
+                var result = TestRunnerMap<RequestHeaderGuid>(httpContext => httpContext.Request.Headers.Add(Key, GuidValue.ToString()));
+
+                result.ShouldBeSuccessWithValueEquivalentTo(new RequestHeaderGuid { Id = GuidValue });
+            }
+
+            [Fact]
+            public void failure()
+            {
+                var result = TestRunnerMap<RequestHeaderGuid>();
+
+                result.ShouldBeFailureWithError($"Unable to get Request Header Parameter - '{Key}'. Request Header Parameters available are ''");
+            }
+        }
     }
 
     public class Cookie
@@ -359,6 +507,16 @@ public class MapFromRequestMapperTests
         public record RequestCookieDateTime
         {
             [MapFromCookie(Key)] public System.DateTime Id { get; set; }
+        }
+
+        public record RequestCookieBool
+        {
+            [MapFromCookie(Key)] public bool Id { get; set; }
+        }
+
+        public record RequestCookieGuid
+        {
+            [MapFromCookie(Key)] public System.Guid Id { get; set; }
         }
 
         public class String
@@ -435,6 +593,44 @@ public class MapFromRequestMapperTests
             public void failure()
             {
                 var result = TestRunnerCookieMap<RequestCookieDateTime>(httpContext => httpContext.SetupRequestCookies(new Dictionary<string, string> { }));
+
+                result.ShouldBeFailureWithError($"Unable to get Request Cookie Parameter - '{Key}'. Request Cookie Parameters available are ''");
+            }
+        }
+
+        public class Bool
+        {
+            [Fact]
+            public void success()
+            {
+                var result = TestRunnerCookieMap<RequestCookieBool>(httpContext => httpContext.SetupRequestCookies(new Dictionary<string, string> { { Key, BoolValue.ToString() } }));
+
+                result.ShouldBeSuccessWithValueEquivalentTo(new RequestCookieBool { Id = BoolValue });
+            }
+
+            [Fact]
+            public void failure()
+            {
+                var result = TestRunnerCookieMap<RequestCookieBool>(httpContext => httpContext.SetupRequestCookies(new Dictionary<string, string> { }));
+
+                result.ShouldBeFailureWithError($"Unable to get Request Cookie Parameter - '{Key}'. Request Cookie Parameters available are ''");
+            }
+        }
+
+        public class Guid
+        {
+            [Fact]
+            public void success()
+            {
+                var result = TestRunnerCookieMap<RequestCookieGuid>(httpContext => httpContext.SetupRequestCookies(new Dictionary<string, string> { { Key, GuidValue.ToString() } }));
+
+                result.ShouldBeSuccessWithValueEquivalentTo(new RequestCookieGuid { Id = GuidValue });
+            }
+
+            [Fact]
+            public void failure()
+            {
+                var result = TestRunnerCookieMap<RequestCookieGuid>(httpContext => httpContext.SetupRequestCookies(new Dictionary<string, string> { }));
 
                 result.ShouldBeFailureWithError($"Unable to get Request Cookie Parameter - '{Key}'. Request Cookie Parameters available are ''");
             }

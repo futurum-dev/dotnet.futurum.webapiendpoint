@@ -46,6 +46,20 @@ public static partial class HttpContextExtensions
     public static Result<DateTime> GetRequestCookieFirstParameterAsDateTime(this HttpContext httpContext, string parameterName) =>
         GetRequestCookieFirstParameter(httpContext, parameterName,
                                       value => value.TryParseDateTime(() => $"Unable to parse Request Cookie Parameter - '{parameterName}' to DateTime: '{value}'"));
+
+    /// <summary>
+    /// Get <see cref="bool"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Cookies"/> for <paramref name="parameterName"/>
+    /// </summary>
+    public static Result<bool> GetRequestCookieFirstParameterAsBool(this HttpContext httpContext, string parameterName) =>
+        GetRequestCookieFirstParameter(httpContext, parameterName,
+                                      value => value.TryParseBool(() => $"Unable to parse Request Cookie Parameter - '{parameterName}' to Bool: '{value}'"));
+
+    /// <summary>
+    /// Get <see cref="Guid"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Cookies"/> for <paramref name="parameterName"/>
+    /// </summary>
+    public static Result<Guid> GetRequestCookieFirstParameterAsGuid(this HttpContext httpContext, string parameterName) =>
+        GetRequestCookieFirstParameter(httpContext, parameterName,
+                                      value => value.TryParseGuid(() => $"Unable to parse Request Cookie Parameter - '{parameterName}' to Guid: '{value}'"));
     
     private static Option<StringValues> TryGetValue(this IRequestCookieCollection source, string key) =>
         source.TryGetValue(key, out var value) ? Option<StringValues>.From(value) : Option<StringValues>.None;

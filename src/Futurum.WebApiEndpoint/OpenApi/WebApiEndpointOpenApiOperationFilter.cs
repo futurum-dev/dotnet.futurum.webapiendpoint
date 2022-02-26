@@ -60,7 +60,7 @@ internal class WebApiEndpointOpenApiOperationFilter : IOperationFilter
                 Properties = new Dictionary<string, OpenApiSchema>
                 {
                     {
-                        nameof(RequestUploadFilesDto.Files), MapDotnetTypesToOpenApiTypes(typeof(IEnumerable<IFormFile>))
+                        nameof(RequestUploadFilesDto.Files), WebApiEndpointDotnetTypeToOpenApiSchemaMapper.Execute(typeof(IEnumerable<IFormFile>))
                     }
                 }
             };
@@ -77,10 +77,10 @@ internal class WebApiEndpointOpenApiOperationFilter : IOperationFilter
             content.Value.Schema = new OpenApiSchema
             {
                 Type = "object",
-                Required = new HashSet<string>{"file"},
+                Required = new HashSet<string> { "file" },
                 Properties = new Dictionary<string, OpenApiSchema>
                 {
-                    {"file", MapDotnetTypesToOpenApiTypes(typeof(IFormFile))}
+                    { "file", WebApiEndpointDotnetTypeToOpenApiSchemaMapper.Execute(typeof(IFormFile)) }
                 }
             };
         }
@@ -100,7 +100,7 @@ internal class WebApiEndpointOpenApiOperationFilter : IOperationFilter
                 Required = new HashSet<string>(multipartParameterDefinitions.Select(x => x.Name)),
                 Properties = multipartParameterDefinitions.Select(mapFromMultipartParameterDefinition =>
                                                           {
-                                                              var openApiSchema = MapDotnetTypesToOpenApiTypes(mapFromMultipartParameterDefinition.PropertyInfo.PropertyType);
+                                                              var openApiSchema = WebApiEndpointDotnetTypeToOpenApiSchemaMapper.Execute(mapFromMultipartParameterDefinition.PropertyInfo.PropertyType);
 
                                                               return (mapFromMultipartParameterDefinition.Name, OpenApiSchema: openApiSchema);
                                                           })
@@ -150,7 +150,7 @@ internal class WebApiEndpointOpenApiOperationFilter : IOperationFilter
         return metadataRouteParameterDefinitions.Select(parameterDefinition => new OpenApiParameter
         {
             Name = parameterDefinition.Name,
-            Schema = MapDotnetTypesToOpenApiTypes(parameterDefinition.Type),
+            Schema = WebApiEndpointDotnetTypeToOpenApiSchemaMapper.Execute(parameterDefinition.Type),
             Required = true,
             In = TransformMetadataRouteParameterDefinitionTypeToOpenApiParameterLocation(parameterDefinition.ParameterDefinitionType),
         });
@@ -172,7 +172,7 @@ internal class WebApiEndpointOpenApiOperationFilter : IOperationFilter
                                                 .Select(parameterDefinition => new OpenApiParameter
                                                 {
                                                     Name = parameterDefinition.Name,
-                                                    Schema = MapDotnetTypesToOpenApiTypes(parameterDefinition.PropertyInfo.PropertyType),
+                                                    Schema = WebApiEndpointDotnetTypeToOpenApiSchemaMapper.Execute(parameterDefinition.PropertyInfo.PropertyType),
                                                     Required = true,
                                                     In = TransformMetadataRouteParameterDefinitionTypeToOpenApiParameterLocation(parameterDefinition.MapFromAttribute.MapFrom),
                                                 });
@@ -182,61 +182,5 @@ internal class WebApiEndpointOpenApiOperationFilter : IOperationFilter
     {
         openApiOperation.Summary = metadataDefinition.MetadataRouteDefinition.OpenApiOperation?.Summary;
         openApiOperation.Description = metadataDefinition.MetadataRouteDefinition.OpenApiOperation?.Description;
-    }
-
-    private static OpenApiSchema MapDotnetTypesToOpenApiTypes(Type type)
-    {
-        if (type == typeof(string))
-        {
-            return new OpenApiSchema { Type = "string" };
-        }
-
-        if (type == typeof(int))
-        {
-            return new OpenApiSchema { Type = "integer", Format = "int32" };
-        }
-
-        if (type == typeof(long))
-        {
-            return new OpenApiSchema { Type = "integer", Format = "int64" };
-        }
-
-        if (type == typeof(float))
-        {
-            return new OpenApiSchema { Type = "number", Format = "float" };
-        }
-
-        if (type == typeof(double))
-        {
-            return new OpenApiSchema { Type = "number", Format = "double" };
-        }
-
-        if (type == typeof(DateTime))
-        {
-            return new OpenApiSchema { Type = "string", Format = "date-time" };
-        }
-
-        if (type == typeof(IFormFile))
-        {
-            return new OpenApiSchema { Type = "string", Format = "binary" };
-        }
-
-        if (type == typeof(IEnumerable<IFormFile>))
-        {
-            return new OpenApiSchema { Type = "array", Items = new OpenApiSchema { Type = "string", Format = "binary" } };
-        }
-
-        if (type.IsClass && !type.IsPrimitive)
-        {
-            return new OpenApiSchema
-            {
-                Type = "object",
-                Properties = type.GetProperties()
-                                 .Select(x => (x.Name, propertyOpenApiSchema: MapDotnetTypesToOpenApiTypes(x.PropertyType)))
-                                 .ToDictionary(x => x.Name, x => x.propertyOpenApiSchema)
-            };
-        }
-
-        return null;
     }
 }
