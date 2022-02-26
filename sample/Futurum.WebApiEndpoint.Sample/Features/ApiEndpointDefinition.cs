@@ -35,7 +35,6 @@ public class ApiEndpointDefinition : IApiEndpointDefinition
                          .Query<QueryWithRequestParameterMapFromWithResponseFileStreamScenario.ApiEndpoint>(builder => builder.Route("query-with-request-parameter-map-from-with-response-file-stream/{Id}"))
                          .Query<QueryWithRequestParameterMapFromWithResponseFileStreamWithContentTypeScenario.ApiEndpoint>(builder => builder.Route("query-with-request-parameter-map-from-with-response-file-stream-with-content-type/{Id}"))
                          .Query<QueryWithRequestParameterMapFromWithResponseStreamScenario.ApiEndpoint>(builder => builder.Route("query-with-request-parameter-map-from-with-response-stream/{Id}"))
-                         
                          .Query<QueryWithRequestParameterMapFromSupportedTypesScenario.ApiEndpoint>(builder => builder.Route("query-with-request-parameter-map-from-supported-types/{String}/{Int}/{Long}/{DateTime}/{Boolean}/{Guid}"))
                          
                          .Query<QueryWithRequestManualParameterWithResponseScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response/{Id}"))
@@ -56,7 +55,6 @@ public class ApiEndpointDefinition : IApiEndpointDefinition
                          .Command<CommandWithRequestParameterMapFromWithResponseFileStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-parameter-map-from-with-response-file-stream/{Id}"))
                          .Command<CommandWithRequestParameterMapFromWithResponseFileStreamWithContentTypeScenario.ApiEndpoint>(builder => builder.Post("command-with-request-parameter-map-from-with-response-file-stream-with-content-type/{Id}"))
                          .Command<CommandWithRequestParameterMapFromWithResponseStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-parameter-map-from-with-response-stream/{Id}"))
-                         
                          .Command<CommandWithRequestParameterMapFromSupportedTypesScenario.ApiEndpoint>(builder => builder.Post("command-with-request-parameter-map-from-supported-types/{String}/{Int}/{Long}/{DateTime}/{Boolean}/{Guid}"))
                          
                          .Command<CommandWithRequestManualParameterWithResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-with-response/{Id}"))
@@ -80,6 +78,14 @@ public class ApiEndpointDefinition : IApiEndpointDefinition
                          .Command<CommandWithRequestPlainTextWithResponseStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-plain-text-with-response-stream"))
                          
                          .Command<CommandWithRequestUploadFileWithPayloadWithResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-and-json-with-response"))
+                         .Command<CommandWithRequestUploadFileWithPayloadWithoutResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-and-json-without-response"))
+                         .Command<CommandWithRequestUploadFileWithPayloadWithResponseAsyncEnumerableScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-and-json-with-response-async-enumerable"))
+                         .Command<CommandWithRequestUploadFileWithPayloadWithResponseBytesScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-and-json-with-response-bytes"))
+                         .Command<CommandWithRequestUploadFileWithPayloadWithResponseDataCollectionScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-and-json-with-response-data-collection"))
+                         .Command<CommandWithRequestUploadFileWithPayloadWithResponseEmptyJsonScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-and-json-with-response-empty-json"))
+                         .Command<CommandWithRequestUploadFileWithPayloadWithResponseFileStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-and-json-with-response-file-stream"))
+                         .Command<CommandWithRequestUploadFileWithPayloadWithResponseFileStreamWithContentTypeScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-and-json-with-response-file-stream-with-content-type"))
+                         .Command<CommandWithRequestUploadFileWithPayloadWithResponseStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-and-json-with-response-stream"))
                          .Command<CommandWithRequestUploadFileWithPayloadSupportedTypesScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-file-and-json-supported-types"))
                          
                          .Command<CommandWithRequestUploadFilesWithResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-upload-files-with-response"))

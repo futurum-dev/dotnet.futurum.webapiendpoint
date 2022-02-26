@@ -1,5 +1,4 @@
 using Futurum.Core.Result;
-using Futurum.WebApiEndpoint.Internal.AspNetCore;
 
 namespace Futurum.WebApiEndpoint.Sample.Features.QueryWithRequestManualParameter;
 
@@ -9,20 +8,8 @@ public static class QueryWithRequestManualParameterWithResponseAsyncEnumerableSc
 
     public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<Request>.WithResponseAsyncEnumerable<ApiEndpoint, FeatureDto, Feature>.WithMapper<Mapper, FeatureDataMapper>
     {
-        protected override Task<Result<ResponseAsyncEnumerable<Feature>>> ExecuteAsync(Request query, CancellationToken cancellationToken)
-        {
-            return new ResponseAsyncEnumerable<Feature>(AsyncEnumerable()).ToResultOkAsync();
-
-            async IAsyncEnumerable<Feature> AsyncEnumerable()
-            {
-                await Task.Yield();
-
-                foreach (var i in Enumerable.Range(0, 10))
-                {
-                    yield return new Feature($"Name - {i} - {query.Id}");
-                }
-            }
-        }
+        protected override Task<Result<ResponseAsyncEnumerable<Feature>>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+            new ResponseAsyncEnumerable<Feature>(AsyncEnumerable.Range(0, 10).Select(i => new Feature($"Name - {i} - {query.Id}"))).ToResultOkAsync();
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<Request>

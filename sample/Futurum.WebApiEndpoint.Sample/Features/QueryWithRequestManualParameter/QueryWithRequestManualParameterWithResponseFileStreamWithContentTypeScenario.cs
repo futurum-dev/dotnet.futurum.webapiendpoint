@@ -1,5 +1,4 @@
 using Futurum.Core.Result;
-using Futurum.WebApiEndpoint.Internal.AspNetCore;
 
 namespace Futurum.WebApiEndpoint.Sample.Features.QueryWithRequestManualParameter;
 

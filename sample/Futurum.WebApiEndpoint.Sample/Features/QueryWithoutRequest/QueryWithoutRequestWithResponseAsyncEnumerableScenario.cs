@@ -6,19 +6,7 @@ public static class QueryWithoutRequestWithResponseAsyncEnumerableScenario
 {
     public class ApiEndpoint : QueryWebApiEndpoint.WithoutRequest.WithResponseAsyncEnumerable<ApiEndpoint, FeatureDto, Feature>.WithMapper<FeatureDataMapper>
     {
-        protected override Task<Result<ResponseAsyncEnumerable<Feature>>> ExecuteAsync(CancellationToken cancellationToken)
-        {
-            return new ResponseAsyncEnumerable<Feature>(AsyncEnumerable()).ToResultOkAsync();
-
-            async IAsyncEnumerable<Feature> AsyncEnumerable()
-            {
-                await Task.Yield();
-
-                foreach (var i in Enumerable.Range(0, 10))
-                {
-                    yield return new Feature($"Name - {i}");
-                }
-            }
-        }
+        protected override Task<Result<ResponseAsyncEnumerable<Feature>>> ExecuteAsync(CancellationToken cancellationToken) =>
+            new ResponseAsyncEnumerable<Feature>(AsyncEnumerable.Range(0, 10).Select(i => new Feature($"Name - {i}"))).ToResultOkAsync();
     }
 }
