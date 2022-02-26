@@ -12,7 +12,7 @@
     <PropertyGroup>
         <PackageId>Futurum.WebApiEndpoint</PackageId>
         <PackageIcon>dotnet-logo.png</PackageIcon>
-        <Description>Small dotnet library, that allows you to build WebApiEndpoints using a vertical slice architecture approach.</Description>
+        <Description>A dotnet library that allows you to build WebApiEndpoints using a vertical slice architecture approach. Provides a structured way to create REST apis in dotnet without controllers.</Description>
         <PackageProjectUrl>https://www.futurum.dev/projects/dotnet-futurum.html</PackageProjectUrl>
         <RepositoryUrl>https://github.com/futurum-dev/dotnet.futurum.webapiendpoint</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
