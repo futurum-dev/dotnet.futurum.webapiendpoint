@@ -8,11 +8,11 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Futurum.WebApiEndpoint.OpenApi;
 
-internal class WebApiEndpointOpenApiOperationFilter : IOperationFilter
+internal class WebApiEndpointOpenApiOperationTypeInformation : IOperationFilter
 {
     private readonly IWebApiEndpointMetadataCache _metadataCache;
 
-    public WebApiEndpointOpenApiOperationFilter(IWebApiEndpointMetadataCache metadataCache)
+    public WebApiEndpointOpenApiOperationTypeInformation(IWebApiEndpointMetadataCache metadataCache)
     {
         _metadataCache = metadataCache;
     }
@@ -43,8 +43,6 @@ internal class WebApiEndpointOpenApiOperationFilter : IOperationFilter
                                     {
                                         ConfigureParameters(openApiOperation, metadataDefinition);
                                     }
-
-                                    UpdateOpenApiOperationInformation(openApiOperation, metadataDefinition);
                                 },
                                 Function.DoNothing);
     }
@@ -176,11 +174,5 @@ internal class WebApiEndpointOpenApiOperationFilter : IOperationFilter
                                                     Required = true,
                                                     In = TransformMetadataRouteParameterDefinitionTypeToOpenApiParameterLocation(parameterDefinition.MapFromAttribute.MapFrom),
                                                 });
-    }
-
-    private static void UpdateOpenApiOperationInformation(OpenApiOperation openApiOperation, MetadataDefinition metadataDefinition)
-    {
-        openApiOperation.Summary = metadataDefinition.MetadataRouteDefinition.OpenApiOperation?.Summary;
-        openApiOperation.Description = metadataDefinition.MetadataRouteDefinition.OpenApiOperation?.Description;
     }
 }

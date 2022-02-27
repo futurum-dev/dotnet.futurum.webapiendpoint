@@ -17,7 +17,8 @@ public static class WebApiEndpointOpenApiExtensions
     public static SwaggerGenOptions EnableWebApiEndpointForOpenApi(this SwaggerGenOptions options, string documentTitle, params ApiVersion[] apiVersions)
     {
         options.CustomSchemaIds(type => type.FullName);
-        options.OperationFilter<WebApiEndpointOpenApiOperationFilter>();
+        options.OperationFilter<WebApiEndpointOpenApiOperationTypeInformation>();
+        options.OperationFilter<WebApiEndpointOpenApiOperationInformation>();
 
         foreach (var apiVersion in apiVersions)
         {

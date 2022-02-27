@@ -18,6 +18,9 @@ public partial class MetadataRouteDefinitionBuilder
         _metadataRouteDefinition = metadataRouteDefinition;
     }
 
+    /// <summary>
+    /// Configure success <paramref name="httpStatusCode"/>
+    /// </summary>
     public MetadataRouteDefinitionBuilder SuccessStatusCode(int httpStatusCode)
     {
         _metadataRouteDefinition = _metadataRouteDefinition with

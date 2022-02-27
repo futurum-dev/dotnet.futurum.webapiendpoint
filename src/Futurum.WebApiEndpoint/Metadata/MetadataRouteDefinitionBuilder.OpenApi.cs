@@ -15,7 +15,7 @@ public partial class MetadataRouteDefinitionBuilder
         {
             _metadataRouteDefinition = _metadataRouteDefinition with
             {
-                OpenApiOperation = new(summary, string.Empty)
+                OpenApiOperation = new(summary, string.Empty, false, null)
             };
         }
         else
@@ -41,7 +41,7 @@ public partial class MetadataRouteDefinitionBuilder
         {
             _metadataRouteDefinition = _metadataRouteDefinition with
             {
-                OpenApiOperation = new(string.Empty, description)
+                OpenApiOperation = new(string.Empty, description, false, null)
             };
         }
         else
@@ -50,6 +50,122 @@ public partial class MetadataRouteDefinitionBuilder
             {
                 OpenApiOperation = _metadataRouteDefinition.OpenApiOperation with { Description = description }
             };
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Configure OpenApi <paramref name="deprecated"/>
+    /// <remarks>
+    /// Declares this operation to be deprecated. Consumers SHOULD refrain from usage of the declared operation.
+    /// </remarks>
+    /// </summary>
+    public MetadataRouteDefinitionBuilder Deprecated(bool deprecated)
+    {
+        if (_metadataRouteDefinition.OpenApiOperation == null)
+        {
+            _metadataRouteDefinition = _metadataRouteDefinition with
+            {
+                OpenApiOperation = new(string.Empty, string.Empty, deprecated, null)
+            };
+        }
+        else
+        {
+            _metadataRouteDefinition = _metadataRouteDefinition with
+            {
+                OpenApiOperation = _metadataRouteDefinition.OpenApiOperation with { Deprecated = deprecated }
+            };
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Configure OpenApi ExternalDocs <paramref name="externalDocsDescription"/>
+    /// <remarks>
+    /// A short description of the target documentation.
+    /// </remarks>
+    /// </summary>
+    public MetadataRouteDefinitionBuilder ExternalDocsDescription(string externalDocsDescription)
+    {
+        if (_metadataRouteDefinition.OpenApiOperation == null)
+        {
+            _metadataRouteDefinition = _metadataRouteDefinition with
+            {
+                OpenApiOperation = new(string.Empty, string.Empty, false, new MetadataRouteOpenApiExternalDocs(externalDocsDescription, null))
+            };
+        }
+        else
+        {
+            if (_metadataRouteDefinition.OpenApiOperation.ExternalDocs != null)
+            {
+                _metadataRouteDefinition = _metadataRouteDefinition with
+                {
+                    OpenApiOperation = _metadataRouteDefinition.OpenApiOperation with
+                    {
+                        ExternalDocs = _metadataRouteDefinition.OpenApiOperation.ExternalDocs with
+                        {
+                            Description = externalDocsDescription
+                        }
+                    }
+                };
+            }
+            else
+            {
+                _metadataRouteDefinition = _metadataRouteDefinition with
+                {
+                    OpenApiOperation = _metadataRouteDefinition.OpenApiOperation with
+                    {
+                        ExternalDocs = new MetadataRouteOpenApiExternalDocs(externalDocsDescription, null)
+                    }
+                };
+            }
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Configure OpenApi ExternalDocs <paramref name="externalDocsUrl"/>
+    /// <remarks>
+    /// REQUIRED. The URL for the target documentation. Value MUST be in the format of a URL.
+    /// </remarks>
+    /// </summary>
+    public MetadataRouteDefinitionBuilder ExternalDocsUrl(Uri externalDocsUrl)
+    {
+        if (_metadataRouteDefinition.OpenApiOperation == null)
+        {
+            _metadataRouteDefinition = _metadataRouteDefinition with
+            {
+                OpenApiOperation = new(string.Empty, string.Empty, false, new MetadataRouteOpenApiExternalDocs(string.Empty, externalDocsUrl))
+            };
+        }
+        else
+        {
+            if (_metadataRouteDefinition.OpenApiOperation.ExternalDocs != null)
+            {
+                _metadataRouteDefinition = _metadataRouteDefinition with
+                {
+                    OpenApiOperation = _metadataRouteDefinition.OpenApiOperation with
+                    {
+                        ExternalDocs = _metadataRouteDefinition.OpenApiOperation.ExternalDocs with
+                        {
+                            Url = externalDocsUrl
+                        }
+                    }
+                };
+            }
+            else
+            {
+                _metadataRouteDefinition = _metadataRouteDefinition with
+                {
+                    OpenApiOperation = _metadataRouteDefinition.OpenApiOperation with
+                    {
+                        ExternalDocs = new MetadataRouteOpenApiExternalDocs(string.Empty, externalDocsUrl)
+                    }
+                };
+            }
         }
 
         return this;
