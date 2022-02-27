@@ -84,7 +84,7 @@ internal class EndpointRouteOpenApiBuilder : IEndpointRouteOpenApiBuilder
         }
         else if (requestDtoType != typeof(EmptyResponseDto))
         {
-            routeHandlerBuilder.Produces(metadataRouteDefinition.SuccessStatusCode);
+            routeHandlerBuilder.Produces(metadataRouteDefinition.SuccessStatusCode, responseDtoType, MediaTypeNames.Application.Json);
         }
 
         routeHandlerBuilder.Produces(metadataRouteDefinition.FailedStatusCode);
