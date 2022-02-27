@@ -19,6 +19,20 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
     
     /// <summary>
     /// Configure Post <paramref name="route"/>
+    /// <para />
+    /// Defaults values to the following:
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         <see cref="MetadataRouteDefinition.SuccessStatusCode"/> = 201
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         <see cref="MetadataRouteDefinition.FailedStatusCode"/> = 400
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public MetadataRouteDefinitionBuilder Post(string route)
     {
@@ -33,6 +47,20 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
     /// <summary>
     /// Configure Post <paramref name="route"/> with <paramref name="parameterDefinitions"/>
     /// <para>You only need to specify the parameters that DO NOT use <see cref="MapFromAttribute"/></para>
+    /// <para />
+    /// Defaults values to the following:
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         <see cref="MetadataRouteDefinition.SuccessStatusCode"/> = 201
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         <see cref="MetadataRouteDefinition.FailedStatusCode"/> = 400
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public MetadataRouteDefinitionBuilder Post(string route, params (string name, MetadataRouteParameterDefinitionType parameterDefinitionType, Type type)[] parameterDefinitions)
     {
@@ -47,6 +75,20 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
     
     /// <summary>
     /// Configure Put <paramref name="route"/>
+    /// <para />
+    /// Defaults values to the following:
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         <see cref="MetadataRouteDefinition.SuccessStatusCode"/> = 201
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         <see cref="MetadataRouteDefinition.FailedStatusCode"/> = 404
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public MetadataRouteDefinitionBuilder Put(string route)
     {
@@ -61,6 +103,20 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
     /// <summary>
     /// Configure Put <paramref name="route"/> with <paramref name="parameterDefinitions"/>
     /// <para>You only need to specify the parameters that DO NOT use <see cref="MapFromAttribute"/></para>
+    /// <para />
+    /// Defaults values to the following:
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         <see cref="MetadataRouteDefinition.SuccessStatusCode"/> = 201
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         <see cref="MetadataRouteDefinition.FailedStatusCode"/> = 404
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public MetadataRouteDefinitionBuilder Put(string route, params (string name, MetadataRouteParameterDefinitionType parameterDefinitionType, Type type)[] parameterDefinitions)
     {
@@ -75,6 +131,20 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
     
     /// <summary>
     /// Configure Patch <paramref name="route"/>
+    /// <para />
+    /// Defaults values to the following:
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         <see cref="MetadataRouteDefinition.SuccessStatusCode"/> = 200
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         <see cref="MetadataRouteDefinition.FailedStatusCode"/> = 404
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public MetadataRouteDefinitionBuilder Patch(string route)
     {
@@ -89,6 +159,20 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
     /// <summary>
     /// Configure Patch <paramref name="route"/> with <paramref name="parameterDefinitions"/>
     /// <para>You only need to specify the parameters that DO NOT use <see cref="MapFromAttribute"/></para>
+    /// <para />
+    /// Defaults values to the following:
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         <see cref="MetadataRouteDefinition.SuccessStatusCode"/> = 200
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         <see cref="MetadataRouteDefinition.FailedStatusCode"/> = 404
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public MetadataRouteDefinitionBuilder Patch(string route, params (string name, MetadataRouteParameterDefinitionType parameterDefinitionType, Type type)[] parameterDefinitions)
     {
@@ -103,6 +187,20 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
     
     /// <summary>
     /// Configure Delete <paramref name="route"/>
+    /// <para />
+    /// Defaults values to the following:
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         <see cref="MetadataRouteDefinition.SuccessStatusCode"/> = 200
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         <see cref="MetadataRouteDefinition.FailedStatusCode"/> = 404
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public MetadataRouteDefinitionBuilder Delete(string route)
     {
@@ -117,6 +215,20 @@ public class CommandMetadataRouteDefinitionInitialBuilder : IMetadataRouteDefini
     /// <summary>
     /// Configure Delete <paramref name="route"/> with <paramref name="parameterDefinitions"/>
     /// <para>You only need to specify the parameters that DO NOT use <see cref="MapFromAttribute"/></para>
+    /// <para />
+    /// Defaults values to the following:
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         <see cref="MetadataRouteDefinition.SuccessStatusCode"/> = 200
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         <see cref="MetadataRouteDefinition.FailedStatusCode"/> = 404
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public MetadataRouteDefinitionBuilder Delete(string route, params (string name, MetadataRouteParameterDefinitionType parameterDefinitionType, Type type)[] parameterDefinitions)
     {
