@@ -36,6 +36,26 @@ public class QueryMetadataRouteDefinitionInitialBuilderTests
     public void check_with_parameters()
     {
         var route = Guid.NewGuid().ToString();
+
+        IMetadataRouteDefinitionBuilder builder = new QueryMetadataRouteDefinitionInitialBuilder(typeof(ApiEndpoint))
+                                                  .RouteWithParameters(route);
+
+        var metadataRouteDefinitions = builder.Build();
+
+        metadataRouteDefinitions.Count().Should().Be(1);
+
+        var metadataRouteDefinition = metadataRouteDefinitions.First();
+        metadataRouteDefinition.RouteTemplate.Should().Be(route);
+        metadataRouteDefinition.HttpMethod.Should().Be(MetadataRouteHttpMethod.Get);
+        metadataRouteDefinition.SuccessStatusCode.Should().Be(200);
+        metadataRouteDefinition.FailedStatusCode.Should().Be(404);
+        metadataRouteDefinition.ManualParameterDefinitions.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void check_with_parameters_specified()
+    {
+        var route = Guid.NewGuid().ToString();
         var parameterName = "parameter1";
         var parameterType = typeof(int);
         var parameterDefinitionType = MetadataRouteParameterDefinitionType.Path;

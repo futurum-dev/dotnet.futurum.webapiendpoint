@@ -33,7 +33,7 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
     }
 
     [Fact]
-    public void post_with_parameters()
+    public void post_with_parameters_specified()
     {
         var route = Guid.NewGuid().ToString();
         var parameterName = "parameter1";
@@ -79,7 +79,7 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
     }
 
     [Fact]
-    public void put_with_parameters()
+    public void put_with_parameters_specified()
     {
         var route = Guid.NewGuid().ToString();
         var parameterName = "parameter1";
@@ -125,7 +125,7 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
     }
 
     [Fact]
-    public void patch_with_parameters()
+    public void patch_with_parameters_specified()
     {
         var route = Guid.NewGuid().ToString();
         var parameterName = "parameter1";
@@ -171,7 +171,7 @@ public class CommandMetadataRouteDefinitionInitialBuilderTests
     }
 
     [Fact]
-    public void delete_with_parameters()
+    public void delete_with_parameters_specified()
     {
         var route = Guid.NewGuid().ToString();
         var parameterName = "parameter1";
