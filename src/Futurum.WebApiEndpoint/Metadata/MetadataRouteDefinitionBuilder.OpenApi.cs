@@ -1,3 +1,5 @@
+using Futurum.Core.Option;
+
 namespace Futurum.WebApiEndpoint.Metadata;
 
 public partial class MetadataRouteDefinitionBuilder
@@ -15,7 +17,7 @@ public partial class MetadataRouteDefinitionBuilder
         {
             _metadataRouteDefinition = _metadataRouteDefinition with
             {
-                OpenApiOperation = new(summary, string.Empty, false, null)
+                OpenApiOperation = new(summary, string.Empty, Option<bool>.None, null)
             };
         }
         else
@@ -41,7 +43,7 @@ public partial class MetadataRouteDefinitionBuilder
         {
             _metadataRouteDefinition = _metadataRouteDefinition with
             {
-                OpenApiOperation = new(string.Empty, description, false, null)
+                OpenApiOperation = new(string.Empty, description, Option<bool>.None, null)
             };
         }
         else
@@ -93,7 +95,7 @@ public partial class MetadataRouteDefinitionBuilder
         {
             _metadataRouteDefinition = _metadataRouteDefinition with
             {
-                OpenApiOperation = new(string.Empty, string.Empty, false, new MetadataRouteOpenApiExternalDocs(externalDocsDescription, null))
+                OpenApiOperation = new(string.Empty, string.Empty, Option<bool>.None, new MetadataRouteOpenApiExternalDocs(externalDocsDescription, null))
             };
         }
         else
@@ -138,7 +140,7 @@ public partial class MetadataRouteDefinitionBuilder
         {
             _metadataRouteDefinition = _metadataRouteDefinition with
             {
-                OpenApiOperation = new(string.Empty, string.Empty, false, new MetadataRouteOpenApiExternalDocs(string.Empty, externalDocsUrl))
+                OpenApiOperation = new(string.Empty, string.Empty, Option<bool>.None, new MetadataRouteOpenApiExternalDocs(string.Empty, externalDocsUrl))
             };
         }
         else

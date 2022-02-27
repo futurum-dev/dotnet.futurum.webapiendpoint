@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Swashbuckle.AspNetCore.SwaggerUI;
-
 namespace Futurum.WebApiEndpoint.OpenApi;
 
 /// <summary>
@@ -14,66 +11,90 @@ public static class WebApiEndpointOpenApiExtensions
     /// <summary>
     /// Configures OpenApi to work with <see cref="WebApiEndpoint"/>
     /// </summary>
-    public static SwaggerGenOptions EnableWebApiEndpointForOpenApi(this SwaggerGenOptions options, string documentTitle, params ApiVersion[] apiVersions)
+    public static IServiceCollection EnableOpenApiForWebApiEndpoint(this IServiceCollection serviceCollection)
     {
-        options.CustomSchemaIds(type => type.FullName);
-        options.OperationFilter<WebApiEndpointOpenApiOperationTypeInformation>();
-        options.OperationFilter<WebApiEndpointOpenApiOperationInformation>();
-
-        foreach (var apiVersion in apiVersions)
+        serviceCollection.AddEndpointsApiExplorer();
+        
+        serviceCollection.AddSwaggerGen(options =>
         {
-            options.SwaggerDoc($"v{apiVersion}", new OpenApiInfo { Title = documentTitle, Version = $"v{apiVersion}" });
-        }
+            options.CustomSchemaIds(type => type.FullName);
+            options.OperationFilter<WebApiEndpointOpenApiOperationRequestBodyRequired>();
+            options.OperationFilter<WebApiEndpointOpenApiOperationTypeInformation>();
+            options.OperationFilter<WebApiEndpointOpenApiOperationInformation>();
+            options.OperationFilter<WebApiEndpointOpenApiOperationDeprecated>();
+        });
 
-        return options;
+        return serviceCollection;
     }
 
     /// <summary>
     /// Configures Jwt for OpenApi to work with <see cref="WebApiEndpoint"/>
     /// </summary>
-    public static SwaggerGenOptions EnableWebApiEndpointJwtForOpenApi(this SwaggerGenOptions options)
+    public static IServiceCollection EnableOpenApiJwtForWebApiEndpoint(this IServiceCollection serviceCollection)
     {
-        var securityScheme = new OpenApiSecurityScheme()
+        serviceCollection.AddSwaggerGen(options =>
         {
-            Name = "Authorization",
-            Type = SecuritySchemeType.Http,
-            Scheme = "Bearer",
-            BearerFormat = "JWT",
-            In = ParameterLocation.Header,
-            Description = "JSON Web Token based security",
-        };
-
-        var securityReq = new OpenApiSecurityRequirement
-        {
+            var securityScheme = new OpenApiSecurityScheme()
             {
-                new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    }
-                },
-                new string[] { }
-            }
-        };
-        
-        options.AddSecurityDefinition("Bearer", securityScheme);
-        options.AddSecurityRequirement(securityReq);
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "JSON Web Token based security",
+            };
 
-        return options;
+            var securityReq = new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] { }
+                }
+            };
+
+            options.AddSecurityDefinition("Bearer", securityScheme);
+            options.AddSecurityRequirement(securityReq);
+        });
+
+        return serviceCollection;
+    }
+
+    /// <summary>
+    /// Add an OpenApi Version to <see cref="WebApiEndpoint"/>
+    /// </summary>
+    public static IServiceCollection AddOpenApiVersion(this IServiceCollection serviceCollection, string title, ApiVersion apiVersion, bool deprecated = false)
+    {
+        serviceCollection.AddSwaggerGen(options => options.SwaggerDoc($"v{apiVersion}", new OpenApiInfo { Title = title, Version = $"v{apiVersion}" }));
+
+        serviceCollection.AddSingleton(new WebApiEndpointOpenApiVersion(title, apiVersion, deprecated));
+
+        return serviceCollection;
     }
 
     /// <summary>
     /// Configures OpenApi UI to work with <see cref="WebApiEndpoint"/>
     /// </summary>
-    public static SwaggerUIOptions UseWebApiEndpointOpenApiUI(this SwaggerUIOptions options, string documentTitle, params ApiVersion[] apiVersions)
+    public static WebApplication UseOpenApiUIForWebApiEndpoint(this WebApplication application)
     {
-        foreach (var apiVersion in apiVersions)
-        {
-            options.SwaggerEndpoint($"v{apiVersion}/swagger.json", $"{documentTitle} V{apiVersion}");
-        }
+        application.UseSwagger();
 
-        return options;
+        var openApiVersions = application.Services.GetServices<WebApiEndpointOpenApiVersion>();
+        
+        application.UseSwaggerUI(options =>
+        {
+            foreach (var (title, apiVersion, _) in openApiVersions)
+            {
+                options.SwaggerEndpoint($"v{apiVersion}/swagger.json", $"{title} V{apiVersion}");
+            }
+        });
+
+        return application;
     }
 }

@@ -19,22 +19,17 @@ internal class WebApiEndpointOpenApiOperationInformation : IOperationFilter
     public void Apply(OpenApiOperation openApiOperation, OperationFilterContext operationFilterContext)
     {
         _metadataCache.Get(new WebApiEndpointMetadataCacheKey(operationFilterContext.ApiDescription.HttpMethod, operationFilterContext.ApiDescription.RelativePath))
-                      .DoSwitch(metadataDefinition =>
-                                {
-                                    UpdateOpenApiOperationInformation(openApiOperation, metadataDefinition);
-                                },
+                      .DoSwitch(metadataDefinition => UpdateOpenApiOperation(openApiOperation, metadataDefinition),
                                 Function.DoNothing);
     }
     
-    private static void UpdateOpenApiOperationInformation(OpenApiOperation openApiOperation, MetadataDefinition metadataDefinition)
+    private static void UpdateOpenApiOperation(OpenApiOperation openApiOperation, MetadataDefinition metadataDefinition)
     {
         var metadataRouteOpenApiOperation = metadataDefinition.MetadataRouteDefinition.OpenApiOperation;
         if (metadataRouteOpenApiOperation != null)
         {
             openApiOperation.Summary = metadataRouteOpenApiOperation.Summary;
             openApiOperation.Description = metadataRouteOpenApiOperation.Description;
-
-            openApiOperation.Deprecated = metadataRouteOpenApiOperation.Deprecated;
 
             if (metadataRouteOpenApiOperation.ExternalDocs != null)
             {
