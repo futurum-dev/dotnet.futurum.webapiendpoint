@@ -23,7 +23,7 @@ using Xunit;
 
 namespace Futurum.WebApiEndpoint.Tests.OpenApi;
 
-public class WebApiEndpointOpenApiOperationFilterTests
+public class WebApiEndpointOpenApiOperationTypeInformationTests
 {
     public class when_RequestUploadFilesDto
     {
@@ -43,7 +43,7 @@ public class WebApiEndpointOpenApiOperationFilterTests
                                                                     new List<Type>());
             var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, null, null);
 
-            var webApiEndpointOpenApiOperationFilter = new WebApiEndpointOpenApiOperationFilter(new TestWebApiEndpointMetadataCache(metadataDefinition));
+            var webApiEndpointOpenApiOperationFilter = new WebApiEndpointOpenApiOperationTypeInformation(new TestWebApiEndpointMetadataCache(metadataDefinition));
 
             var openApiOperation = new OpenApiOperation
             {
@@ -60,7 +60,7 @@ public class WebApiEndpointOpenApiOperationFilterTests
                                                                     new SchemaGenerator(new SchemaGeneratorOptions(),
                                                                                         new JsonSerializerDataContractResolver(new JsonSerializerOptions(JsonSerializerDefaults.Web))),
                                                                     new SchemaRepository(null),
-                                                                    typeof(WebApiEndpointOpenApiOperationFilterTests).GetMethods()[0]);
+                                                                    typeof(WebApiEndpointOpenApiOperationTypeInformationTests).GetMethods()[0]);
             webApiEndpointOpenApiOperationFilter.Apply(openApiOperation, operationFilterContext);
 
             openApiOperation.RequestBody.Content.Count.Should().Be(1);
@@ -99,7 +99,7 @@ public class WebApiEndpointOpenApiOperationFilterTests
                                                                     new List<Type>());
             var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, null, null);
 
-            var webApiEndpointOpenApiOperationFilter = new WebApiEndpointOpenApiOperationFilter(new TestWebApiEndpointMetadataCache(metadataDefinition));
+            var webApiEndpointOpenApiOperationFilter = new WebApiEndpointOpenApiOperationTypeInformation(new TestWebApiEndpointMetadataCache(metadataDefinition));
 
             var openApiOperation = new OpenApiOperation
             {
@@ -116,7 +116,7 @@ public class WebApiEndpointOpenApiOperationFilterTests
                                                                     new SchemaGenerator(new SchemaGeneratorOptions(),
                                                                                         new JsonSerializerDataContractResolver(new JsonSerializerOptions(JsonSerializerDefaults.Web))),
                                                                     new SchemaRepository(null),
-                                                                    typeof(WebApiEndpointOpenApiOperationFilterTests).GetMethods()[0]);
+                                                                    typeof(WebApiEndpointOpenApiOperationTypeInformationTests).GetMethods()[0]);
             webApiEndpointOpenApiOperationFilter.Apply(openApiOperation, operationFilterContext);
 
             openApiOperation.RequestBody.Content.Count.Should().Be(1);
@@ -157,7 +157,7 @@ public class WebApiEndpointOpenApiOperationFilterTests
                                                                                                                              .ToList());
             var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, null, metadataMapFromMultipartDefinition);
 
-            var webApiEndpointOpenApiOperationFilter = new WebApiEndpointOpenApiOperationFilter(new TestWebApiEndpointMetadataCache(metadataDefinition));
+            var webApiEndpointOpenApiOperationFilter = new WebApiEndpointOpenApiOperationTypeInformation(new TestWebApiEndpointMetadataCache(metadataDefinition));
 
             var openApiOperation = new OpenApiOperation
             {
@@ -174,7 +174,7 @@ public class WebApiEndpointOpenApiOperationFilterTests
                                                                     new SchemaGenerator(new SchemaGeneratorOptions(),
                                                                                         new JsonSerializerDataContractResolver(new JsonSerializerOptions(JsonSerializerDefaults.Web))),
                                                                     new SchemaRepository(null),
-                                                                    typeof(WebApiEndpointOpenApiOperationFilterTests).GetMethods()[0]);
+                                                                    typeof(WebApiEndpointOpenApiOperationTypeInformationTests).GetMethods()[0]);
             webApiEndpointOpenApiOperationFilter.Apply(openApiOperation, operationFilterContext);
 
             openApiOperation.RequestBody.Content.Count.Should().Be(1);
@@ -243,7 +243,7 @@ public class WebApiEndpointOpenApiOperationFilterTests
                                                                                                            .ToList());
             var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, null);
 
-            var webApiEndpointOpenApiOperationFilter = new WebApiEndpointOpenApiOperationFilter(new TestWebApiEndpointMetadataCache(metadataDefinition));
+            var webApiEndpointOpenApiOperationFilter = new WebApiEndpointOpenApiOperationTypeInformation(new TestWebApiEndpointMetadataCache(metadataDefinition));
 
             var openApiOperation = new OpenApiOperation();
             var operationFilterContext = new OperationFilterContext(new ApiDescription
@@ -254,7 +254,7 @@ public class WebApiEndpointOpenApiOperationFilterTests
                                                                     new SchemaGenerator(new SchemaGeneratorOptions(),
                                                                                         new JsonSerializerDataContractResolver(new JsonSerializerOptions(JsonSerializerDefaults.Web))),
                                                                     new SchemaRepository(null),
-                                                                    typeof(WebApiEndpointOpenApiOperationFilterTests).GetMethods()[0]);
+                                                                    typeof(WebApiEndpointOpenApiOperationTypeInformationTests).GetMethods()[0]);
             webApiEndpointOpenApiOperationFilter.Apply(openApiOperation, operationFilterContext);
 
             openApiOperation.Parameters.Count.Should().Be(1);
@@ -305,7 +305,7 @@ public class WebApiEndpointOpenApiOperationFilterTests
 
             var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, null, null);
 
-            var webApiEndpointOpenApiOperationFilter = new WebApiEndpointOpenApiOperationFilter(new TestWebApiEndpointMetadataCache(metadataDefinition));
+            var webApiEndpointOpenApiOperationFilter = new WebApiEndpointOpenApiOperationTypeInformation(new TestWebApiEndpointMetadataCache(metadataDefinition));
 
             var openApiOperation = new OpenApiOperation();
             var operationFilterContext = new OperationFilterContext(new ApiDescription
@@ -316,7 +316,7 @@ public class WebApiEndpointOpenApiOperationFilterTests
                                                                     new SchemaGenerator(new SchemaGeneratorOptions(),
                                                                                         new JsonSerializerDataContractResolver(new JsonSerializerOptions(JsonSerializerDefaults.Web))),
                                                                     new SchemaRepository(null),
-                                                                    typeof(WebApiEndpointOpenApiOperationFilterTests).GetMethods()[0]);
+                                                                    typeof(WebApiEndpointOpenApiOperationTypeInformationTests).GetMethods()[0]);
             webApiEndpointOpenApiOperationFilter.Apply(openApiOperation, operationFilterContext);
 
             openApiOperation.Parameters.Count.Should().Be(1);
@@ -346,60 +346,7 @@ public class WebApiEndpointOpenApiOperationFilterTests
                 new Command(dto.Id).ToResultOk();
         }
     }
-
-    public class OpenApiOperationInformation
-    {
-        [Fact]
-        public void check()
-        {
-            var summary = Guid.NewGuid().ToString();
-            var description = Guid.NewGuid().ToString();
-
-            var routeTemplate = "test-route";
-            var httpMethod = MetadataRouteHttpMethod.Post;
-            var metadataRouteDefinition = new MetadataRouteDefinition(httpMethod, routeTemplate, null, new List<MetadataRouteParameterDefinition>(),
-                                                                      new MetadataRouteOpenApiOperation(summary, description), 200, 400,
-                                                                      Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
-
-            var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestUploadFilesDto), typeof(EmptyResponseDto), typeof(ApiEndpoint),
-                                                                    typeof(ICommandWebApiEndpoint<RequestUploadFilesDto, RequestUploadFiles<ApiEndpoint>, RequestUploadFilesMapper<ApiEndpoint>>),
-                                                                    typeof(IWebApiEndpointMiddlewareExecutor<RequestUploadFiles<ApiEndpoint>, Unit>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestUploadFilesDto, RequestUploadFiles<ApiEndpoint>,
-                                                                        RequestUploadFilesMapper<ApiEndpoint>>),
-                                                                    new List<Type>());
-            var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, null, null);
-
-            var webApiEndpointOpenApiOperationFilter = new WebApiEndpointOpenApiOperationFilter(new TestWebApiEndpointMetadataCache(metadataDefinition));
-
-            var openApiOperation = new OpenApiOperation
-            {
-                RequestBody = new OpenApiRequestBody
-                {
-                    Content = new Dictionary<string, OpenApiMediaType> { { "multipart/form-data", new OpenApiMediaType() } }
-                }
-            };
-            var operationFilterContext = new OperationFilterContext(new ApiDescription
-                                                                    {
-                                                                        HttpMethod = httpMethod.ToString(),
-                                                                        RelativePath = routeTemplate
-                                                                    },
-                                                                    new SchemaGenerator(new SchemaGeneratorOptions(),
-                                                                                        new JsonSerializerDataContractResolver(new JsonSerializerOptions(JsonSerializerDefaults.Web))),
-                                                                    new SchemaRepository(null),
-                                                                    typeof(WebApiEndpointOpenApiOperationFilterTests).GetMethods()[0]);
-            webApiEndpointOpenApiOperationFilter.Apply(openApiOperation, operationFilterContext);
-
-            openApiOperation.Summary.Should().Be(summary);
-            openApiOperation.Description.Should().Be(description);
-        }
-
-        public class ApiEndpoint : CommandWebApiEndpoint.WithRequestUploadFiles<ApiEndpoint>.WithoutResponse
-        {
-            protected override Task<Result> ExecuteAsync(RequestUploadFiles command, CancellationToken cancellationToken) =>
-                Result.OkAsync();
-        }
-    }
-
+    
     private class TestWebApiEndpointMetadataCache : IWebApiEndpointMetadataCache
     {
         private readonly Dictionary<WebApiEndpointMetadataCacheKey, MetadataDefinition> _cache = new();

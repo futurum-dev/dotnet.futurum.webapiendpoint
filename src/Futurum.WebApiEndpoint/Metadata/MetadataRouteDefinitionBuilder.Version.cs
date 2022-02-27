@@ -5,7 +5,8 @@ namespace Futurum.WebApiEndpoint.Metadata;
 public partial class MetadataRouteDefinitionBuilder
 {
     /// <summary>
-    /// Configure <paramref name="versions"/>
+    /// Configure <see cref="ApiVersion"/>
+    /// <para>If not specified it will use <see cref="WebApiEndpointConfiguration.DefaultApiVersion"/></para>
     /// </summary>
     public MetadataRouteDefinitionBuilder Version(params ApiVersion[] versions)
     {
