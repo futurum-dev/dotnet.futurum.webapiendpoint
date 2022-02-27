@@ -19,32 +19,29 @@ internal class WebApiEndpointOpenApiOperationTypeInformation : IOperationFilter
 
     public void Apply(OpenApiOperation openApiOperation, OperationFilterContext operationFilterContext)
     {
-        if (operationFilterContext.ApiDescription.HttpMethod == MetadataRouteHttpMethod.Get.ToString() && openApiOperation.RequestBody != null)
-        {
-            openApiOperation.RequestBody.Required = false;
-        }
-
         _metadataCache.Get(new WebApiEndpointMetadataCacheKey(operationFilterContext.ApiDescription.HttpMethod, operationFilterContext.ApiDescription.RelativePath))
-                      .DoSwitch(metadataDefinition =>
-                                {
-                                    if (metadataDefinition.MetadataTypeDefinition.RequestDtoType == typeof(RequestUploadFilesDto))
-                                    {
-                                        ConfigureRequestUploadFilesDto(openApiOperation);
-                                    }
-                                    else if (metadataDefinition.MetadataTypeDefinition.RequestDtoType == typeof(RequestUploadFileDto))
-                                    {
-                                        ConfigureRequestUploadFileDto(openApiOperation);
-                                    }
-                                    else if (metadataDefinition.MetadataMapFromMultipartDefinition != null)
-                                    {
-                                        ConfigureMultipart(openApiOperation, metadataDefinition.MetadataMapFromMultipartDefinition);
-                                    }
-                                    else
-                                    {
-                                        ConfigureParameters(openApiOperation, metadataDefinition);
-                                    }
-                                },
+                      .DoSwitch(metadataDefinition => UpdateOpenApiOperation(openApiOperation, metadataDefinition),
                                 Function.DoNothing);
+    }
+
+    private static void UpdateOpenApiOperation(OpenApiOperation openApiOperation, MetadataDefinition metadataDefinition)
+    {
+        if (metadataDefinition.MetadataTypeDefinition.RequestDtoType == typeof(RequestUploadFilesDto))
+        {
+            ConfigureRequestUploadFilesDto(openApiOperation);
+        }
+        else if (metadataDefinition.MetadataTypeDefinition.RequestDtoType == typeof(RequestUploadFileDto))
+        {
+            ConfigureRequestUploadFileDto(openApiOperation);
+        }
+        else if (metadataDefinition.MetadataMapFromMultipartDefinition != null)
+        {
+            ConfigureMultipart(openApiOperation, metadataDefinition.MetadataMapFromMultipartDefinition);
+        }
+        else
+        {
+            ConfigureParameters(openApiOperation, metadataDefinition);
+        }
     }
 
     private static void ConfigureRequestUploadFilesDto(OpenApiOperation openApiOperation)

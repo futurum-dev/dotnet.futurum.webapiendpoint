@@ -26,10 +26,13 @@ try
 
         serviceCollection.RegisterModule<ApplicationModule>();
     });
+    
+    builder.Services.EnableOpenApiForWebApiEndpoint();
+    builder.Services.EnableOpenApiJwtForWebApiEndpoint();
 
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen(options => options.EnableWebApiEndpointForOpenApi("WebApiEndpoint Samples", WebApiEndpointVersions.V1_0, WebApiEndpointVersions.V2_0)
-                                                     .EnableWebApiEndpointJwtForOpenApi());
+    builder.Services.AddOpenApiVersion("WebApiEndpoint Samples", WebApiEndpointVersions.V1_0);
+    builder.Services.AddOpenApiVersion("WebApiEndpoint Samples", WebApiEndpointVersions.V2_0);
+    builder.Services.AddOpenApiVersion("WebApiEndpoint Samples - Deprecated", WebApiEndpointVersions.V3_0, true);
     
     builder.Services.AddWebApiEndpointAuthorization(typeof(AssemblyHook).Assembly);
     builder.Services.AddAuthenticationJwtBearer(builder.Configuration["Jwt:Issuer"], builder.Configuration["Jwt:Audience"], builder.Configuration["Jwt:Key"]);
@@ -41,8 +44,7 @@ try
 
     if (application.Environment.IsDevelopment())
     {
-        application.UseSwagger();
-        application.UseSwaggerUI(options => options.UseWebApiEndpointOpenApiUI("WebApiEndpoint Samples", WebApiEndpointVersions.V1_0, WebApiEndpointVersions.V2_0));
+        application.UseOpenApiUIForWebApiEndpoint();
     }
 
     application.UseHttpsRedirection();

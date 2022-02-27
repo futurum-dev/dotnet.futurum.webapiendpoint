@@ -41,7 +41,7 @@ public class MetadataRouteDefinitionBuilderOpenApiTests
         {
             var summary = Guid.NewGuid().ToString();
             
-            var metadataRouteOpenApiOperation = new MetadataRouteOpenApiOperation(string.Empty, string.Empty, false, null);
+            var metadataRouteOpenApiOperation = new MetadataRouteOpenApiOperation(string.Empty, string.Empty, Option<bool>.None, null);
             var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), metadataRouteOpenApiOperation, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
@@ -99,7 +99,7 @@ public class MetadataRouteDefinitionBuilderOpenApiTests
         {
             var description = Guid.NewGuid().ToString();
             
-            var metadataRouteOpenApiOperation = new MetadataRouteOpenApiOperation(string.Empty, string.Empty, false, null);
+            var metadataRouteOpenApiOperation = new MetadataRouteOpenApiOperation(string.Empty, string.Empty, Option<bool>.None, null);
             var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), metadataRouteOpenApiOperation, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
@@ -215,7 +215,7 @@ public class MetadataRouteDefinitionBuilderOpenApiTests
         {
             var externalDocsDescription = Guid.NewGuid().ToString();
             
-            var metadataRouteOpenApiOperation = new MetadataRouteOpenApiOperation(string.Empty, string.Empty, false, null);
+            var metadataRouteOpenApiOperation = new MetadataRouteOpenApiOperation(string.Empty, string.Empty, Option<bool>.None, null);
             var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), metadataRouteOpenApiOperation, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
@@ -273,7 +273,7 @@ public class MetadataRouteDefinitionBuilderOpenApiTests
         {
             var externalDocsUrl = new Uri("https://www.google.com");
             
-            var metadataRouteOpenApiOperation = new MetadataRouteOpenApiOperation(string.Empty, string.Empty, false, null);
+            var metadataRouteOpenApiOperation = new MetadataRouteOpenApiOperation(string.Empty, string.Empty, Option<bool>.None, null);
             var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new(), metadataRouteOpenApiOperation, 0, 0,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 

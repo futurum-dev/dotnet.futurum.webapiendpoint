@@ -10,7 +10,6 @@ public class ApiDefinition : IApiEndpointDefinition
                          .Query<OpenApiInformation.ApiEndpoint>(builder => builder.Route("open-api-information")
                                                                                   .Summary("OpenApi Summary")
                                                                                   .Description("OpenApi Description")
-                                                                                  .Deprecated(true)
                                                                                   .ExternalDocsDescription("OpenApi ExternalDocs Description")
                                                                                   .ExternalDocsUrl(new Uri("http://www.google.com")));
     }
