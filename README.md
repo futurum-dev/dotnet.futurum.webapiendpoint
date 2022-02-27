@@ -1,9 +1,4 @@
-    ___________      __                                __      __      ___.        _____         .__  ___________           .___             .__        __   
-    \_   _____/_ ___/  |_ __ _________ __ __  _____   /  \    /  \ ____\_ |__     /  _  \ ______ |__| \_   _____/ ____    __| _/_____   ____ |__| _____/  |_
-     |    __)|  |  \   __\  |  \_  __ \  |  \/     \  \   \/\/   // __ \| __ \   /  /_\  \\____ \|  |  |    __)_ /    \  / __ |\____ \ /  _ \|  |/    \   __\
-     |     \ |  |  /|  | |  |  /|  | \/  |  /  Y Y  \  \        /\  ___/| \_\ \ /    |    \  |_> >  |  |        \   |  \/ /_/ ||  |_> >  <_> )  |   |  \  |  
-     \___  / |____/ |__| |____/ |__|  |____/|__|_|  /   \__/\  /  \___  >___  / \____|__  /   __/|__| /_______  /___|  /\____ ||   __/ \____/|__|___|  /__|  
-         \/                                       \/         \/       \/    \/          \/|__|                \/     \/      \/|__|                  \/      
+# Futurum.WebApiEndpoint
 
 ![CI](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint/workflows/CI/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/futurum-dev/dotnet.futurum.webapiendpoint/badge.svg?branch=main)](https://coveralls.io/github/futurum-dev/dotnet.futurum.webapiendpoint?branch=main)
