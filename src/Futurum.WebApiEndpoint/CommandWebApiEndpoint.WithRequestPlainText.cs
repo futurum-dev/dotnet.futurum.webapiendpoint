@@ -12,11 +12,11 @@ public abstract partial class CommandWebApiEndpoint
         /// <summary>
         /// Configure without response
         /// </summary>
-        public abstract class WithoutResponse : ICommandWebApiEndpoint<RequestPlainTextDto, RequestPlainText<TApiEndpoint>, RequestPlainTextMapper<TApiEndpoint>>
+        public abstract class WithoutResponse : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseEmptyDto, RequestPlainText<TApiEndpoint>, ResponseEmpty, RequestPlainTextMapper<TApiEndpoint>, ResponseEmptyMapper>
         {
             /// <inheritdoc />
-            public Task<Result> ExecuteCommandAsync(RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
-                ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken);
+            public Task<Result<ResponseEmpty>> ExecuteCommandAsync(RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
+                ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken).MapAsync(ResponseEmpty.Default);
 
             /// <summary>
             /// Execute the WebApiEndpoint
@@ -30,8 +30,9 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class WithResponse<TResponseDto, TResponseDomain>
         {
-            public abstract class WithMapper<TMapper> : ICommandWebApiEndpoint<RequestPlainTextDto, TResponseDto, RequestPlainText<TApiEndpoint>, TResponseDomain, RequestPlainTextMapper<TApiEndpoint>, TMapper>
-                where TMapper : IWebApiEndpointResponseMapper<TResponseDomain, TResponseDto>
+            public abstract class WithMapper<TMapper> : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseJsonDto<TResponseDto>, RequestPlainText<TApiEndpoint>, TResponseDomain, 
+                RequestPlainTextMapper<TApiEndpoint>, ResponseJsonMapper<TResponseDomain, TResponseDto, TMapper>>
+                where TMapper : IWebApiEndpointResponseDtoMapper<TResponseDomain, TResponseDto>
             {
                 /// <inheritdoc />
                 public Task<Result<TResponseDomain>> ExecuteCommandAsync(RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
@@ -124,7 +125,8 @@ public abstract partial class CommandWebApiEndpoint
         /// <summary>
         /// Configure with response file stream
         /// </summary>
-        public abstract class WithResponseFileStream : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseFileStreamDto, RequestPlainText<TApiEndpoint>, ResponseFileStream<TApiEndpoint>, RequestPlainTextMapper<TApiEndpoint>, ResponseFileStreamMapper<TApiEndpoint>>
+        public abstract class WithResponseFileStream : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseFileStreamDto, RequestPlainText<TApiEndpoint>, ResponseFileStream<TApiEndpoint>,
+            RequestPlainTextMapper<TApiEndpoint>, ResponseFileStreamMapper<TApiEndpoint>>
         {
             /// <inheritdoc />
             public Task<Result<ResponseFileStream<TApiEndpoint>>> ExecuteCommandAsync(RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>

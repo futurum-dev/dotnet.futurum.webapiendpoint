@@ -2,6 +2,7 @@ using FluentAssertions;
 
 using Futurum.Core.Result;
 using Futurum.Test.Result;
+using Futurum.WebApiEndpoint.Metadata;
 using Futurum.WebApiEndpoint.Middleware;
 
 using Microsoft.AspNetCore.Http;
@@ -49,12 +50,12 @@ public class DisabledWebApiEndpointMiddlewareExecutorTests
         }
     }
 
-    public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+    public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>, IWebApiEndpointResponseDtoMapper<Response, ResponseDto>
     {
-        public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
+        public Task<Result<Command>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CommandDto dto, CancellationToken cancellationToken) =>
             throw new NotImplementedException();
 
-        public ResponseDto Map(HttpContext httpContext, Response domain) =>
+        public ResponseDto Map(Response domain) =>
             throw new NotImplementedException();
     }
 

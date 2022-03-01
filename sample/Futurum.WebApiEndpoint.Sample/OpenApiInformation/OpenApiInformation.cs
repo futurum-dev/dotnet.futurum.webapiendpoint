@@ -14,9 +14,9 @@ public static class OpenApiInformation
             new Response(10).ToResultOkAsync();
     }
 
-    public class Mapper : IWebApiEndpointResponseMapper<Response, ResponseDto>
+    public class Mapper : IWebApiEndpointResponseDtoMapper<Response, ResponseDto>
     {
-        public ResponseDto Map(HttpContext httpContext, Response domain) => 
-            new(domain.Number);
+        public ResponseDto Map(Response domain) =>
+            new (domain.Number);
     }
 }

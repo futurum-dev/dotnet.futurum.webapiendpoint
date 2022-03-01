@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint;
 
@@ -10,7 +11,7 @@ public interface IWebApiEndpointRequestMapper<TRequest>
     /// <summary>
     /// Map from <see cref="HttpContext"/> to request domain
     /// </summary>
-    Result<TRequest> Map(HttpContext httpContext);
+    Task<Result<TRequest>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -21,5 +22,5 @@ public interface IWebApiEndpointRequestMapper<TRequestDto, TRequest>
     /// <summary>
     /// Map from <see cref="HttpContext"/> and request dto to request domain
     /// </summary>
-    Result<TRequest> Map(HttpContext httpContext, TRequestDto dto);
+    Task<Result<TRequest>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, TRequestDto dto, CancellationToken cancellationToken);
 }

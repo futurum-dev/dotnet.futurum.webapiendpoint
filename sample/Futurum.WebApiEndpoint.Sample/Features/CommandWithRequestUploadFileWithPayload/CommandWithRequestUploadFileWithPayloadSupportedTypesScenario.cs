@@ -19,12 +19,12 @@ public static class CommandWithRequestUploadFileWithPayloadSupportedTypesScenari
     }
 
     public class Mapper : IWebApiEndpointRequestPayloadMapper<CustomPayloadDto, CustomPayload>,
-                          IWebApiEndpointResponseMapper<Response, ResponseDto>
+                          IWebApiEndpointResponseDtoMapper<Response, ResponseDto>
     {
         public Result<CustomPayload> Map(CustomPayloadDto dto) =>
             new CustomPayload(dto.String, dto.Int, dto.Long, dto.DateTime, dto.Boolean, dto.Guid).ToResultOk();
 
-        public ResponseDto Map(HttpContext httpContext, Response domain) => 
+        public ResponseDto Map(Response domain) => 
             new(domain.FileName, domain.String, domain.Int, domain.Long, domain.DateTime, domain.Boolean, domain.Guid);
     }
 }

@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestManualParameter;
 
@@ -14,8 +15,9 @@ public static class CommandWithRequestManualParameterWithoutResponseScenario
 
     public class Mapper : IWebApiEndpointRequestMapper<Command>
     {
-        public Result<Command> Map(HttpContext httpContext) =>
+        public Task<Result<Command>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
             httpContext.GetRequestPathParameterAsString("Id")
-                       .Map(id => new Command(id));
+                       .Map(id => new Command(id))
+                       .ToResultAsync();
     }
 }

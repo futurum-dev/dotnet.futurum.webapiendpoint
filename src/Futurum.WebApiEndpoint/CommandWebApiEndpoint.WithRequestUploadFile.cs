@@ -12,11 +12,12 @@ public abstract partial class CommandWebApiEndpoint
         /// <summary>
         /// Configure without response
         /// </summary>
-        public abstract class WithoutResponse : ICommandWebApiEndpoint<RequestUploadFileDto, RequestUploadFile<TApiEndpoint>, RequestUploadFileMapper<TApiEndpoint>>
+        public abstract class WithoutResponse : ICommandWebApiEndpoint<RequestUploadFileDto, ResponseEmptyDto, RequestUploadFile<TApiEndpoint>, ResponseEmpty,
+            RequestUploadFileMapper<TApiEndpoint>, ResponseEmptyMapper>
         {
             /// <inheritdoc />
-            public Task<Result> ExecuteCommandAsync(RequestUploadFile<TApiEndpoint> command, CancellationToken cancellationToken) =>
-                ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken);
+            public Task<Result<ResponseEmpty>> ExecuteCommandAsync(RequestUploadFile<TApiEndpoint> command, CancellationToken cancellationToken) =>
+                ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken).MapAsync(ResponseEmpty.Default);
 
             /// <summary>
             /// Execute the WebApiEndpoint
@@ -30,8 +31,9 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class WithResponse<TResponseDto, TResponseDomain>
         {
-            public abstract class WithMapper<TMapper> : ICommandWebApiEndpoint<RequestUploadFileDto, TResponseDto, RequestUploadFile<TApiEndpoint>, TResponseDomain, RequestUploadFileMapper<TApiEndpoint>, TMapper>
-                where TMapper : IWebApiEndpointResponseMapper<TResponseDomain, TResponseDto>
+            public abstract class WithMapper<TMapper> : ICommandWebApiEndpoint<RequestUploadFileDto, ResponseJsonDto<TResponseDto>, RequestUploadFile<TApiEndpoint>, TResponseDomain, 
+                RequestUploadFileMapper<TApiEndpoint>, ResponseJsonMapper<TResponseDomain, TResponseDto, TMapper>>
+                where TMapper : IWebApiEndpointResponseDtoMapper<TResponseDomain, TResponseDto>
             {
                 /// <inheritdoc />
                 public Task<Result<TResponseDomain>> ExecuteCommandAsync(RequestUploadFile<TApiEndpoint> command, CancellationToken cancellationToken) =>

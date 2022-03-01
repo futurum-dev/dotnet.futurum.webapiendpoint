@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestParameterMapFrom;
 
@@ -27,12 +28,12 @@ public static class CommandWithRequestParameterMapFromSupportedTypesScenario
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>,
-                          IWebApiEndpointResponseMapper<Response, ResponseDto>
+                          IWebApiEndpointResponseDtoMapper<Response, ResponseDto>
     {
-        public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
-            new Command(dto.String, dto.Int, dto.Long, dto.DateTime, dto.Boolean, dto.Guid).ToResultOk();
+        public Task<Result<Command>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CommandDto dto, CancellationToken cancellationToken) =>
+            new Command(dto.String, dto.Int, dto.Long, dto.DateTime, dto.Boolean, dto.Guid).ToResultOkAsync();
 
-        public ResponseDto Map(HttpContext httpContext, Response domain) => 
+        public ResponseDto Map(Response domain) => 
             new(domain.String, domain.Int, domain.Long, domain.DateTime, domain.Boolean, domain.Guid);
     }
 }

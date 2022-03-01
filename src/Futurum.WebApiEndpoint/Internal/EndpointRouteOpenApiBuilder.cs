@@ -1,5 +1,7 @@
+using System.Net;
 using System.Net.Mime;
 
+using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Internal;
@@ -11,97 +13,59 @@ internal interface IEndpointRouteOpenApiBuilder
 
 internal class EndpointRouteOpenApiBuilder : IEndpointRouteOpenApiBuilder
 {
-    private readonly IRequestOpenApiTypeCreator _requestOpenApiTypeCreator;
-    private readonly WebApiEndpointConfiguration _configuration;
+    private readonly IEnumerable<IWebApiOpenApiRequestConfiguration> _openApiRequestsConfigurations;
+    private readonly IEnumerable<IWebApiOpenApiResponseConfiguration> _openApiResponseConfigurations;
+    private readonly IEndpointRouteOpenApiBuilderApiVersion _openApiBuilderApiVersion;
+    private readonly IEndpointRouteOpenApiBuilderTag _openApiBuilderTag;
 
-    public EndpointRouteOpenApiBuilder(IRequestOpenApiTypeCreator requestOpenApiTypeCreator,
-                                       WebApiEndpointConfiguration configuration)
+    public EndpointRouteOpenApiBuilder(IEnumerable<IWebApiOpenApiRequestConfiguration> openApiRequestsConfigurations,
+                                       IEnumerable<IWebApiOpenApiResponseConfiguration> openApiResponseConfigurations,
+                                       IEndpointRouteOpenApiBuilderApiVersion openApiBuilderApiVersion,
+                                       IEndpointRouteOpenApiBuilderTag openApiBuilderTag)
     {
-        _requestOpenApiTypeCreator = requestOpenApiTypeCreator;
-        _configuration = configuration;
+        _openApiRequestsConfigurations = openApiRequestsConfigurations;
+        _openApiResponseConfigurations = openApiResponseConfigurations;
+        _openApiBuilderApiVersion = openApiBuilderApiVersion;
+        _openApiBuilderTag = openApiBuilderTag;
     }
 
     public void Configure(RouteHandlerBuilder routeHandlerBuilder, MetadataDefinition metadataDefinition)
     {
         ConfigureAccepts(routeHandlerBuilder, metadataDefinition);
+        
         ConfigureProduces(routeHandlerBuilder, metadataDefinition);
-        ConfigureApiVersion(routeHandlerBuilder, metadataDefinition);
-        ConfigureTags(routeHandlerBuilder, metadataDefinition);
+        
+        _openApiBuilderApiVersion.Configure(routeHandlerBuilder, metadataDefinition);
+        
+        _openApiBuilderTag.Configure(routeHandlerBuilder, metadataDefinition);
     }
 
     private void ConfigureAccepts(RouteHandlerBuilder routeHandlerBuilder, MetadataDefinition metadataDefinition)
     {
-        var (_, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition) = metadataDefinition;
-
-        var requestDtoType = metadataTypeDefinition.RequestDtoType;
-
-        if (requestDtoType == typeof(RequestPlainTextDto))
+        foreach (var openApiRequestsConfiguration in _openApiRequestsConfigurations)
         {
-            routeHandlerBuilder.Accepts(typeof(EmptyRequestDto), MediaTypeNames.Text.Plain);
-        }
-        else if (requestDtoType == typeof(RequestUploadFilesDto) || requestDtoType == typeof(RequestUploadFileDto))
-        {
-            routeHandlerBuilder.Accepts(requestDtoType, "multipart/form-data");
-        }
-        else if (metadataMapFromMultipartDefinition != null && metadataMapFromMultipartDefinition.MapFromMultipartParameterDefinitions.Any())
-        {
-            routeHandlerBuilder.Accepts(requestDtoType, "multipart/form-data");
-        }
-        else if (requestDtoType != typeof(EmptyRequestDto))
-        {
-            if (metadataMapFromDefinition != null && metadataMapFromDefinition.MapFromParameterDefinitions.Any())
+            if (openApiRequestsConfiguration.Check(metadataDefinition))
             {
-                var requestOpenApiType = _requestOpenApiTypeCreator.Create(metadataMapFromDefinition, requestDtoType);
-
-                if (requestOpenApiType.GetProperties().Any())
-                {
-                    routeHandlerBuilder.Accepts(requestOpenApiType, MediaTypeNames.Application.Json);
-                }
-            }
-            else
-            {
-                routeHandlerBuilder.Accepts(requestDtoType, MediaTypeNames.Application.Json);
+                openApiRequestsConfiguration.Execute(routeHandlerBuilder, metadataDefinition);
             }
         }
     }
 
-    private static void ConfigureProduces(RouteHandlerBuilder routeHandlerBuilder, MetadataDefinition metadataDefinition)
+    private void ConfigureProduces(RouteHandlerBuilder routeHandlerBuilder, MetadataDefinition metadataDefinition)
     {
-        var (metadataRouteDefinition, metadataTypeDefinition, _, _) = metadataDefinition;
-
-        var requestDtoType = metadataTypeDefinition.RequestDtoType;
-        var responseDtoType = metadataDefinition.MetadataTypeDefinition.ResponseDtoType;
-
-        if (responseDtoType.GetInterfaces().Contains(typeof(IResponseStreamDto)))
+        foreach (var openApiResponseConfiguration in _openApiResponseConfigurations)
         {
-            routeHandlerBuilder.Produces(metadataRouteDefinition.SuccessStatusCode, contentType: MediaTypeNames.Application.Octet);
+            if (openApiResponseConfiguration.Check(metadataDefinition))
+            {
+                openApiResponseConfiguration.Execute(routeHandlerBuilder, metadataDefinition);
+            }
         }
-        else if (responseDtoType.IsGenericType && responseDtoType.GetGenericTypeDefinition() == typeof(ResponseAsyncEnumerableDto<>))
+        
+        routeHandlerBuilder.Produces(metadataDefinition.MetadataRouteDefinition.FailedStatusCode, typeof(ResultErrorStructure), MediaTypeNames.Application.Json);
+
+        if (metadataDefinition.MetadataRouteDefinition.FailedStatusCode != (int)HttpStatusCode.InternalServerError)
         {
-            var type = typeof(IEnumerable<>).MakeGenericType(responseDtoType.GetGenericArguments()[0]);
-
-            routeHandlerBuilder.Produces(metadataRouteDefinition.SuccessStatusCode, type, MediaTypeNames.Application.Json);
+            routeHandlerBuilder.Produces((int)HttpStatusCode.InternalServerError, typeof(ResultErrorStructure), MediaTypeNames.Application.Json);
         }
-        else if (requestDtoType != typeof(EmptyResponseDto))
-        {
-            routeHandlerBuilder.Produces(metadataRouteDefinition.SuccessStatusCode, responseDtoType, MediaTypeNames.Application.Json);
-        }
-
-        routeHandlerBuilder.Produces(metadataRouteDefinition.FailedStatusCode);
-    }
-
-    private void ConfigureApiVersion(RouteHandlerBuilder routeHandlerBuilder, MetadataDefinition metadataDefinition)
-    {
-        var apiVersion = metadataDefinition.MetadataRouteDefinition.ApiVersion ?? _configuration.DefaultApiVersion;
-        routeHandlerBuilder.WithGroupName($"v{apiVersion}");
-    }
-
-    private static void ConfigureTags(RouteHandlerBuilder routeHandlerBuilder, MetadataDefinition metadataDefinition)
-    {
-        var (_, metadataTypeDefinition, _, _) = metadataDefinition;
-
-        var apiEndpointType = metadataTypeDefinition.WebApiEndpointType;
-
-        routeHandlerBuilder.WithTags(apiEndpointType.GetSanitizedLastPartOfNamespace());
     }
 }

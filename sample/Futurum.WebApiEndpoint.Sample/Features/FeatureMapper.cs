@@ -1,6 +1,6 @@
 namespace Futurum.WebApiEndpoint.Sample.Features;
 
-public class FeatureMapper : IWebApiEndpointResponseMapper<Feature, FeatureDto>
+public class FeatureMapper : IWebApiEndpointResponseDtoMapper<Feature, FeatureDto>
 {
     private readonly IWebApiEndpointResponseDataMapper<Feature, FeatureDto> _dataMapper;
 
@@ -8,7 +8,7 @@ public class FeatureMapper : IWebApiEndpointResponseMapper<Feature, FeatureDto>
     {
         _dataMapper = dataMapper;
     }
-    
-    public FeatureDto Map(HttpContext httpContext, Feature domain) =>
+
+    public FeatureDto Map(Feature domain) =>
         _dataMapper.Map(domain);
 }

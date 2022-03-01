@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Features.QueryWithRequestParameterMapFrom;
 
@@ -19,7 +20,7 @@ public static class QueryWithRequestParameterMapFromWithResponseAsyncEnumerableS
 
     public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>
     {
-        public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
-            new Request(dto.Id).ToResultOk();
+        public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, RequestDto dto, CancellationToken cancellationToken) =>
+            new Request(dto.Id).ToResultOkAsync();
     }
 }

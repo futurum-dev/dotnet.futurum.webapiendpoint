@@ -2,11 +2,9 @@ using System.Text.Json;
 
 using FluentAssertions;
 
-using Futurum.Core.Functional;
 using Futurum.Core.Option;
 using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Internal;
-using Futurum.WebApiEndpoint.Internal.Dispatcher;
 using Futurum.WebApiEndpoint.Metadata;
 using Futurum.WebApiEndpoint.Middleware;
 using Futurum.WebApiEndpoint.OpenApi;
@@ -38,11 +36,10 @@ public class WebApiEndpointOpenApiOperationInformationTests
                                                                                                     new MetadataRouteOpenApiExternalDocs(externalDocsDescription, externalDocsUrl)), 200, 400,
                                                                   Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
-        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestUploadFilesDto), typeof(EmptyResponseDto), typeof(ApiEndpoint),
-                                                                typeof(ICommandWebApiEndpoint<RequestUploadFilesDto, RequestUploadFiles<ApiEndpoint>, RequestUploadFilesMapper<ApiEndpoint>>),
-                                                                typeof(IWebApiEndpointMiddlewareExecutor<RequestUploadFiles<ApiEndpoint>, Unit>),
-                                                                typeof(CommandWebApiEndpointDispatcher<RequestUploadFilesDto, RequestUploadFiles<ApiEndpoint>,
-                                                                    RequestUploadFilesMapper<ApiEndpoint>>),
+        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestEmptyDto), typeof(RequestEmptyDto), typeof(ResponseEmptyDto), typeof(ResponseEmptyDto), typeof(ApiEndpoint),
+                                                                typeof(ICommandWebApiEndpoint<RequestEmptyDto, ResponseEmptyDto, RequestEmpty, ResponseEmpty, RequestEmptyMapper, ResponseEmptyMapper>),
+                                                                typeof(IWebApiEndpointMiddlewareExecutor<RequestEmpty, ResponseEmpty>),
+                                                                typeof(WebApiEndpointDispatcher<RequestEmptyDto, ResponseEmptyDto, RequestEmpty, ResponseEmpty, RequestEmptyMapper, ResponseEmptyMapper>),
                                                                 new List<Type>());
         var metadataDefinition = new MetadataDefinition(metadataRouteDefinition, metadataTypeDefinition, null, null);
 

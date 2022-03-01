@@ -8,7 +8,6 @@ using FluentValidation;
 using Futurum.Core.Option;
 using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Internal;
-using Futurum.WebApiEndpoint.Internal.Dispatcher;
 using Futurum.WebApiEndpoint.Metadata;
 using Futurum.WebApiEndpoint.Middleware;
 
@@ -60,13 +59,13 @@ public class WebApiEndpointExecutorServiceTests
     {
     }
 
-    public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+    public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>, IWebApiEndpointResponseDtoMapper<Response, ResponseDto>
     {
-        public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
-            new Command().ToResultOk();
+        public Task<Result<Command>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CommandDto dto, CancellationToken cancellationToken) =>
+            new Command().ToResultOkAsync();
 
-        public ResponseDto Map(HttpContext httpContext, Response domain) => 
-            new(domain.FirstName, domain.Age);
+        public ResponseDto Map(Response domain) =>
+            new (domain.FirstName, domain.Age);
     }
 
     [Fact]
@@ -99,12 +98,15 @@ public class WebApiEndpointExecutorServiceTests
         services.AddSingleton<IWebApiEndpointHttpContextDispatcher, WebApiEndpointHttpContextDispatcher>();
         services.AddSingleton<IOptions<JsonOptions>>(Options.Create(new JsonOptions()));
         services.AddSingleton(typeof(IWebApiEndpointMiddlewareExecutor<,>), typeof(DisabledWebApiEndpointMiddlewareExecutor<,>));
-        services.AddSingleton<ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>, SuccessApiEndpoint>();
-        services.AddSingleton<CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>>();
+        services.AddSingleton<ICommandWebApiEndpoint<RequestJsonDto<CommandDto>, ResponseJsonDto<ResponseDto>, Command, Response,
+            RequestJsonMapper<CommandDto, Command, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>, SuccessApiEndpoint>();
+        services.AddSingleton<WebApiEndpointDispatcher<RequestJsonDto<CommandDto>, ResponseJsonDto<ResponseDto>, Command, Response, RequestJsonMapper<CommandDto, Command, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>>();
         services.AddSingleton(typeof(IWebApiEndpointRequestValidation<>), typeof(WebApiEndpointRequestValidation<>));
         services.AddSingleton<IValidator<CommandDto>, Validator>();
         services.AddSingleton<Mapper>();
-        services.AddSingleton<Mapper>();
+        services.AddSingleton<RequestJsonMapper<CommandDto, Command, Mapper>>();
+        services.AddSingleton<ResponseJsonMapper<Response, ResponseDto, Mapper>>();
+        services.AddSingleton<IRequestJsonReader<CommandDto>, RequestJsonReader<CommandDto>>();
 
         var httpContext = new DefaultHttpContext();
         httpContext.Response.Body = new MemoryStream();
@@ -113,10 +115,10 @@ public class WebApiEndpointExecutorServiceTests
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                   Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
-        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(CommandDto), typeof(ResponseDto), typeof(SuccessApiEndpoint),
-                                                                typeof(ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>),
+        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestJsonDto<CommandDto>), typeof(CommandDto), typeof(ResponseJsonDto<ResponseDto>), typeof(ResponseDto), typeof(SuccessApiEndpoint),
+                                                                typeof(ICommandWebApiEndpoint<RequestJsonDto<CommandDto>, ResponseJsonDto<ResponseDto>, Command, Response, RequestJsonMapper<CommandDto, Command, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>),
                                                                 typeof(IWebApiEndpointMiddlewareExecutor<Command, Response>),
-                                                                typeof(CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>),
+                                                                typeof(WebApiEndpointDispatcher<RequestJsonDto<CommandDto>, ResponseJsonDto<ResponseDto>, Command, Response, RequestJsonMapper<CommandDto, Command, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>),
                                                                 new List<Type>());
 
         var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
@@ -148,12 +150,15 @@ public class WebApiEndpointExecutorServiceTests
         services.AddSingleton<IWebApiEndpointHttpContextDispatcher, WebApiEndpointHttpContextDispatcher>();
         services.AddSingleton<IOptions<JsonOptions>>(Options.Create(new JsonOptions()));
         services.AddSingleton(typeof(IWebApiEndpointMiddlewareExecutor<,>), typeof(DisabledWebApiEndpointMiddlewareExecutor<,>));
-        services.AddSingleton<ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>, FailedApiEndpoint>();
-        services.AddSingleton<CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>>();
+        services.AddSingleton<ICommandWebApiEndpoint<RequestJsonDto<CommandDto>, ResponseJsonDto<ResponseDto>, Command, Response,
+            RequestJsonMapper<CommandDto, Command, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>, FailedApiEndpoint>();
+        services.AddSingleton<WebApiEndpointDispatcher<RequestJsonDto<CommandDto>, ResponseJsonDto<ResponseDto>, Command, Response, RequestJsonMapper<CommandDto, Command, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>>();
         services.AddSingleton(typeof(IWebApiEndpointRequestValidation<>), typeof(WebApiEndpointRequestValidation<>));
         services.AddSingleton<IValidator<CommandDto>, Validator>();
         services.AddSingleton<Mapper>();
-        services.AddSingleton<Mapper>();
+        services.AddSingleton<RequestJsonMapper<CommandDto, Command, Mapper>>();
+        services.AddSingleton<ResponseJsonMapper<Response, ResponseDto, Mapper>>();
+        services.AddSingleton<IRequestJsonReader<CommandDto>, RequestJsonReader<CommandDto>>();
 
         var httpContext = new DefaultHttpContext();
         httpContext.Response.Body = new MemoryStream();
@@ -162,10 +167,10 @@ public class WebApiEndpointExecutorServiceTests
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                   Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
-        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(CommandDto), typeof(ResponseDto), typeof(SuccessApiEndpoint),
-                                                                typeof(ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>),
+        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestJsonDto<CommandDto>), typeof(CommandDto), typeof(ResponseJsonDto<ResponseDto>), typeof(ResponseDto), typeof(FailedApiEndpoint),
+                                                                typeof(ICommandWebApiEndpoint<RequestJsonDto<CommandDto>, ResponseJsonDto<ResponseDto>, Command, Response, RequestJsonMapper<CommandDto, Command, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>),
                                                                 typeof(IWebApiEndpointMiddlewareExecutor<Command, Response>),
-                                                                typeof(CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>),
+                                                                typeof(WebApiEndpointDispatcher<RequestJsonDto<CommandDto>, ResponseJsonDto<ResponseDto>, Command, Response, RequestJsonMapper<CommandDto, Command, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>),
                                                                 new List<Type>());
 
         var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
@@ -201,10 +206,10 @@ public class WebApiEndpointExecutorServiceTests
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                   Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
-        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(CommandDto), typeof(ResponseDto), typeof(SuccessApiEndpoint),
-                                                                typeof(ICommandWebApiEndpoint<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>),
+        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestJsonDto<CommandDto>), typeof(CommandDto), typeof(ResponseJsonDto<ResponseDto>), typeof(ResponseDto), typeof(SuccessApiEndpoint),
+                                                                typeof(ICommandWebApiEndpoint<RequestJsonDto<CommandDto>, ResponseJsonDto<ResponseDto>, Command, Response, RequestJsonMapper<CommandDto, Command, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>),
                                                                 typeof(IWebApiEndpointMiddlewareExecutor<Command, Response>),
-                                                                typeof(CommandWebApiEndpointDispatcher<CommandDto, ResponseDto, Command, Response, Mapper, Mapper>),
+                                                                typeof(WebApiEndpointDispatcher<RequestJsonDto<CommandDto>, ResponseJsonDto<ResponseDto>, Command, Response, RequestJsonMapper<CommandDto, Command, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>),
                                                                 new List<Type>());
 
         var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());

@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Blog;
 
@@ -26,7 +27,7 @@ public static class BlogGetById
 
     public class Mapper : IWebApiEndpointRequestMapper<QueryDto, Query>
     {
-        public Result<Query> Map(HttpContext httpContext, QueryDto dto) =>
-            new Query(dto.Id.ToId()).ToResultOk();
+        public Task<Result<Query>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, QueryDto dto, CancellationToken cancellationToken) =>
+            new Query(dto.Id.ToId()).ToResultOkAsync();
     }
 }

@@ -4,7 +4,7 @@ namespace Futurum.WebApiEndpoint.Internal.AspNetCore;
 
 internal static class HttpRequestExtensions
 {
-    public static Task<Result<string>> ReadPlainTextBodyAsync(this HttpRequest httpRequest)
+    public static Task<Result<string>> TryReadPlainTextBodyAsync(this HttpRequest httpRequest)
     {
         async Task<string> Execute()
         {
@@ -15,7 +15,7 @@ internal static class HttpRequestExtensions
         return Result.TryAsync(Execute, () => "Failed to read request as plain text");
     }
     
-    public static Task<Result<IEnumerable<IFormFile>>> ReadUploadFilesAsync(this HttpRequest httpRequest, CancellationToken cancellationToken)
+    public static Task<Result<IEnumerable<IFormFile>>> TryReadUploadFilesAsync(this HttpRequest httpRequest, CancellationToken cancellationToken)
     {
         async Task<IEnumerable<IFormFile>> Execute()
         {

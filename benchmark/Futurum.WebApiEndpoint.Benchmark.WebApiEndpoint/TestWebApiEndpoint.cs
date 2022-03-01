@@ -1,6 +1,7 @@
 using FluentValidation;
 
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Benchmark.WebApiEndpoint;
 
@@ -23,12 +24,12 @@ public static class TestWebApiEndpoint
             new Response(query.Id, query.FirstName + " " + query.LastName, query.Age, query.PhoneNumbers?.FirstOrDefault()).ToResultOkAsync();
     }
 
-    public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Query>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+    public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Query>, IWebApiEndpointResponseDtoMapper<Response, ResponseDto>
     {
-        public Result<Query> Map(HttpContext httpContext, RequestDto dto) =>
-            new Query(dto.Id, dto.FirstName, dto.LastName, dto.Age, dto.PhoneNumbers).ToResultOk();
+        public Task<Result<Query>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, RequestDto dto, CancellationToken cancellationToken) =>
+            new Query(dto.Id, dto.FirstName, dto.LastName, dto.Age, dto.PhoneNumbers).ToResultOkAsync();
 
-        public ResponseDto Map(HttpContext httpContext, Response domain) => 
+        public ResponseDto Map(Response domain) => 
             new(domain.Id, domain.Name, domain.Age, domain.PhoneNumber);
     }
 

@@ -2,7 +2,6 @@ using System.Net;
 
 using Futurum.Core.Result;
 using Futurum.Microsoft.Extensions.DependencyInjection;
-using Futurum.WebApiEndpoint.Internal.Dispatcher;
 using Futurum.WebApiEndpoint.Metadata;
 using Futurum.WebApiEndpoint.Middleware;
 

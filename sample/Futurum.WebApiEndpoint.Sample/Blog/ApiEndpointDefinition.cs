@@ -15,6 +15,7 @@ public class ApiEndpointDefinition : IApiEndpointDefinition
                          .Query<BlogGetById.ApiEndpoint>(builder => builder.RouteWithParameters("blog/{Id}")
                                                                            .Version(WebApiEndpointVersions.V1_0).Summary("Get Blogs By Id").Description("Get Blogs By Id"))
                          .Command<BlogUpdate.ApiEndpoint>(builder => builder.Put("blog").Version(WebApiEndpointVersions.V1_0).Summary("Update Blog").Description("Update Blog"))
-                         .Query<BlogGetAsyncEnumerable.ApiEndpoint>(builder => builder.Route("blog-async").Version(WebApiEndpointVersions.V1_0).Summary("Get Blogs").Description("Get Blogs"));
+                         .Query<BlogGetAsyncEnumerable.ApiEndpoint>(builder => builder.Route("blog-async").Version(WebApiEndpointVersions.V1_0).Summary("Get Blogs").Description("Get Blogs"))
+                         ;
     }
 }

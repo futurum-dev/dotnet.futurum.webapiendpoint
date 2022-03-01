@@ -1,7 +1,5 @@
 using FluentAssertions;
 
-using Futurum.Core.Linq;
-
 using Microsoft.AspNetCore.Http;
 
 using Xunit;

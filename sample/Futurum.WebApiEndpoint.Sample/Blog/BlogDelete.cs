@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Blog;
 
@@ -21,8 +22,9 @@ public static class BlogDelete
 
     public class Mapper : IWebApiEndpointRequestMapper<Command>
     {
-        public Result<Command> Map(HttpContext httpContext) =>
+        public Task<Result<Command>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
             httpContext.GetRequestPathParameterAsLong("Id")
-                       .Map(id => new Command(id.ToId()));
+                       .Map(id => new Command(id.ToId()))
+                       .ToResultAsync();
     }
 }

@@ -6,7 +6,6 @@ using FluentValidation;
 using Futurum.ApiEndpoint;
 using Futurum.Microsoft.Extensions.DependencyInjection;
 using Futurum.WebApiEndpoint.Internal;
-using Futurum.WebApiEndpoint.Internal.Dispatcher;
 using Futurum.WebApiEndpoint.Metadata;
 using Futurum.WebApiEndpoint.Middleware;
 
@@ -43,7 +42,7 @@ public class WebApiEndpointModule : IModule
 
         RegisterHttpContextDispatcher(services);
 
-        RegisterDispatchers(services);
+        RegisterDispatcher(services);
 
         RegisterValidation(services, _assemblies);
 
@@ -70,16 +69,9 @@ public class WebApiEndpointModule : IModule
         services.AddSingleton<IWebApiEndpointHttpContextDispatcher, WebApiEndpointHttpContextDispatcher>();
     }
 
-    private static void RegisterDispatchers(IServiceCollection services)
+    private static void RegisterDispatcher(IServiceCollection services)
     {
-        services.AddSingleton(typeof(QueryWebApiEndpointDispatcher<,,>));
-        services.AddSingleton(typeof(QueryWebApiEndpointDispatcher<,,,,>));
-        services.AddSingleton(typeof(QueryWebApiEndpointDispatcher<,,,,,>));
-
-        services.AddSingleton(typeof(CommandWebApiEndpointDispatcher<,,,,,>));
-        services.AddSingleton(typeof(CommandWebApiEndpointDispatcher<,,,,>));
-        services.AddSingleton(typeof(CommandWebApiEndpointDispatcher<,,>));
-        services.AddSingleton(typeof(CommandWebApiEndpointDispatcher<,>));
+        services.AddSingleton(typeof(WebApiEndpointDispatcher<,,,,,>));
     }
 
     private static void RegisterValidation(IServiceCollection services, Assembly[] assemblies)
@@ -101,6 +93,8 @@ public class WebApiEndpointModule : IModule
     {
         services.AddSingleton<IRequestOpenApiTypeCreator, RequestOpenApiTypeCreator>();
         services.AddSingleton<IEndpointRouteOpenApiBuilder, EndpointRouteOpenApiBuilder>();
+        services.AddSingleton<IEndpointRouteOpenApiBuilderApiVersion, EndpointRouteOpenApiBuilderApiVersion>();
+        services.AddSingleton<IEndpointRouteOpenApiBuilderTag, EndpointRouteOpenApiBuilderTag>();
         services.AddSingleton<IEndpointRouteSecurityBuilder, EndpointRouteSecurityBuilder>();
     }
 

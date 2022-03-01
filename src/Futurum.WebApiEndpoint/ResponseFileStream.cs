@@ -1,7 +1,5 @@
 using System.Net.Mime;
 
-using Futurum.WebApiEndpoint.Internal;
-
 namespace Futurum.WebApiEndpoint;
 
 /// <summary>
@@ -20,10 +18,4 @@ public record ResponseFileStream(FileInfo FileInfo, string ContentType = MediaTy
 /// <summary>
 /// Response dto for file-stream
 /// </summary>
-public record ResponseFileStreamDto(FileInfo FileInfo, string ContentType) : IResponseStreamDto;
-
-internal class ResponseFileStreamMapper<TApiEndpoint> : IWebApiEndpointResponseMapper<ResponseFileStream<TApiEndpoint>, ResponseFileStreamDto>
-{
-    public ResponseFileStreamDto Map(HttpContext httpContext, ResponseFileStream<TApiEndpoint> domain) => 
-        new(domain.FileInfo, domain.ContentType);
-}
+public record ResponseFileStreamDto(FileInfo FileInfo, string ContentType);

@@ -2,6 +2,7 @@ using FluentValidation;
 
 using Futurum.Core.Option;
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Blog;
 
@@ -26,8 +27,8 @@ public static class BlogCreate
 
     public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>
     {
-        public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
-            new Command(new Blog(Option<Id>.None, dto.Url)).ToResultOk();
+        public Task<Result<Command>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CommandDto dto, CancellationToken cancellationToken) =>
+            new Command(new Blog(Option<Id>.None, dto.Url)).ToResultOkAsync();
     }
 
     public class Validator : AbstractValidator<CommandDto>

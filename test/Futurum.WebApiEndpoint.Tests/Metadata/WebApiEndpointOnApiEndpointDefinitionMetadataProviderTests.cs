@@ -1,11 +1,9 @@
 using FluentAssertions;
 
 using Futurum.ApiEndpoint;
-using Futurum.Core.Functional;
 using Futurum.Core.Linq;
 using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Internal;
-using Futurum.WebApiEndpoint.Internal.Dispatcher;
 using Futurum.WebApiEndpoint.Metadata;
 using Futurum.WebApiEndpoint.Middleware;
 
@@ -24,361 +22,478 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
     {
         _output = output;
     }
-
+    
     public class QueryWebApiEndpoint
     {
-        public class QueryWithoutRequest
+        private const string Route = "Route";
+
+        public class ApiEndpointDefinition : IApiEndpointDefinition
         {
-            private const string Route = "Route";
-
-            public class ApiEndpointDefinition : IApiEndpointDefinition
+            public void Configure(ApiEndpointDefinitionBuilder definitionBuilder)
             {
-                public void Configure(ApiEndpointDefinitionBuilder definitionBuilder)
-                {
-                    definitionBuilder.Web()
-                                     .Query<ApiEndpoint>(builder => builder.Route(Route));
-                }
-            }
-
-            public record ResponseDto;
-
-            public record Response;
-
-            public class ApiEndpoint : Futurum.WebApiEndpoint.QueryWebApiEndpoint.WithoutRequest.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
-            {
-                protected override Task<Result<Response>> ExecuteAsync(CancellationToken cancellationToken) =>
-                    new Response().ToResultOkAsync();
-            }
-
-            public class Mapper : IWebApiEndpointResponseMapper<Response, ResponseDto>
-            {
-                public ResponseDto Map(HttpContext httpContext, Response domain) =>
-                    throw new NotImplementedException();
-            }
-
-            [Fact]
-            public void check_MetadataDefinition()
-            {
-                var metadataDefinitions = WebApiEndpointOnApiEndpointDefinitionMetadataProvider.GetMetadata(EnumerableExtensions.Return(new ApiEndpointDefinition()));
-
-                var metadataDefinition = metadataDefinitions.Single();
-
-                metadataDefinition.MetadataRouteDefinition.RouteTemplate.Should().Be(Route);
-                metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<EmptyRequestDto>();
-                metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
-                metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Unit, Response>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<ResponseDto, Response, Mapper>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<ResponseDto, Response, Mapper>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
-                metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
+                definitionBuilder.Web()
+                                 .Query<ApiEndpoint>(builder => builder.Route(Route));
             }
         }
 
-        public class QueryWithoutRequestDto
+        public record RequestDto;
+
+        public record Request;
+
+        public record ResponseDto;
+
+        public record Response;
+
+        public class ApiEndpoint : Futurum.WebApiEndpoint.QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
         {
-            private const string Route = "Route";
-
-            public class ApiEndpointDefinition : IApiEndpointDefinition
-            {
-                public void Configure(ApiEndpointDefinitionBuilder definitionBuilder)
-                {
-                    definitionBuilder.Web()
-                                     .Query<ApiEndpoint>(builder => builder.Route(Route));
-                }
-            }
-
-            public record Request;
-
-            public record ResponseDto;
-
-            public record Response;
-
-            public class ApiEndpoint : Futurum.WebApiEndpoint.QueryWebApiEndpoint.WithRequest<Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
-            {
-                protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
-                    new Response().ToResultOkAsync();
-            }
-
-            public class Mapper : IWebApiEndpointRequestMapper<Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
-            {
-                public Result<Request> Map(HttpContext httpContext) =>
-                    throw new NotImplementedException();
-
-                public ResponseDto Map(HttpContext httpContext, Response domain) =>
-                    throw new NotImplementedException();
-            }
-
-            [Fact]
-            public void check_MetadataDefinition()
-            {
-                var metadataDefinitions = WebApiEndpointOnApiEndpointDefinitionMetadataProvider.GetMetadata(EnumerableExtensions.Return(new ApiEndpointDefinition()));
-
-                var metadataDefinition = metadataDefinitions.Single();
-
-                metadataDefinition.MetadataRouteDefinition.RouteTemplate.Should().Be(Route);
-                metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<EmptyRequestDto>();
-                metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
-                metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Response>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<ResponseDto, Request, Response, Mapper, Mapper>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<ResponseDto, Request, Response, Mapper, Mapper>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
-                metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
-            }
+            protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+                throw new NotImplementedException();
         }
 
-        public class QueryWithRequestDto
+        public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseDtoMapper<Response, ResponseDto>
         {
-            private const string Route = "Route";
+            public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, RequestDto dto, CancellationToken cancellationToken) =>
+                throw new NotImplementedException();
 
-            public class ApiEndpointDefinition : IApiEndpointDefinition
-            {
-                public void Configure(ApiEndpointDefinitionBuilder definitionBuilder)
-                {
-                    definitionBuilder.Web()
-                                     .Query<ApiEndpoint>(builder => builder.Route(Route));
-                }
-            }
+            public ResponseDto Map(Response domain) =>
+                throw new NotImplementedException();
+        }
 
-            public record RequestDto;
+        [Fact]
+        public void check_MetadataDefinition()
+        {
+            var metadataDefinitions = WebApiEndpointOnApiEndpointDefinitionMetadataProvider.GetMetadata(EnumerableExtensions.Return(new ApiEndpointDefinition()));
 
-            public record Request;
+            var metadataDefinition = metadataDefinitions.Single();
 
-            public record ResponseDto;
-
-            public record Response;
-
-            public class ApiEndpoint : Futurum.WebApiEndpoint.QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
-            {
-                protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
-                    new Response().ToResultOkAsync();
-            }
-
-            public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
-            {
-                public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
-                    throw new NotImplementedException();
-
-                public ResponseDto Map(HttpContext httpContext, Response domain) =>
-                    throw new NotImplementedException();
-            }
-
-            [Fact]
-            public void check_MetadataDefinition()
-            {
-                var metadataDefinitions = WebApiEndpointOnApiEndpointDefinitionMetadataProvider.GetMetadata(EnumerableExtensions.Return(new ApiEndpointDefinition()));
-
-                var metadataDefinition = metadataDefinitions.Single();
-
-                metadataDefinition.MetadataRouteDefinition.RouteTemplate.Should().Be(Route);
-                metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<RequestDto>();
-                metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
-                metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Response>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
-                metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
-            }
+            metadataDefinition.MetadataRouteDefinition.RouteTemplate.Should().Be(Route);
+            metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<RequestJsonDto<RequestDto>>();
+            metadataDefinition.MetadataTypeDefinition.UnderlyingRequestDtoType.Should().Be<RequestDto>();
+            metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<ResponseJsonDto<ResponseDto>>();
+            metadataDefinition.MetadataTypeDefinition.UnderlyingResponseDtoType.Should().Be<ResponseDto>();
+            metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Response>>();
+            metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<WebApiEndpointDispatcher<RequestJsonDto<RequestDto>, ResponseJsonDto<ResponseDto>, Request, Response, 
+                RequestJsonMapper<RequestDto, Request, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>>();
+            metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<RequestJsonDto<RequestDto>, ResponseJsonDto<ResponseDto>, Request, Response, 
+                RequestJsonMapper<RequestDto, Request, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>>();
+            metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
+            metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
         }
     }
-
+    
     public class CommandWebApiEndpoint
     {
-        public class CommandWithRequestWithResponse
+        private const string Route = "Route";
+
+        public class ApiEndpointDefinition : IApiEndpointDefinition
         {
-            private const string Route = "Route";
-
-            public class ApiEndpointDefinition : IApiEndpointDefinition
+            public void Configure(ApiEndpointDefinitionBuilder definitionBuilder)
             {
-                public void Configure(ApiEndpointDefinitionBuilder definitionBuilder)
-                {
-                    definitionBuilder.Web()
-                                     .Command<ApiEndpoint>(builder => builder.Post(Route));
-                }
-            }
-
-            public record RequestDto;
-
-            public record Request;
-
-            public record ResponseDto;
-
-            public record Response;
-
-            public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
-            {
-                protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
-                    new Response().ToResultOkAsync();
-            }
-
-            public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
-            {
-                public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
-                    throw new NotImplementedException();
-
-                public ResponseDto Map(HttpContext httpContext, Response domain) =>
-                    throw new NotImplementedException();
-            }
-
-            [Fact]
-            public void check_MetadataDefinition()
-            {
-                var metadataDefinitions = WebApiEndpointOnApiEndpointDefinitionMetadataProvider.GetMetadata(EnumerableExtensions.Return(new ApiEndpointDefinition()));
-
-                var metadataDefinition = metadataDefinitions.Single();
-
-                metadataDefinition.MetadataRouteDefinition.RouteTemplate.Should().Be(Route);
-                metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<RequestDto>();
-                metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
-                metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Response>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
-                metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
+                definitionBuilder.Web()
+                                 .Command<ApiEndpoint>(builder => builder.Post(Route));
             }
         }
 
-        public class CommandWithoutRequestWithResponse
+        public record RequestDto;
+
+        public record Request;
+
+        public record ResponseDto;
+
+        public record Response;
+
+        public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
         {
-            private const string Route = "Route";
-
-            public class ApiEndpointDefinition : IApiEndpointDefinition
-            {
-                public void Configure(ApiEndpointDefinitionBuilder definitionBuilder)
-                {
-                    definitionBuilder.Web()
-                                     .Command<ApiEndpoint>(builder => builder.Post(Route));
-                }
-            }
-
-            public record Request;
-
-            public record ResponseDto;
-
-            public record Response;
-
-            public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
-            {
-                protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
-                    new Response().ToResultOkAsync();
-            }
-
-            public class Mapper : IWebApiEndpointRequestMapper<Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
-            {
-                public Result<Request> Map(HttpContext httpContext) =>
-                    throw new NotImplementedException();
-
-                public ResponseDto Map(HttpContext httpContext, Response domain) =>
-                    throw new NotImplementedException();
-            }
-
-            [Fact]
-            public void check_MetadataDefinition()
-            {
-                var metadataDefinitions = WebApiEndpointOnApiEndpointDefinitionMetadataProvider.GetMetadata(EnumerableExtensions.Return(new ApiEndpointDefinition()));
-
-                var metadataDefinition = metadataDefinitions.Single();
-
-                metadataDefinition.MetadataRouteDefinition.RouteTemplate.Should().Be(Route);
-                metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<EmptyRequestDto>();
-                metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
-                metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Response>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<ResponseDto, Request, Response, Mapper, Mapper>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<ResponseDto, Request, Response, Mapper, Mapper>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
-                metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
-            }
+            protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+                new Response().ToResultOkAsync();
         }
 
-        public class CommandWithResponse
+        public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseDtoMapper<Response, ResponseDto>
         {
-            private const string Route = "Route";
+            public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, RequestDto dto, CancellationToken cancellationToken) =>
+                throw new NotImplementedException();
 
-            public class ApiEndpointDefinition : IApiEndpointDefinition
-            {
-                public void Configure(ApiEndpointDefinitionBuilder definitionBuilder)
-                {
-                    definitionBuilder.Web()
-                                     .Command<ApiEndpoint>(builder => builder.Post(Route));
-                }
-            }
-
-            public record RequestDto;
-
-            public record Request;
-
-            public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<RequestDto, Request>.WithoutResponse.WithMapper<Mapper>
-            {
-                protected override Task<Result> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
-                    Result.OkAsync();
-            }
-
-            public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>
-            {
-                public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
-                    throw new NotImplementedException();
-            }
-
-            [Fact]
-            public void check_MetadataDefinition()
-            {
-                var metadataDefinitions = WebApiEndpointOnApiEndpointDefinitionMetadataProvider.GetMetadata(EnumerableExtensions.Return(new ApiEndpointDefinition()));
-
-                var metadataDefinition = metadataDefinitions.Single();
-
-                metadataDefinition.MetadataRouteDefinition.RouteTemplate.Should().Be(Route);
-                metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<RequestDto>();
-                metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<EmptyResponseDto>();
-                metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Unit>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<RequestDto, Request, Mapper>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<RequestDto, Request, Mapper>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
-                metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
-            }
+            public ResponseDto Map(Response domain) =>
+                throw new NotImplementedException();
         }
 
-        public class CommandWithoutRequestWithoutResponse
+        [Fact]
+        public void check_MetadataDefinition()
         {
-            private const string Route = "Route";
+            var metadataDefinitions = WebApiEndpointOnApiEndpointDefinitionMetadataProvider.GetMetadata(EnumerableExtensions.Return(new ApiEndpointDefinition()));
 
-            public class ApiEndpointDefinition : IApiEndpointDefinition
-            {
-                public void Configure(ApiEndpointDefinitionBuilder definitionBuilder)
-                {
-                    definitionBuilder.Web()
-                                     .Command<ApiEndpoint>(builder => builder.Post(Route));
-                }
-            }
+            var metadataDefinition = metadataDefinitions.Single();
 
-            public record Request;
-
-            public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<Request>.WithoutResponse.WithMapper<Mapper>
-            {
-                protected override Task<Result> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
-                    Result.OkAsync();
-            }
-
-            public class Mapper : IWebApiEndpointRequestMapper<Request>
-            {
-                public Result<Request> Map(HttpContext httpContext) =>
-                    throw new NotImplementedException();
-            }
-
-            [Fact]
-            public void check_MetadataDefinition()
-            {
-                var metadataDefinitions = WebApiEndpointOnApiEndpointDefinitionMetadataProvider.GetMetadata(EnumerableExtensions.Return(new ApiEndpointDefinition()));
-
-                var metadataDefinition = metadataDefinitions.Single();
-
-                metadataDefinition.MetadataRouteDefinition.RouteTemplate.Should().Be(Route);
-                metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<EmptyRequestDto>();
-                metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<EmptyResponseDto>();
-                metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Unit>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<Request, Mapper>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<Request, Mapper>>();
-                metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
-                metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
-            }
+            metadataDefinition.MetadataRouteDefinition.RouteTemplate.Should().Be(Route);
+            metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<RequestJsonDto<RequestDto>>();
+            metadataDefinition.MetadataTypeDefinition.UnderlyingRequestDtoType.Should().Be<RequestDto>();
+            metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<ResponseJsonDto<ResponseDto>>();
+            metadataDefinition.MetadataTypeDefinition.UnderlyingResponseDtoType.Should().Be<ResponseDto>();
+            metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Response>>();
+            metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<WebApiEndpointDispatcher<RequestJsonDto<RequestDto>, ResponseJsonDto<ResponseDto>, Request, Response, 
+                RequestJsonMapper<RequestDto, Request, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>>();
+            metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<RequestJsonDto<RequestDto>, ResponseJsonDto<ResponseDto>, Request, Response, 
+                RequestJsonMapper<RequestDto, Request, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>>();
+            metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
+            metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
         }
     }
+    
+    //
+    // public class QueryWebApiEndpoint
+    // {
+    //     public class QueryWithoutRequest
+    //     {
+    //         private const string Route = "Route";
+    //
+    //         public class ApiEndpointDefinition : IApiEndpointDefinition
+    //         {
+    //             public void Configure(ApiEndpointDefinitionBuilder definitionBuilder)
+    //             {
+    //                 definitionBuilder.Web()
+    //                                  .Query<ApiEndpoint>(builder => builder.Route(Route));
+    //             }
+    //         }
+    //
+    //         public record ResponseDto;
+    //
+    //         public record Response;
+    //
+    //         public class ApiEndpoint : Futurum.WebApiEndpoint.QueryWebApiEndpoint.WithoutRequest.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    //         {
+    //             protected override Task<Result<Response>> ExecuteAsync(CancellationToken cancellationToken) =>
+    //                 new Response().ToResultOkAsync();
+    //         }
+    //
+    //         public class Mapper : IWebApiEndpointResponseMapper<Response, ResponseDto>
+    //         {
+    //             public Task<Result> MapAsync(HttpContext httpContext, MetadataRouteDefinition metadataRouteDefinition, Response domain, CancellationToken cancellation) =>
+    //                 throw new NotImplementedException();
+    //         }
+    //
+    //         [Fact]
+    //         public void check_MetadataDefinition()
+    //         {
+    //             var metadataDefinitions = WebApiEndpointOnApiEndpointDefinitionMetadataProvider.GetMetadata(EnumerableExtensions.Return(new ApiEndpointDefinition()));
+    //
+    //             var metadataDefinition = metadataDefinitions.Single();
+    //
+    //             metadataDefinition.MetadataRouteDefinition.RouteTemplate.Should().Be(Route);
+    //             metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<EmptyRequestDto>();
+    //             metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
+    //             metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Unit, Response>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<ResponseDto, Response, Mapper>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<ResponseDto, Response, Mapper>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
+    //             metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
+    //         }
+    //     }
+    //
+    //     public class QueryWithoutRequestDto
+    //     {
+    //         private const string Route = "Route";
+    //
+    //         public class ApiEndpointDefinition : IApiEndpointDefinition
+    //         {
+    //             public void Configure(ApiEndpointDefinitionBuilder definitionBuilder)
+    //             {
+    //                 definitionBuilder.Web()
+    //                                  .Query<ApiEndpoint>(builder => builder.Route(Route));
+    //             }
+    //         }
+    //
+    //         public record Request;
+    //
+    //         public record ResponseDto;
+    //
+    //         public record Response;
+    //
+    //         public class ApiEndpoint : Futurum.WebApiEndpoint.QueryWebApiEndpoint.WithRequest<Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    //         {
+    //             protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+    //                 new Response().ToResultOkAsync();
+    //         }
+    //
+    //         public class Mapper : IWebApiEndpointRequestMapper<Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+    //         {
+    //             public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
+    //                 throw new NotImplementedException();
+    //
+    //             public Task<Result> MapAsync(HttpContext httpContext, MetadataRouteDefinition metadataRouteDefinition, Response domain, CancellationToken cancellation) =>
+    //                 throw new NotImplementedException();
+    //         }
+    //
+    //         [Fact]
+    //         public void check_MetadataDefinition()
+    //         {
+    //             var metadataDefinitions = WebApiEndpointOnApiEndpointDefinitionMetadataProvider.GetMetadata(EnumerableExtensions.Return(new ApiEndpointDefinition()));
+    //
+    //             var metadataDefinition = metadataDefinitions.Single();
+    //
+    //             metadataDefinition.MetadataRouteDefinition.RouteTemplate.Should().Be(Route);
+    //             metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<EmptyRequestDto>();
+    //             metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
+    //             metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Response>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<ResponseDto, Request, Response, Mapper, Mapper>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<ResponseDto, Request, Response, Mapper, Mapper>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
+    //             metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
+    //         }
+    //     }
+    //
+    //     public class QueryWithRequestDto
+    //     {
+    //         private const string Route = "Route";
+    //
+    //         public class ApiEndpointDefinition : IApiEndpointDefinition
+    //         {
+    //             public void Configure(ApiEndpointDefinitionBuilder definitionBuilder)
+    //             {
+    //                 definitionBuilder.Web()
+    //                                  .Query<ApiEndpoint>(builder => builder.Route(Route));
+    //             }
+    //         }
+    //
+    //         public record RequestDto;
+    //
+    //         public record Request;
+    //
+    //         public record ResponseDto;
+    //
+    //         public record Response;
+    //
+    //         public class ApiEndpoint : Futurum.WebApiEndpoint.QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    //         {
+    //             protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+    //                 new Response().ToResultOkAsync();
+    //         }
+    //
+    //         public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+    //         {
+    //             public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, RequestDto dto, CancellationToken cancellationToken) =>
+    //                 throw new NotImplementedException();
+    //
+    //             public Task<Result> MapAsync(HttpContext httpContext, MetadataRouteDefinition metadataRouteDefinition, Response domain, CancellationToken cancellation) =>
+    //                 throw new NotImplementedException();
+    //         }
+    //
+    //         [Fact]
+    //         public void check_MetadataDefinition()
+    //         {
+    //             var metadataDefinitions = WebApiEndpointOnApiEndpointDefinitionMetadataProvider.GetMetadata(EnumerableExtensions.Return(new ApiEndpointDefinition()));
+    //
+    //             var metadataDefinition = metadataDefinitions.Single();
+    //
+    //             metadataDefinition.MetadataRouteDefinition.RouteTemplate.Should().Be(Route);
+    //             metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<RequestDto>();
+    //             metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
+    //             metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Response>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<QueryWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<IQueryWebApiEndpoint<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
+    //             metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
+    //         }
+    //     }
+    // }
+    //
+    // public class CommandWebApiEndpoint
+    // {
+    //     public class CommandWithRequestWithResponse
+    //     {
+    //         private const string Route = "Route";
+    //
+    //         public class ApiEndpointDefinition : IApiEndpointDefinition
+    //         {
+    //             public void Configure(ApiEndpointDefinitionBuilder definitionBuilder)
+    //             {
+    //                 definitionBuilder.Web()
+    //                                  .Command<ApiEndpoint>(builder => builder.Post(Route));
+    //             }
+    //         }
+    //
+    //         public record RequestDto;
+    //
+    //         public record Request;
+    //
+    //         public record ResponseDto;
+    //
+    //         public record Response;
+    //
+    //         public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    //         {
+    //             protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+    //                 new Response().ToResultOkAsync();
+    //         }
+    //
+    //         public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+    //         {
+    //             public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, RequestDto dto, CancellationToken cancellationToken) =>
+    //                 throw new NotImplementedException();
+    //
+    //             public Task<Result> MapAsync(HttpContext httpContext, MetadataRouteDefinition metadataRouteDefinition, Response domain, CancellationToken cancellation) =>
+    //                 throw new NotImplementedException();
+    //         }
+    //
+    //         [Fact]
+    //         public void check_MetadataDefinition()
+    //         {
+    //             var metadataDefinitions = WebApiEndpointOnApiEndpointDefinitionMetadataProvider.GetMetadata(EnumerableExtensions.Return(new ApiEndpointDefinition()));
+    //
+    //             var metadataDefinition = metadataDefinitions.Single();
+    //
+    //             metadataDefinition.MetadataRouteDefinition.RouteTemplate.Should().Be(Route);
+    //             metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<RequestDto>();
+    //             metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
+    //             metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Response>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
+    //             metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
+    //         }
+    //     }
+    //
+    //     public class CommandWithoutRequestWithResponse
+    //     {
+    //         private const string Route = "Route";
+    //
+    //         public class ApiEndpointDefinition : IApiEndpointDefinition
+    //         {
+    //             public void Configure(ApiEndpointDefinitionBuilder definitionBuilder)
+    //             {
+    //                 definitionBuilder.Web()
+    //                                  .Command<ApiEndpoint>(builder => builder.Post(Route));
+    //             }
+    //         }
+    //
+    //         public record Request;
+    //
+    //         public record ResponseDto;
+    //
+    //         public record Response;
+    //
+    //         public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    //         {
+    //             protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+    //                 new Response().ToResultOkAsync();
+    //         }
+    //
+    //         public class Mapper : IWebApiEndpointRequestMapper<Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+    //         {
+    //             public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
+    //                 throw new NotImplementedException();
+    //
+    //             public Task<Result> MapAsync(HttpContext httpContext, MetadataRouteDefinition metadataRouteDefinition, Response domain, CancellationToken cancellation) =>
+    //                 throw new NotImplementedException();
+    //         }
+    //
+    //         [Fact]
+    //         public void check_MetadataDefinition()
+    //         {
+    //             var metadataDefinitions = WebApiEndpointOnApiEndpointDefinitionMetadataProvider.GetMetadata(EnumerableExtensions.Return(new ApiEndpointDefinition()));
+    //
+    //             var metadataDefinition = metadataDefinitions.Single();
+    //
+    //             metadataDefinition.MetadataRouteDefinition.RouteTemplate.Should().Be(Route);
+    //             metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<EmptyRequestDto>();
+    //             metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<ResponseDto>();
+    //             metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Response>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<ResponseDto, Request, Response, Mapper, Mapper>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<ResponseDto, Request, Response, Mapper, Mapper>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
+    //             metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
+    //         }
+    //     }
+    //
+    //     public class CommandWithResponse
+    //     {
+    //         private const string Route = "Route";
+    //
+    //         public class ApiEndpointDefinition : IApiEndpointDefinition
+    //         {
+    //             public void Configure(ApiEndpointDefinitionBuilder definitionBuilder)
+    //             {
+    //                 definitionBuilder.Web()
+    //                                  .Command<ApiEndpoint>(builder => builder.Post(Route));
+    //             }
+    //         }
+    //
+    //         public record RequestDto;
+    //
+    //         public record Request;
+    //
+    //         public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<RequestDto, Request>.WithoutResponse.WithMapper<Mapper>
+    //         {
+    //             protected override Task<Result> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+    //                 Result.OkAsync();
+    //         }
+    //
+    //         public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>
+    //         {
+    //             public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, RequestDto dto, CancellationToken cancellationToken) =>
+    //                 throw new NotImplementedException();
+    //         }
+    //
+    //         [Fact]
+    //         public void check_MetadataDefinition()
+    //         {
+    //             var metadataDefinitions = WebApiEndpointOnApiEndpointDefinitionMetadataProvider.GetMetadata(EnumerableExtensions.Return(new ApiEndpointDefinition()));
+    //
+    //             var metadataDefinition = metadataDefinitions.Single();
+    //
+    //             metadataDefinition.MetadataRouteDefinition.RouteTemplate.Should().Be(Route);
+    //             metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<RequestDto>();
+    //             metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<EmptyResponseDto>();
+    //             metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Unit>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<RequestDto, Request, Mapper>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<RequestDto, Request, Mapper>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
+    //             metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
+    //         }
+    //     }
+    //
+    //     public class CommandWithoutRequestWithoutResponse
+    //     {
+    //         private const string Route = "Route";
+    //
+    //         public class ApiEndpointDefinition : IApiEndpointDefinition
+    //         {
+    //             public void Configure(ApiEndpointDefinitionBuilder definitionBuilder)
+    //             {
+    //                 definitionBuilder.Web()
+    //                                  .Command<ApiEndpoint>(builder => builder.Post(Route));
+    //             }
+    //         }
+    //
+    //         public record Request;
+    //
+    //         public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<Request>.WithoutResponse.WithMapper<Mapper>
+    //         {
+    //             protected override Task<Result> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+    //                 Result.OkAsync();
+    //         }
+    //
+    //         public class Mapper : IWebApiEndpointRequestMapper<Request>
+    //         {
+    //             public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
+    //                 throw new NotImplementedException();
+    //         }
+    //
+    //         [Fact]
+    //         public void check_MetadataDefinition()
+    //         {
+    //             var metadataDefinitions = WebApiEndpointOnApiEndpointDefinitionMetadataProvider.GetMetadata(EnumerableExtensions.Return(new ApiEndpointDefinition()));
+    //
+    //             var metadataDefinition = metadataDefinitions.Single();
+    //
+    //             metadataDefinition.MetadataRouteDefinition.RouteTemplate.Should().Be(Route);
+    //             metadataDefinition.MetadataTypeDefinition.RequestDtoType.Should().Be<EmptyRequestDto>();
+    //             metadataDefinition.MetadataTypeDefinition.ResponseDtoType.Should().Be<EmptyResponseDto>();
+    //             metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType.Should().Be<IWebApiEndpointMiddlewareExecutor<Request, Unit>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType.Should().Be<CommandWebApiEndpointDispatcher<Request, Mapper>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType.Should().Be<ICommandWebApiEndpoint<Request, Mapper>>();
+    //             metadataDefinition.MetadataTypeDefinition.WebApiEndpointType.Should().Be<ApiEndpoint>();
+    //             metadataDefinition.MetadataMapFromDefinition.Should().BeNull();
+    //         }
+    //     }
+    // }
 }

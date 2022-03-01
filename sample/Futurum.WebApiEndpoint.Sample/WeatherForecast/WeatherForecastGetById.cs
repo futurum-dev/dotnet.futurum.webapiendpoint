@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.WeatherForecast;
 
@@ -22,12 +23,12 @@ public static class WeatherForecastGetById
                       .ToResultOkAsync();
     }
 
-    public class Mapper : IWebApiEndpointRequestMapper<QueryDto, Query>, IWebApiEndpointResponseMapper<WeatherForecast, WeatherForecastDto>
+    public class Mapper : IWebApiEndpointRequestMapper<QueryDto, Query>, IWebApiEndpointResponseDtoMapper<WeatherForecast, WeatherForecastDto>
     {
-        public Result<Query> Map(HttpContext httpContext, QueryDto dto) =>
-            new Query(dto.Id).ToResultOk();
+        public Task<Result<Query>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, QueryDto dto, CancellationToken cancellationToken) =>
+            new Query(dto.Id).ToResultOkAsync();
 
-        public WeatherForecastDto Map(HttpContext httpContext, WeatherForecast domain) =>
+        public WeatherForecastDto Map(WeatherForecast domain) =>
             WeatherForecastMapper.MapToDto(domain);
     }
 }

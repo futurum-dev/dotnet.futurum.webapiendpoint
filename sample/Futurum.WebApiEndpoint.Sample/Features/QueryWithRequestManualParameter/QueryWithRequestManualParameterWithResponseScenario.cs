@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Features.QueryWithRequestManualParameter;
 
@@ -17,8 +18,9 @@ public static class QueryWithRequestManualParameterWithResponseScenario
 
     public class Mapper : IWebApiEndpointRequestMapper<Request>
     {
-        public Result<Request> Map(HttpContext httpContext) =>
+        public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
             httpContext.GetRequestPathParameterAsString("Id")
-                       .Map(id => new Request(id));
+                       .Map(id => new Request(id))
+                       .ToResultAsync();
     }
 }

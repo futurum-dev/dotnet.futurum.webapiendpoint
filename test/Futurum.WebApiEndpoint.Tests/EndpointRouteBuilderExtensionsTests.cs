@@ -3,7 +3,6 @@ using FluentAssertions;
 using Futurum.Core.Option;
 using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Internal;
-using Futurum.WebApiEndpoint.Internal.Dispatcher;
 using Futurum.WebApiEndpoint.Metadata;
 using Futurum.WebApiEndpoint.Middleware;
 
@@ -34,10 +33,10 @@ public class EndpointRouteBuilderExtensionsTests
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, route, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                   Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
-        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto),typeof(RequestDto), typeof(ResponseDto),typeof(ResponseDto), typeof(CommandApiEndpoint),
                                                                 typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
                                                                 typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
+                                                                typeof(WebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
                                                                 new List<Type>());
         var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
         var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
@@ -73,10 +72,10 @@ public class EndpointRouteBuilderExtensionsTests
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route-123", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                   Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
-        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto),typeof(RequestDto), typeof(ResponseDto),typeof(ResponseDto), typeof(CommandApiEndpoint),
                                                                 typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
                                                                 typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
+                                                                typeof(WebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
                                                                 new List<Type>());
         var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
         var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
@@ -112,10 +111,10 @@ public class EndpointRouteBuilderExtensionsTests
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route-123", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                   Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
-        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto),typeof(RequestDto), typeof(ResponseDto),typeof(ResponseDto), typeof(CommandApiEndpoint),
                                                                 typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
                                                                 typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
+                                                                typeof(WebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
                                                                 new List<Type>());
         var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
         var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
@@ -153,10 +152,10 @@ public class EndpointRouteBuilderExtensionsTests
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route-123", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                   extendedOptionsAction, Option<MetadataSecurityDefinition>.None);
 
-        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+        var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto),typeof(RequestDto), typeof(ResponseDto),typeof(ResponseDto), typeof(CommandApiEndpoint),
                                                                 typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
                                                                 typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
+                                                                typeof(WebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
                                                                 new List<Type>());
         var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
         var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
@@ -218,10 +217,10 @@ public class EndpointRouteBuilderExtensionsTests
             var metadataRouteDefinition = new MetadataRouteDefinition(httpMethod, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                       Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
-            var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto), typeof(ResponseDto), typeof(CommandApiEndpoint),
+            var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestDto),typeof(RequestDto), typeof(ResponseDto),typeof(ResponseDto), typeof(CommandApiEndpoint),
                                                                     typeof(ICommandWebApiEndpoint<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
                                                                     typeof(IWebApiEndpointMiddlewareExecutor<Request, Response>),
-                                                                    typeof(CommandWebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
+                                                                    typeof(WebApiEndpointDispatcher<RequestDto, ResponseDto, Request, Response, Mapper, Mapper>),
                                                                     new List<Type>());
             var metadataMapFromDefinition = new MetadataMapFromDefinition(new List<MetadataMapFromParameterDefinition>());
             var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
@@ -303,12 +302,18 @@ public class EndpointRouteBuilderExtensionsTests
             new Response().ToResultOkAsync();
     }
 
-    private class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+    private class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>, IWebApiEndpointResponseMapper<Response, ResponseDto>, IWebApiEndpointRequestMapper<Request>, IWebApiEndpointResponseDtoMapper<Response, ResponseDto>
     {
-        public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
-            new Request().ToResultOk();
+        public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, RequestDto dto, CancellationToken cancellationToken) =>
+            new Request().ToResultOkAsync();
 
-        public ResponseDto Map(HttpContext httpContext, Response domain) => 
-            new();
+        public Task<Result> MapAsync(HttpContext httpContext, MetadataRouteDefinition metadataRouteDefinition, Response domain, CancellationToken cancellation) => 
+            Result.OkAsync();
+
+        public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
+            new Request().ToResultOkAsync();
+
+        public ResponseDto Map(Response domain) =>
+            new ();
     }
 }

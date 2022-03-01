@@ -1,5 +1,3 @@
-using Futurum.Core.Result;
-
 namespace Futurum.WebApiEndpoint;
 
 /// <summary>
@@ -20,24 +18,7 @@ public record RequestUploadFileWithPayload<TPayload>(IFormFile File, TPayload Pa
 /// </summary>
 public record RequestUploadFileWithPayloadDto<TPayload>
 {
-    [MapFromMultipartFile(0)] 
-    public IFormFile File { get; set; }
+    [MapFromMultipartFile(0)] public IFormFile File { get; set; }
 
-    [MapFromMultipartJson(1)] 
-    public TPayload Payload { get; set; }
+    [MapFromMultipartJson(1)] public TPayload Payload { get; set; }
 };
-
-internal class RequestUploadFileWithPayloadMapper<TApiEndpoint, TPayloadDto, TPayload, TRequestPayloadMapper> : IWebApiEndpointRequestMapper<RequestUploadFileWithPayloadDto<TPayloadDto>, RequestUploadFileWithPayload<TApiEndpoint, TPayload>>
-    where TRequestPayloadMapper : IWebApiEndpointRequestPayloadMapper<TPayloadDto, TPayload>
-{
-    private readonly TRequestPayloadMapper _payloadMapper;
-
-    public RequestUploadFileWithPayloadMapper(TRequestPayloadMapper payloadMapper)
-    {
-        _payloadMapper = payloadMapper;
-    }
-    
-    public Result<RequestUploadFileWithPayload<TApiEndpoint, TPayload>> Map(HttpContext httpContext, RequestUploadFileWithPayloadDto<TPayloadDto> dto) =>
-        _payloadMapper.Map(dto.Payload)
-                      .Map(payload => new RequestUploadFileWithPayload<TApiEndpoint, TPayload>(dto.File, payload));
-}

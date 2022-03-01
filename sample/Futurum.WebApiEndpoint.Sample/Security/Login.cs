@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 using Microsoft.IdentityModel.Tokens;
 
@@ -72,12 +73,12 @@ public static class Login
         }
     }
 
-    public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+    public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>, IWebApiEndpointResponseDtoMapper<Response, ResponseDto>
     {
-        public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
-            new Command(dto.Username, dto.Password, dto.SetPermission, dto.SetClaim, dto.SetRole).ToResultOk();
+        public Task<Result<Command>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CommandDto dto, CancellationToken cancellationToken) =>
+            new Command(dto.Username, dto.Password, dto.SetPermission, dto.SetClaim, dto.SetRole).ToResultOkAsync();
 
-        public ResponseDto Map(HttpContext httpContext, Response domain) => 
-            new(domain.JwtToken);
+        public ResponseDto Map(Response domain) =>
+            new (domain.JwtToken);
     }
 }

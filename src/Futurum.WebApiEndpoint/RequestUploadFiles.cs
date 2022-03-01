@@ -1,5 +1,3 @@
-using Futurum.Core.Result;
-
 namespace Futurum.WebApiEndpoint;
 
 /// <summary>
@@ -19,9 +17,3 @@ public record RequestUploadFiles(IEnumerable<IFormFile> Files);
 /// Request dto for upload files
 /// </summary>
 public record RequestUploadFilesDto(IEnumerable<IFormFile> Files);
-
-internal class RequestUploadFilesMapper<TApiEndpoint> : IWebApiEndpointRequestMapper<RequestUploadFilesDto, RequestUploadFiles<TApiEndpoint>>
-{
-    public Result<RequestUploadFiles<TApiEndpoint>> Map(HttpContext httpContext, RequestUploadFilesDto dto) =>
-        new RequestUploadFiles<TApiEndpoint>(dto.Files).ToResultOk();
-}

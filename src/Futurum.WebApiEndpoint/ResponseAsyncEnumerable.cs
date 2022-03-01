@@ -1,5 +1,3 @@
-using Futurum.Core.Result;
-
 namespace Futurum.WebApiEndpoint;
 
 /// <summary>
@@ -16,32 +14,6 @@ public record ResponseAsyncEnumerable<TData>(IAsyncEnumerable<TData> Data)
 }
 
 /// <summary>
-/// Extension methods for ResponseAsyncEnumerable
-/// </summary>
-public static class ResponseAsyncEnumerableExtensions
-{
-    /// <summary>
-    /// Transform an <see cref="IAsyncEnumerable{T}"/> to a <see cref="ResponseAsyncEnumerable{TData}"/>
-    /// </summary>
-    public static Result<ResponseAsyncEnumerable<TData>> ToResponseAsyncEnumerable<TData>(this Result<IAsyncEnumerable<TData>> result) =>
-        result.Map(x => new ResponseAsyncEnumerable<TData>(x));
-}
-
-/// <summary>
 /// Response dto for async-enumerable
 /// </summary>
-public record ResponseAsyncEnumerableDto<T>(IAsyncEnumerable<T> AsyncEnumerable);
-
-internal class ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TResponseDataMapper> : IWebApiEndpointResponseMapper<ResponseAsyncEnumerable<TApiEndpoint, TData>, ResponseAsyncEnumerableDto<TDataDto>>
-    where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
-{
-    private readonly TResponseDataMapper _dataMapper;
-
-    public ResponseAsyncEnumerableMapper(TResponseDataMapper dataMapper)
-    {
-        _dataMapper = dataMapper;
-    }
-
-    public ResponseAsyncEnumerableDto<TDataDto> Map(HttpContext httpContext, ResponseAsyncEnumerable<TApiEndpoint, TData> domain) => 
-        new(domain.Data.Select(_dataMapper.Map));
-}
+public record ResponseAsyncEnumerableDto<TData>(IAsyncEnumerable<TData> AsyncEnumerable);
