@@ -10,14 +10,14 @@ public abstract partial class QueryWebApiEndpoint
     /// <summary>
     /// Configure without request
     /// </summary>
-    public abstract class WithoutRequest
+    public abstract class NoRequest
     {
         /// <summary>
         /// Configure with response
         /// </summary>
-        public abstract class WithResponse<TResponseDto, TResponseDomain>
+        public abstract class Response<TResponseDto, TResponseDomain>
         {
-            public abstract class WithMapper<TMapper> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseJsonDto<TResponseDto>, RequestEmpty, TResponseDomain, 
+            public abstract class Mapper<TMapper> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseJsonDto<TResponseDto>, RequestEmpty, TResponseDomain, 
                 RequestEmptyMapper, ResponseJsonMapper<TResponseDomain, TResponseDto, TMapper>>
                 where TMapper : IWebApiEndpointResponseDtoMapper<TResponseDomain, TResponseDto>
             {
@@ -36,9 +36,9 @@ public abstract partial class QueryWebApiEndpoint
         /// <summary>
         /// Configure with response async enumerable
         /// </summary>
-        public abstract class WithResponseAsyncEnumerable<TApiEndpoint, TDataDto, TData>
+        public abstract class ResponseAsyncEnumerable<TApiEndpoint, TDataDto, TData>
         {
-            public abstract class WithMapper<TResponseDataMapper> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseAsyncEnumerableDto<TDataDto>, RequestEmpty, ResponseAsyncEnumerable<TApiEndpoint, TData>, 
+            public abstract class Mapper<TResponseDataMapper> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseAsyncEnumerableDto<TDataDto>, RequestEmpty, ResponseAsyncEnumerable<TApiEndpoint, TData>, 
                 RequestEmptyMapper, ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TResponseDataMapper>>
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
@@ -57,11 +57,11 @@ public abstract partial class QueryWebApiEndpoint
         /// <summary>
         /// Configure with response bytes
         /// </summary>
-        public abstract class WithResponseBytes<TApiEndpoint> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseBytesDto, RequestEmpty, ResponseBytes<TApiEndpoint>, 
+        public abstract class ResponseBytes<TApiEndpoint> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseBytesDto, RequestEmpty, WebApiEndpoint.ResponseBytes<TApiEndpoint>, 
             RequestEmptyMapper, ResponseBytesMapper<TApiEndpoint>>
         {
             /// <inheritdoc />
-            public Task<Result<ResponseBytes<TApiEndpoint>>> ExecuteCommandAsync(RequestEmpty command, CancellationToken cancellationToken) =>
+            public Task<Result<WebApiEndpoint.ResponseBytes<TApiEndpoint>>> ExecuteCommandAsync(RequestEmpty command, CancellationToken cancellationToken) =>
                 ExecuteAsync(cancellationToken).MapAsync(responseBytes => responseBytes.ToApiEndpoint<TApiEndpoint>());
 
             /// <summary>
@@ -74,9 +74,9 @@ public abstract partial class QueryWebApiEndpoint
         /// <summary>
         /// Configure with response data collection
         /// </summary>
-        public abstract class WithResponseDataCollection<TApiEndpoint, TDataDto, TData>
+        public abstract class ResponseDataCollection<TApiEndpoint, TDataDto, TData>
         {
-            public abstract class WithMapper<TResponseDataMapper> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseDataCollectionDto<TDataDto>, RequestEmpty, ResponseDataCollection<TApiEndpoint, TData>, 
+            public abstract class Mapper<TResponseDataMapper> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseDataCollectionDto<TDataDto>, RequestEmpty, ResponseDataCollection<TApiEndpoint, TData>, 
                 RequestEmptyMapper, ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TResponseDataMapper>>
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
@@ -95,11 +95,11 @@ public abstract partial class QueryWebApiEndpoint
         /// <summary>
         /// Configure with response empty json
         /// </summary>
-        public abstract class WithResponseEmptyJson<TApiEndpoint> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseEmptyJsonDto, RequestEmpty, ResponseEmptyJson<TApiEndpoint>, 
+        public abstract class ResponseEmptyJson<TApiEndpoint> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseEmptyJsonDto, RequestEmpty, WebApiEndpoint.ResponseEmptyJson<TApiEndpoint>, 
             RequestEmptyMapper, ResponseEmptyJsonMapper<TApiEndpoint>>
         {
             /// <inheritdoc />
-            public Task<Result<ResponseEmptyJson<TApiEndpoint>>> ExecuteCommandAsync(RequestEmpty command, CancellationToken cancellationToken) =>
+            public Task<Result<WebApiEndpoint.ResponseEmptyJson<TApiEndpoint>>> ExecuteCommandAsync(RequestEmpty command, CancellationToken cancellationToken) =>
                 ExecuteAsync(cancellationToken).MapAsync(responseEmptyJson => responseEmptyJson.ToApiEndpoint<TApiEndpoint>());
 
             /// <summary>
@@ -112,11 +112,11 @@ public abstract partial class QueryWebApiEndpoint
         /// <summary>
         /// Configure with response file stream
         /// </summary>
-        public abstract class WithResponseFileStream<TApiEndpoint> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseFileStreamDto, RequestEmpty, ResponseFileStream<TApiEndpoint>, 
+        public abstract class ResponseFileStream<TApiEndpoint> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseFileStreamDto, RequestEmpty, WebApiEndpoint.ResponseFileStream<TApiEndpoint>, 
             RequestEmptyMapper, ResponseFileStreamMapper<TApiEndpoint>>
         {
             /// <inheritdoc />
-            public Task<Result<ResponseFileStream<TApiEndpoint>>> ExecuteCommandAsync(RequestEmpty command, CancellationToken cancellationToken) =>
+            public Task<Result<WebApiEndpoint.ResponseFileStream<TApiEndpoint>>> ExecuteCommandAsync(RequestEmpty command, CancellationToken cancellationToken) =>
                 ExecuteAsync(cancellationToken).MapAsync(responseFileStream => responseFileStream.ToApiEndpoint<TApiEndpoint>());
 
             /// <summary>
@@ -129,11 +129,11 @@ public abstract partial class QueryWebApiEndpoint
         /// <summary>
         /// Configure with response stream
         /// </summary>
-        public abstract class WithResponseStream<TApiEndpoint> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseStreamDto, RequestEmpty, ResponseStream<TApiEndpoint>, 
+        public abstract class ResponseStream<TApiEndpoint> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseStreamDto, RequestEmpty, WebApiEndpoint.ResponseStream<TApiEndpoint>, 
             RequestEmptyMapper, ResponseStreamMapper<TApiEndpoint>>
         {
             /// <inheritdoc />
-            public Task<Result<ResponseStream<TApiEndpoint>>> ExecuteCommandAsync(RequestEmpty command, CancellationToken cancellationToken) =>
+            public Task<Result<WebApiEndpoint.ResponseStream<TApiEndpoint>>> ExecuteCommandAsync(RequestEmpty command, CancellationToken cancellationToken) =>
                 ExecuteAsync(cancellationToken).MapAsync(responseStream => responseStream.ToApiEndpoint<TApiEndpoint>());
 
             /// <summary>

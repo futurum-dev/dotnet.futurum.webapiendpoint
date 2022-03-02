@@ -44,7 +44,7 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
 
         public record Response;
 
-        public class ApiEndpoint : Futurum.WebApiEndpoint.QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+        public class ApiEndpoint : Futurum.WebApiEndpoint.QueryWebApiEndpoint.Request<RequestDto, Request>.Response<ResponseDto, Response>.Mapper<Mapper>
         {
             protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
                 throw new NotImplementedException();
@@ -102,7 +102,7 @@ public class WebApiEndpointOnApiEndpointDefinitionMetadataProviderTests
 
         public record Response;
 
-        public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+        public class ApiEndpoint : Futurum.WebApiEndpoint.CommandWebApiEndpoint.Request<RequestDto, Request>.Response<ResponseDto, Response>.Mapper<Mapper>
         {
             protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
                 new Response().ToResultOkAsync();

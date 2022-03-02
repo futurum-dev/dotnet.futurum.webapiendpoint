@@ -18,7 +18,7 @@ public static class TestWebApiEndpoint
 
     public record Response(int Id, string? Name, int Age, string? PhoneNumber);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<RequestDto, Query>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    public class ApiEndpoint : CommandWebApiEndpoint.Request<RequestDto, Query>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
         protected override Task<Result<Response>> ExecuteAsync(Query query, CancellationToken cancellationToken) =>
             new Response(query.Id, query.FirstName + " " + query.LastName, query.Age, query.PhoneNumbers?.FirstOrDefault()).ToResultOkAsync();

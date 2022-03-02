@@ -8,7 +8,7 @@ public static class OpenApiInformation
 
     public record ResponseDto(int Number);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.WithoutRequest.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    public class ApiEndpoint : QueryWebApiEndpoint.NoRequest.Response<ResponseDto, Response>.Mapper<Mapper>
     {
         protected override Task<Result<Response>> ExecuteAsync(CancellationToken cancellationToken) =>
             new Response(10).ToResultOkAsync();

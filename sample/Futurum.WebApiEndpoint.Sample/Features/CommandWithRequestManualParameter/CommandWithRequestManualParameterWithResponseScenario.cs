@@ -7,7 +7,7 @@ public static class CommandWithRequestManualParameterWithResponseScenario
 {
     public record Command(string Id);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<Command>.WithResponse<FeatureDto, Feature>.WithMapper<Mapper, FeatureMapper>
+    public class ApiEndpoint : CommandWebApiEndpoint.Request<Command>.Response<FeatureDto, Feature>.Mapper<Mapper, FeatureMapper>
     {
         protected override Task<Result<Feature>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             new Feature($"Name - {command.Id}").ToResultOkAsync();

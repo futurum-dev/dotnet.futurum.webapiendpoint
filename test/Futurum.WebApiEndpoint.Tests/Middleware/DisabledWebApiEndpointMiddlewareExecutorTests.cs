@@ -27,7 +27,7 @@ public class DisabledWebApiEndpointMiddlewareExecutorTests
     public record ResponseDto;
     public record Response;
     
-    private class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    private class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
         private readonly bool _isSuccess;
 

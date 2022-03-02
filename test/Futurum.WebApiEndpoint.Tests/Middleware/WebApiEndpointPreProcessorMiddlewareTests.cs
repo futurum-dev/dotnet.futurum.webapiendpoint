@@ -31,7 +31,7 @@ public class WebApiEndpointPreProcessorMiddlewareTests
 
     public record Response;
 
-    private class SuccessApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    private class SuccessApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
         private readonly Action _action;
 
@@ -48,7 +48,7 @@ public class WebApiEndpointPreProcessorMiddlewareTests
         }
     }
 
-    private class FailureApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    private class FailureApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
         private readonly Action _action;
 

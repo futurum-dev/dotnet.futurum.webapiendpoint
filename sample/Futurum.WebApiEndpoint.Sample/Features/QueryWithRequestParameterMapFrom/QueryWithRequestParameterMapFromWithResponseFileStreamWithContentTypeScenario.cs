@@ -12,7 +12,7 @@ public static class QueryWithRequestParameterMapFromWithResponseFileStreamWithCo
 
     public record Request(string Id);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponseFileStream<ApiEndpoint>.WithMapper<Mapper>
+    public class ApiEndpoint : QueryWebApiEndpoint.Request<RequestDto, Request>.ResponseFileStream<ApiEndpoint>.Mapper<Mapper>
     {
         protected override Task<Result<ResponseFileStream>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
             new ResponseFileStream(new FileInfo("./Data/dotnet-logo.png"), "image/png").ToResultOkAsync();

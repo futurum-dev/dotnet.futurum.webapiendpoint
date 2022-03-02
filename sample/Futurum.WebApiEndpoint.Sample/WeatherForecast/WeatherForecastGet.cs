@@ -4,7 +4,7 @@ namespace Futurum.WebApiEndpoint.Sample.WeatherForecast;
 
 public static class WeatherForecastGet
 {
-    public class ApiEndpoint : QueryWebApiEndpoint.WithoutRequest.WithResponseDataCollection<ApiEndpoint, WeatherForecastDto, WeatherForecast>.WithMapper<WeatherForecastDataMapper>
+    public class ApiEndpoint : QueryWebApiEndpoint.NoRequest.ResponseDataCollection<ApiEndpoint, WeatherForecastDto, WeatherForecast>.Mapper<WeatherForecastDataMapper>
     {
         private static readonly string[] Summaries = { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
 

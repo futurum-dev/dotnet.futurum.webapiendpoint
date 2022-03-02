@@ -109,7 +109,7 @@ public class WebApiEndpointDispatcherTests
         return await commandWebApiEndpointDispatcher.ExecuteAsync(metadataDefinition, httpContext, middlewareExecutor, apiEndpoint, CancellationToken.None);
     }
 
-    private class ApiEndpoint : CommandWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    private class ApiEndpoint : CommandWebApiEndpoint.Request<RequestDto, Request>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
         private readonly bool _isSuccess;
 

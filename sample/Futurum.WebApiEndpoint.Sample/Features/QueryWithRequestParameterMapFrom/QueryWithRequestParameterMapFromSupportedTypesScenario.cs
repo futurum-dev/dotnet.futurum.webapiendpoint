@@ -21,7 +21,7 @@ public static class QueryWithRequestParameterMapFromSupportedTypesScenario
     
     public record ResponseDto(string String, int Int, long Long, DateTime DateTime, bool Boolean, Guid Guid);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<QueryDto, Query>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    public class ApiEndpoint : QueryWebApiEndpoint.Request<QueryDto, Query>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
         protected override Task<Result<Response>> ExecuteAsync(Query query, CancellationToken cancellationToken) =>
             new Response(query.String, query.Int, query.Long, query.DateTime, query.Boolean, query.Guid).ToResultOkAsync();

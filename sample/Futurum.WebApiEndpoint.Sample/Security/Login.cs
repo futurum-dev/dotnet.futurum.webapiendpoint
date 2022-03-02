@@ -19,7 +19,7 @@ public static class Login
 
     public record ResponseDto(string JwtToken);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
         private readonly IConfiguration _configuration;
 

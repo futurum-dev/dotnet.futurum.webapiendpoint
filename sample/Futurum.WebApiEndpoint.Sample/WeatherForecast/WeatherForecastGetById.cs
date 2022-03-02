@@ -12,7 +12,7 @@ public static class WeatherForecastGetById
 
     public record Query(string Id);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<QueryDto, Query>.WithResponse<WeatherForecastDto, WeatherForecast>.WithMapper<Mapper>
+    public class ApiEndpoint : QueryWebApiEndpoint.Request<QueryDto, Query>.Response<WeatherForecastDto, WeatherForecast>.Mapper<Mapper>
     {
         private static readonly string[] Summaries = { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
 

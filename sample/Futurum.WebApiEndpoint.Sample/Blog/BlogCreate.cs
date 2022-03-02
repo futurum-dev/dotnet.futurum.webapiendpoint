@@ -12,7 +12,7 @@ public static class BlogCreate
     
     public record Command(Blog Blog);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<BlogDto, Blog>.WithMapper<Mapper, BlogMapper>
+    public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.Response<BlogDto, Blog>.Mapper<Mapper, BlogMapper>
     {
         private readonly IBlogStorageBroker _storageBroker;
 

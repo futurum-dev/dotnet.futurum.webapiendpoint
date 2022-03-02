@@ -108,7 +108,7 @@ public class WebApiEndpointOpenApiOperationDeprecatedTests
         openApiOperation.Deprecated.Should().Be(result);
     }
 
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequestUploadFiles<ApiEndpoint>.WithoutResponse
+    public class ApiEndpoint : CommandWebApiEndpoint.RequestUploadFiles<ApiEndpoint>.NoResponse
     {
         protected override Task<Result> ExecuteAsync(RequestUploadFiles command, CancellationToken cancellationToken) =>
             Result.OkAsync();

@@ -9,7 +9,7 @@ public static class CommandWithRequestWithoutResponseScenario
     
     public record Command(string Id);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithoutResponse.WithMapper<Mapper>
+    public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.NoResponse.Mapper<Mapper>
     {
         protected override Task<Result> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             Result.OkAsync();

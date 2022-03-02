@@ -41,13 +41,13 @@ public class WebApiEndpointExecutorServiceTests
 
     public record Response(string FirstName, int Age);
 
-    private class SuccessApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    private class SuccessApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
         protected override Task<Result<Response>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             new Response("FirstName", 10).ToResultOkAsync();
     }
 
-    private class FailedApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    private class FailedApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
         public const string ERROR_MESSAGE = "Error-Message";
 
