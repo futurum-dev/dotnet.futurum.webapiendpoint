@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace Futurum.WebApiEndpoint;
 
-internal class ResponseDataCollectionMapper<TData, TDataDto, TResponseDataMapper> : IWebApiEndpointResponseMapper<ResponseDataCollection<TData>, ResponseDataCollectionDto<TDataDto>>
+public class ResponseDataCollectionMapper<TData, TDataDto, TResponseDataMapper> : IWebApiEndpointResponseMapper<ResponseDataCollection<TData>, ResponseDataCollectionDto<TDataDto>>
     where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
 {
     private readonly IOptions<JsonOptions> _serializationOptions;

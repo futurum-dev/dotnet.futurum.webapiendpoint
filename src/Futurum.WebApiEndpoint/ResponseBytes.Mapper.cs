@@ -4,7 +4,7 @@ using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint;
 
-internal class ResponseBytesMapper : IWebApiEndpointResponseMapper<ResponseBytes, ResponseBytesDto>
+public class ResponseBytesMapper : IWebApiEndpointResponseMapper<ResponseBytes, ResponseBytesDto>
 {
     public Task<Result> MapAsync(HttpContext httpContext, MetadataRouteDefinition metadataRouteDefinition, ResponseBytes domain, CancellationToken cancellation) =>
         httpContext.Response.TrySendResponseBytesAsync(domain.Bytes, metadataRouteDefinition.SuccessStatusCode, domain.FileName, domain.Bytes.Length, domain.ContentType, cancellation);

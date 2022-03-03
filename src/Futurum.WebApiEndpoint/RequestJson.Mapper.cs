@@ -4,7 +4,7 @@ using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint;
 
-internal class RequestJsonMapper<TRequestDto, TRequest, TMapper> : IWebApiEndpointRequestMapper<TRequest>
+public class RequestJsonMapper<TRequestDto, TRequest, TMapper> : IWebApiEndpointRequestMapper<TRequest>
     where TRequestDto : class
     where TMapper : IWebApiEndpointRequestMapper<TRequestDto, TRequest>
 {
