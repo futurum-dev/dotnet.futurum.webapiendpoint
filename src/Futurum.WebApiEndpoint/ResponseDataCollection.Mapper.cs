@@ -7,6 +7,9 @@ using Microsoft.Extensions.Options;
 
 namespace Futurum.WebApiEndpoint;
 
+/// <summary>
+/// Mapper for ResponseDataCollection
+/// </summary>
 public class ResponseDataCollectionMapper<TData, TDataDto, TResponseDataMapper> : IWebApiEndpointResponseMapper<ResponseDataCollection<TData>, ResponseDataCollectionDto<TDataDto>>
     where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
 {

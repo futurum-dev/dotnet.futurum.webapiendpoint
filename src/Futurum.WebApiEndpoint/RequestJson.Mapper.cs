@@ -4,6 +4,9 @@ using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint;
 
+/// <summary>
+/// Mapper for RequestJson
+/// </summary>
 public class RequestJsonMapper<TRequestDto, TRequest, TMapper> : IWebApiEndpointRequestMapper<TRequest>
     where TRequestDto : class
     where TMapper : IWebApiEndpointRequestMapper<TRequestDto, TRequest>

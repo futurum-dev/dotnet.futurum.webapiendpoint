@@ -4,6 +4,9 @@ using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint;
 
+/// <summary>
+/// Mapper for RequestUploadFiles
+/// </summary>
 public class RequestUploadFilesMapper : IWebApiEndpointRequestMapper<RequestUploadFiles>
 {
     public Task<Result<RequestUploadFiles>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>

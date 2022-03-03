@@ -4,6 +4,9 @@ using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint;
 
+/// <summary>
+/// Mapper for ResponseStream
+/// </summary>
 public class ResponseStreamMapper : IWebApiEndpointResponseMapper<ResponseStream, ResponseStreamDto>
 {
     public Task<Result> MapAsync(HttpContext httpContext, MetadataRouteDefinition metadataRouteDefinition, ResponseStream domain, CancellationToken cancellation) => 

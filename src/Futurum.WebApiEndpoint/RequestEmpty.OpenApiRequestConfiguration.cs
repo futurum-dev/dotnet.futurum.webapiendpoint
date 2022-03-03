@@ -1,4 +1,5 @@
 using Futurum.WebApiEndpoint.Metadata;
+using Futurum.WebApiEndpoint.OpenApi;
 
 using Microsoft.OpenApi.Models;
 
