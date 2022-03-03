@@ -1,4 +1,5 @@
 using Futurum.ApiEndpoint;
+using Futurum.WebApiEndpoint.Metadata;
 using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequest;
 using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestManualParameter;
 using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestParameterMapFrom;
@@ -37,14 +38,14 @@ public class ApiEndpointDefinition : IApiEndpointDefinition
                          .Query<QueryWithRequestParameterMapFromWithResponseStreamScenario.ApiEndpoint>(builder => builder.Route("query-with-request-parameter-map-from-with-response-stream/{Id}"))
                          .Query<QueryWithRequestParameterMapFromSupportedTypesScenario.ApiEndpoint>(builder => builder.Route("query-with-request-parameter-map-from-supported-types/{String}/{Int}/{Long}/{DateTime}/{Boolean}/{Guid}"))
                          
-                         .Query<QueryWithRequestManualParameterWithResponseScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response/{Id}"))
-                         .Query<QueryWithRequestManualParameterWithResponseAsyncEnumerableScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-async-enumerable/{Id}"))
-                         .Query<QueryWithRequestManualParameterWithResponseBytesScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-bytes/{Id}"))
-                         .Query<QueryWithRequestManualParameterWithResponseDataCollectionScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-data-collection/{Id}"))
-                         .Query<QueryWithRequestManualParameterWithResponseEmptyJsonScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-empty-json/{Id}"))
-                         .Query<QueryWithRequestManualParameterWithResponseFileStreamScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-file-stream/{Id}"))
-                         .Query<QueryWithRequestManualParameterWithResponseFileStreamWithContentTypeScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-file-stream-with-content-type/{Id}"))
-                         .Query<QueryWithRequestManualParameterWithResponseStreamScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-stream/{Id}"))
+                         .Query<QueryWithRequestManualParameterWithResponseScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
+                         .Query<QueryWithRequestManualParameterWithResponseAsyncEnumerableScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-async-enumerable/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
+                         .Query<QueryWithRequestManualParameterWithResponseBytesScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-bytes/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
+                         .Query<QueryWithRequestManualParameterWithResponseDataCollectionScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-data-collection/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
+                         .Query<QueryWithRequestManualParameterWithResponseEmptyJsonScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-empty-json/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
+                         .Query<QueryWithRequestManualParameterWithResponseFileStreamScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-file-stream/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
+                         .Query<QueryWithRequestManualParameterWithResponseFileStreamWithContentTypeScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-file-stream-with-content-type/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
+                         .Query<QueryWithRequestManualParameterWithResponseStreamScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-stream/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
                          
                          .Command<CommandWithRequestParameterMapFromWithResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-parameter-map-from-with-response/{Id}"))
                          .Command<CommandWithRequestParameterMapFromWithoutResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-parameter-map-from-without-response/{Id}"))
@@ -57,15 +58,15 @@ public class ApiEndpointDefinition : IApiEndpointDefinition
                          .Command<CommandWithRequestParameterMapFromWithResponseStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-parameter-map-from-with-response-stream/{Id}"))
                          .Command<CommandWithRequestParameterMapFromSupportedTypesScenario.ApiEndpoint>(builder => builder.Post("command-with-request-parameter-map-from-supported-types/{String}/{Int}/{Long}/{DateTime}/{Boolean}/{Guid}"))
                          
-                         .Command<CommandWithRequestManualParameterWithResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-with-response/{Id}"))
-                         .Command<CommandWithRequestManualParameterWithoutResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-without-response/{Id}"))
-                         .Command<CommandWithRequestManualParameterWithResponseAsyncEnumerableScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-with-response-async-enumerable/{Id}"))
-                         .Command<CommandWithRequestManualParameterWithResponseBytesScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-with-response-bytes/{Id}"))
-                         .Command<CommandWithRequestManualParameterWithResponseDataCollectionScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-with-response-data-collection/{Id}"))
-                         .Command<CommandWithRequestManualParameterWithResponseEmptyJsonScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-with-response-empty-json/{Id}"))
-                         .Command<CommandWithRequestManualParameterWithResponseFileStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-with-response-file-stream/{Id}"))
-                         .Command<CommandWithRequestManualParameterWithResponseFileStreamWithContentTypeScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-with-response-file-stream-with-content-type/{Id}"))
-                         .Command<CommandWithRequestManualParameterWithResponseStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-with-response-stream/{Id}"))
+                         .Command<CommandWithRequestManualParameterWithResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-with-response/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
+                         .Command<CommandWithRequestManualParameterWithoutResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-without-response/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
+                         .Command<CommandWithRequestManualParameterWithResponseAsyncEnumerableScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-with-response-async-enumerable/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
+                         .Command<CommandWithRequestManualParameterWithResponseBytesScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-with-response-bytes/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
+                         .Command<CommandWithRequestManualParameterWithResponseDataCollectionScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-with-response-data-collection/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
+                         .Command<CommandWithRequestManualParameterWithResponseEmptyJsonScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-with-response-empty-json/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
+                         .Command<CommandWithRequestManualParameterWithResponseFileStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-with-response-file-stream/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
+                         .Command<CommandWithRequestManualParameterWithResponseFileStreamWithContentTypeScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-with-response-file-stream-with-content-type/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
+                         .Command<CommandWithRequestManualParameterWithResponseStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-manual-parameter-with-response-stream/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
                          
                          .Command<CommandWithRequestPlainTextWithResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-plain-text-with-response"))
                          .Command<CommandWithRequestPlainTextWithoutResponseScenario.ApiEndpoint>(builder => builder.Post("command-with-request-plain-text-without-response"))

@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Blog;
 
@@ -11,7 +12,7 @@ public static class BlogGetById
 
     public record Query(Id Id);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<QueryDto, Query>.WithResponse<BlogDto, Blog>.WithMapper<Mapper, BlogMapper>
+    public class ApiEndpoint : QueryWebApiEndpoint.Request<QueryDto, Query>.Response<BlogDto, Blog>.Mapper<Mapper, BlogMapper>
     {
         private readonly IBlogStorageBroker _storageBroker;
 
@@ -20,13 +21,13 @@ public static class BlogGetById
             _storageBroker = storageBroker;
         }
 
-        protected override Task<Result<Blog>> ExecuteAsync(Query query, CancellationToken cancellationToken) =>
+        public override Task<Result<Blog>> ExecuteAsync(Query query, CancellationToken cancellationToken) =>
             _storageBroker.GetByIdAsync(query.Id);
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<QueryDto, Query>
     {
-        public Result<Query> Map(HttpContext httpContext, QueryDto dto) =>
-            new Query(dto.Id.ToId()).ToResultOk();
+        public Task<Result<Query>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, QueryDto dto, CancellationToken cancellationToken) =>
+            new Query(dto.Id.ToId()).ToResultOkAsync();
     }
 }

@@ -4,9 +4,9 @@ namespace Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestUploadFile;
 
 public static class CommandWithRequestUploadFileWithResponseEmptyJsonScenario
 {
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequestUploadFile<ApiEndpoint>.WithResponseEmptyJson
+    public class ApiEndpoint : CommandWebApiEndpoint.RequestUploadFile.ResponseEmptyJson
     {
-        protected override Task<Result<ResponseEmptyJson>> ExecuteAsync(RequestUploadFile command, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseEmptyJson>> ExecuteAsync(RequestUploadFile command, CancellationToken cancellationToken) =>
             new ResponseEmptyJson().ToResultOkAsync();
     }
 }

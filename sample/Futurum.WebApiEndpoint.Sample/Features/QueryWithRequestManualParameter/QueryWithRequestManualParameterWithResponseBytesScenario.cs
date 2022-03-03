@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Features.QueryWithRequestManualParameter;
 
@@ -6,16 +7,17 @@ public static class QueryWithRequestManualParameterWithResponseBytesScenario
 {
     public record Request(string Id);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<Request>.WithResponseBytes<ApiEndpoint>.WithMapper<Mapper>
+    public class ApiEndpoint : QueryWebApiEndpoint.Request<Request>.ResponseBytes.Mapper<Mapper>
     {
-        protected override Task<Result<ResponseBytes>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseBytes>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
             new ResponseBytes(File.ReadAllBytes("./Data/hello-world.txt"), $"hello-world-bytes-{query.Id}").ToResultOkAsync();
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<Request>
     {
-        public Result<Request> Map(HttpContext httpContext) =>
+        public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
             httpContext.GetRequestPathParameterAsString("Id")
-                       .Map(id => new Request(id));
+                       .Map(id => new Request(id))
+                       .ToResultAsync();
     }
 }

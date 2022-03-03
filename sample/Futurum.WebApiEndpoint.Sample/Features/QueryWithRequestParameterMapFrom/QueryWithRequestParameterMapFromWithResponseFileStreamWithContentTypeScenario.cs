@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Features.QueryWithRequestParameterMapFrom;
 
@@ -11,15 +12,15 @@ public static class QueryWithRequestParameterMapFromWithResponseFileStreamWithCo
 
     public record Request(string Id);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponseFileStream<ApiEndpoint>.WithMapper<Mapper>
+    public class ApiEndpoint : QueryWebApiEndpoint.Request<RequestDto, Request>.ResponseFileStream.Mapper<Mapper>
     {
-        protected override Task<Result<ResponseFileStream>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseFileStream>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
             new ResponseFileStream(new FileInfo("./Data/dotnet-logo.png"), "image/png").ToResultOkAsync();
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>
     {
-        public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
-            new Request(dto.Id).ToResultOk();
+        public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, RequestDto dto, CancellationToken cancellationToken) =>
+            new Request(dto.Id).ToResultOkAsync();
     }
 }

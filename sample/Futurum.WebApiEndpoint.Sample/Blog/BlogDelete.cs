@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Blog;
 
@@ -6,7 +7,7 @@ public static class BlogDelete
 {
     public record Command(Id Id);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<Command>.WithoutResponse.WithMapper<Mapper>
+    public class ApiEndpoint : CommandWebApiEndpoint.Request<Command>.NoResponse.Mapper<Mapper>
     {
         private readonly IBlogStorageBroker _storageBroker;
 
@@ -15,14 +16,15 @@ public static class BlogDelete
             _storageBroker = storageBroker;
         }
 
-        protected override Task<Result> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
-            _storageBroker.DeleteAsync(command.Id);
+        public override Task<Result<ResponseEmpty>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+            _storageBroker.DeleteAsync(command.Id).ToResponseEmptyAsync();
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<Command>
     {
-        public Result<Command> Map(HttpContext httpContext) =>
+        public Task<Result<Command>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
             httpContext.GetRequestPathParameterAsLong("Id")
-                       .Map(id => new Command(id.ToId()));
+                       .Map(id => new Command(id.ToId()))
+                       .ToResultAsync();
     }
 }

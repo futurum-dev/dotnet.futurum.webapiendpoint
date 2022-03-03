@@ -1,6 +1,7 @@
 using FluentValidation;
 
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Features.CommandWithRequest;
 
@@ -10,16 +11,16 @@ public static class CommandWithRequestWithResponseScenario
     
     public record Command(string Id);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<FeatureDto, Feature>.WithMapper<Mapper, FeatureMapper>
+    public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.Response<FeatureDto, Feature>.Mapper<Mapper, FeatureMapper>
     {
-        protected override Task<Result<Feature>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+        public override Task<Result<Feature>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             new Feature($"Name - {command.Id}").ToResultOkAsync();
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>
     {
-        public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
-            new Command(dto.Id).ToResultOk();
+        public Task<Result<Command>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CommandDto dto, CancellationToken cancellationToken) =>
+            new Command(dto.Id).ToResultOkAsync();
     }
 
     public class Validator : AbstractValidator<CommandDto>

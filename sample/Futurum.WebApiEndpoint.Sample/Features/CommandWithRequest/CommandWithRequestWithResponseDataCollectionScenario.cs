@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Features.CommandWithRequest;
 
@@ -8,15 +9,15 @@ public static class CommandWithRequestWithResponseDataCollectionScenario
 
     public record Command(string Id);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponseDataCollection<ApiEndpoint, FeatureDto, Feature>.WithMapper<Mapper, FeatureDataMapper>
+    public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.ResponseDataCollection<FeatureDto, Feature>.Mapper<Mapper, FeatureDataMapper>
     {
-        protected override Task<Result<ResponseDataCollection<Feature>>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseDataCollection<Feature>>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             new ResponseDataCollection<Feature>(Enumerable.Range(0, 10).Select(i => new Feature($"Name - {i} - {command.Id}"))).ToResultOkAsync();
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>
     {
-        public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
-            new Command(dto.Id).ToResultOk();
+        public Task<Result<Command>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CommandDto dto, CancellationToken cancellationToken) =>
+            new Command(dto.Id).ToResultOkAsync();
     }
 }

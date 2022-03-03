@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestParameterMapFrom;
 
@@ -20,19 +21,19 @@ public static class CommandWithRequestParameterMapFromSupportedTypesScenario
     
     public record ResponseDto(string String, int Int, long Long, DateTime DateTime, bool Boolean, Guid Guid);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
-        protected override Task<Result<Response>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+        public override Task<Result<Response>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             new Response(command.String, command.Int, command.Long, command.DateTime, command.Boolean, command.Guid).ToResultOkAsync();
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>,
-                          IWebApiEndpointResponseMapper<Response, ResponseDto>
+                          IWebApiEndpointResponseDtoMapper<Response, ResponseDto>
     {
-        public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
-            new Command(dto.String, dto.Int, dto.Long, dto.DateTime, dto.Boolean, dto.Guid).ToResultOk();
+        public Task<Result<Command>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CommandDto dto, CancellationToken cancellationToken) =>
+            new Command(dto.String, dto.Int, dto.Long, dto.DateTime, dto.Boolean, dto.Guid).ToResultOkAsync();
 
-        public ResponseDto Map(HttpContext httpContext, Response domain) => 
+        public ResponseDto Map(Response domain) => 
             new(domain.String, domain.Int, domain.Long, domain.DateTime, domain.Boolean, domain.Guid);
     }
 }

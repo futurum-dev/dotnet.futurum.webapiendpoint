@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Features.QueryWithRequestParameterMapFrom;
 
@@ -11,15 +12,15 @@ public static class QueryWithRequestParameterMapFromWithResponseBytesScenario
 
     public record Request(string Id);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponseBytes<ApiEndpoint>.WithMapper<Mapper>
+    public class ApiEndpoint : QueryWebApiEndpoint.Request<RequestDto, Request>.ResponseBytes.Mapper<Mapper>
     {
-        protected override Task<Result<ResponseBytes>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseBytes>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
             new ResponseBytes(File.ReadAllBytes("./Data/hello-world.txt"), $"hello-world-bytes-{query.Id}").ToResultOkAsync();
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>
     {
-        public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
-            new Request(dto.Id).ToResultOk();
+        public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, RequestDto dto, CancellationToken cancellationToken) =>
+            new Request(dto.Id).ToResultOkAsync();
     }
 }

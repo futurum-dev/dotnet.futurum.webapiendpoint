@@ -4,9 +4,9 @@ namespace Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestUploadFileWit
 
 public static class CommandWithRequestUploadFileWithPayloadWithResponseFileStreamScenario
 {
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequestUploadFileWithPayload<ApiEndpoint, PayloadDto, Payload>.WithResponseFileStream.WithMapper<PayloadMapper>
+    public class ApiEndpoint : CommandWebApiEndpoint.RequestUploadFileWithPayload<PayloadDto, Payload>.ResponseFileStream.Mapper<PayloadMapper>
     {
-        protected override Task<Result<ResponseFileStream>> ExecuteAsync(RequestUploadFileWithPayload<Payload> command, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseFileStream>> ExecuteAsync(RequestUploadFileWithPayload<Payload> command, CancellationToken cancellationToken) =>
             new ResponseFileStream(new FileInfo("./Data/hello-world.txt")).ToResultOkAsync();
     }
 }

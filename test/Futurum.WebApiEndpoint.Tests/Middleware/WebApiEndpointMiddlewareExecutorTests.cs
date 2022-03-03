@@ -2,6 +2,7 @@ using FluentAssertions;
 
 using Futurum.Core.Result;
 using Futurum.Test.Result;
+using Futurum.WebApiEndpoint.Metadata;
 using Futurum.WebApiEndpoint.Middleware;
 
 using Microsoft.AspNetCore.Http;
@@ -30,7 +31,7 @@ public class WebApiEndpointMiddlewareExecutorTests
 
     public record Response;
 
-    private class SuccessApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    private class SuccessApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
         private readonly Action _action;
 
@@ -39,7 +40,7 @@ public class WebApiEndpointMiddlewareExecutorTests
             _action = action;
         }
 
-        protected override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken)
+        public override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken)
         {
             _action();
 
@@ -47,7 +48,7 @@ public class WebApiEndpointMiddlewareExecutorTests
         }
     }
 
-    private class FailureApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    private class FailureApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
         private readonly Action _action;
 
@@ -56,7 +57,7 @@ public class WebApiEndpointMiddlewareExecutorTests
             _action = action;
         }
 
-        protected override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken)
+        public override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken)
         {
             _action();
 
@@ -64,13 +65,13 @@ public class WebApiEndpointMiddlewareExecutorTests
         }
     }
 
-    public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+    public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>, IWebApiEndpointResponseDtoMapper<Response, ResponseDto>
     {
-        public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
-            new Command().ToResultOk();
+        public Task<Result<Command>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CommandDto dto, CancellationToken cancellationToken) =>
+            throw new NotImplementedException();
 
-        public ResponseDto Map(HttpContext httpContext, Response domain) => 
-            new();
+        public ResponseDto Map(Response domain) =>
+            throw new NotImplementedException();
     }
 
     public class SuccessMiddleware<TRequest, TResponse> : IWebApiEndpointMiddleware<TRequest, TResponse>
@@ -128,7 +129,7 @@ public class WebApiEndpointMiddlewareExecutorTests
 
         var httpContext = new DefaultHttpContext();
 
-        var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteCommandAsync(c, ct), CancellationToken.None);
+        var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteAsync(c, ct), CancellationToken.None);
 
         result.ShouldBeSuccess();
         apiEndpointWasCalled.Should().BeTrue();
@@ -177,7 +178,7 @@ public class WebApiEndpointMiddlewareExecutorTests
 
         var httpContext = new DefaultHttpContext();
 
-        var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteCommandAsync(c, ct), CancellationToken.None);
+        var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteAsync(c, ct), CancellationToken.None);
 
         result.ShouldBeSuccess();
         middleware1WasCalled.Should().BeTrue();
@@ -228,7 +229,7 @@ public class WebApiEndpointMiddlewareExecutorTests
 
         var httpContext = new DefaultHttpContext();
 
-        var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteCommandAsync(c, ct), CancellationToken.None);
+        var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteAsync(c, ct), CancellationToken.None);
 
         middleware1WasCalled.Should().BeTrue();
         middleware2WasCalled.Should().BeTrue();
@@ -280,7 +281,7 @@ public class WebApiEndpointMiddlewareExecutorTests
 
         var httpContext = new DefaultHttpContext();
 
-        var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteCommandAsync(c, ct), CancellationToken.None);
+        var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteAsync(c, ct), CancellationToken.None);
 
 
         middleware1WasCalled.Should().BeTrue();

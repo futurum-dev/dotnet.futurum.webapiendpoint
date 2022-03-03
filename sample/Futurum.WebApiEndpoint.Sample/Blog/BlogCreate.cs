@@ -2,6 +2,7 @@ using FluentValidation;
 
 using Futurum.Core.Option;
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Blog;
 
@@ -11,7 +12,7 @@ public static class BlogCreate
     
     public record Command(Blog Blog);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<BlogDto, Blog>.WithMapper<Mapper, BlogMapper>
+    public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.Response<BlogDto, Blog>.Mapper<Mapper, BlogMapper>
     {
         private readonly IBlogStorageBroker _storageBroker;
 
@@ -20,14 +21,14 @@ public static class BlogCreate
             _storageBroker = storageBroker;
         }
 
-        protected override Task<Result<Blog>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+        public override Task<Result<Blog>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             _storageBroker.AddAsync(command.Blog);
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>
     {
-        public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
-            new Command(new Blog(Option<Id>.None, dto.Url)).ToResultOk();
+        public Task<Result<Command>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CommandDto dto, CancellationToken cancellationToken) =>
+            new Command(new Blog(Option<Id>.None, dto.Url)).ToResultOkAsync();
     }
 
     public class Validator : AbstractValidator<CommandDto>

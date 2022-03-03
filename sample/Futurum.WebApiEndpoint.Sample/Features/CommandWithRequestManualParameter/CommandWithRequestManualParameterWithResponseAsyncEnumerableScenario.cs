@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestManualParameter;
 
@@ -6,16 +7,17 @@ public static class CommandWithRequestManualParameterWithResponseAsyncEnumerable
 {
     public record Command(string Id);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequest<Command>.WithResponseAsyncEnumerable<ApiEndpoint, FeatureDto, Feature>.WithMapper<Mapper, FeatureDataMapper>
+    public class ApiEndpoint : CommandWebApiEndpoint.Request<Command>.ResponseAsyncEnumerable<FeatureDto, Feature>.Mapper<Mapper, FeatureDataMapper>
     {
-        protected override Task<Result<ResponseAsyncEnumerable<Feature>>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseAsyncEnumerable<Feature>>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             new ResponseAsyncEnumerable<Feature>(AsyncEnumerable.Range(0, 10).Select(i => new Feature($"Name - {i} - {command.Id}"))).ToResultOkAsync();
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<Command>
     {
-        public Result<Command> Map(HttpContext httpContext) =>
+        public Task<Result<Command>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
             httpContext.GetRequestPathParameterAsString("Id")
-                       .Map(id => new Command(id));
+                       .Map(id => new Command(id))
+                       .ToResultAsync();
     }
 }

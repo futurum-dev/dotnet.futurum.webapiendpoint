@@ -1,6 +1,15 @@
+using System.Text.Json;
+
 using FluentAssertions;
 
+using Futurum.Core.Option;
+using Futurum.Test.Result;
+using Futurum.WebApiEndpoint.Metadata;
+
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 using Xunit;
 
@@ -9,20 +18,47 @@ namespace Futurum.WebApiEndpoint.Tests;
 public class ResponseDataCollectionMapperTests
 {
     [Fact]
-    public void Map()
+    public async Task Map()
     {
-        var numbers = Enumerable.Range(0, 100)
+        var responseDataCollectionMapper = new ResponseDataCollectionMapper<Data, DataDto, DataMapper>(Options.Create(new JsonOptions()), new DataMapper());
+
+        var httpContext = new DefaultHttpContext();
+        httpContext.Request.Body = new MemoryStream();
+        httpContext.Response.Body = new MemoryStream();
+
+        var data = Enumerable.Range(0, 10)
+                                .Select(i => new Data($"First{i}", i))
                                 .ToList();
 
-        var result = new ResponseDataCollectionMapper<object, int, int, DataMapper>(new DataMapper())
-            .Map(new DefaultHttpContext(), new ResponseDataCollection<object, int>(numbers));
+        var response = new ResponseDataCollection<Data>(data);
 
-        result.Should().BeEquivalentTo(new ResponseDataCollectionDto<int>(numbers.Select(x => x * 2).ToList()));
+        MetadataRouteDefinition metadataRouteDefinition =
+            new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, Option<Action<RouteHandlerBuilder>>.None, null);
+
+        var result = await responseDataCollectionMapper.MapAsync(httpContext, metadataRouteDefinition, response, CancellationToken.None);
+
+        result.ShouldBeSuccess();
+
+        httpContext.Response.StatusCode.Should().Be(metadataRouteDefinition.SuccessStatusCode);
+
+        httpContext.Response.Body.Seek(0, SeekOrigin.Begin);
+        using var streamReader = new StreamReader(httpContext.Response.Body);
+        var requestBody = await streamReader.ReadToEndAsync();
+
+        var receivedResponse = JsonSerializer.Deserialize<ResponseDataCollectionDto<DataDto>>(requestBody, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+
+        receivedResponse.Should().BeEquivalentTo(new ResponseDataCollectionDto<DataDto>(Enumerable.Range(0, 10)
+                                                                                                  .Select(i => new DataDto($"First{i}", i))
+                                                                                                  .ToList()));
     }
 
-    private class DataMapper : IWebApiEndpointResponseDataMapper<int, int>
+    public record Data(string FirstName, int Age);
+
+    public record DataDto(string FirstName, int Age);
+
+    private class DataMapper : IWebApiEndpointResponseDataMapper<Data, DataDto>
     {
-        public int Map(int data) =>
-            data * 2;
+        public DataDto Map(Data data) =>
+            new(data.FirstName, data.Age);
     }
 }

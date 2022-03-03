@@ -2,6 +2,7 @@ using FluentAssertions;
 
 using Futurum.Core.Result;
 using Futurum.Test.Result;
+using Futurum.WebApiEndpoint.Metadata;
 using Futurum.WebApiEndpoint.Middleware;
 
 using Microsoft.AspNetCore.Http;
@@ -26,7 +27,7 @@ public class DisabledWebApiEndpointMiddlewareExecutorTests
     public record ResponseDto;
     public record Response;
     
-    private class ApiEndpoint : CommandWebApiEndpoint.WithRequest<CommandDto, Command>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    private class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
         private readonly bool _isSuccess;
 
@@ -39,7 +40,7 @@ public class DisabledWebApiEndpointMiddlewareExecutorTests
 
         public bool WasCalled { get; private set; }
 
-        protected override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken)
+        public override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken)
         {
             WasCalled = true;
 
@@ -49,12 +50,12 @@ public class DisabledWebApiEndpointMiddlewareExecutorTests
         }
     }
 
-    public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>, IWebApiEndpointResponseMapper<Response, ResponseDto>
+    public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>, IWebApiEndpointResponseDtoMapper<Response, ResponseDto>
     {
-        public Result<Command> Map(HttpContext httpContext, CommandDto dto) =>
+        public Task<Result<Command>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CommandDto dto, CancellationToken cancellationToken) =>
             throw new NotImplementedException();
 
-        public ResponseDto Map(HttpContext httpContext, Response domain) =>
+        public ResponseDto Map(Response domain) =>
             throw new NotImplementedException();
     }
 
@@ -70,7 +71,7 @@ public class DisabledWebApiEndpointMiddlewareExecutorTests
         var request = new Command();
 
         var result = await middlewareExecutor.ExecuteAsync(httpContext, request,
-                                                           (c, ct) => apiEndpoint.ExecuteCommandAsync(c, ct),
+                                                           (c, ct) => apiEndpoint.ExecuteAsync(c, ct),
                                                            CancellationToken.None);
         
         result.ShouldBeSuccessWithValue(new Response());
@@ -90,7 +91,7 @@ public class DisabledWebApiEndpointMiddlewareExecutorTests
         var request = new Command();
 
         var result = await middlewareExecutor.ExecuteAsync(httpContext, request,
-                                                           (c, ct) => apiEndpoint.ExecuteCommandAsync(c, ct),
+                                                           (c, ct) => apiEndpoint.ExecuteAsync(c, ct),
                                                            CancellationToken.None);
         
         result.ShouldBeFailureWithError(ApiEndpoint.ErrorMessage);

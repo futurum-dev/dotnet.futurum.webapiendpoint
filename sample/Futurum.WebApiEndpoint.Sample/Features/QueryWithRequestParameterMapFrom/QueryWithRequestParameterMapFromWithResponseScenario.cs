@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Features.QueryWithRequestParameterMapFrom;
 
@@ -11,9 +12,9 @@ public static class QueryWithRequestParameterMapFromWithResponseScenario
 
     public record Request(string Id);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<RequestDto, Request>.WithResponse<FeatureDto, Feature>.WithMapper<Mapper, FeatureMapper>
+    public class ApiEndpoint : QueryWebApiEndpoint.Request<RequestDto, Request>.Response<FeatureDto, Feature>.Mapper<Mapper, FeatureMapper>
     {
-        protected override Task<Result<Feature>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+        public override Task<Result<Feature>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
             Enumerable.Range(0, 10)
                       .Select(i => new Feature($"Name - {i} - {query}"))
                       .First()
@@ -22,7 +23,7 @@ public static class QueryWithRequestParameterMapFromWithResponseScenario
 
     public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>
     {
-        public Result<Request> Map(HttpContext httpContext, RequestDto dto) =>
-            new Request(dto.Id).ToResultOk();
+        public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, RequestDto dto, CancellationToken cancellationToken) =>
+            new Request(dto.Id).ToResultOkAsync();
     }
 }

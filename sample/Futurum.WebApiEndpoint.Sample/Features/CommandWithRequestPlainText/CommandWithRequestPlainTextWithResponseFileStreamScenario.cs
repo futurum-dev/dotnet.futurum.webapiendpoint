@@ -4,9 +4,9 @@ namespace Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestPlainText;
 
 public static class CommandWithRequestPlainTextWithResponseFileStreamScenario
 {
-    public class ApiEndpoint : CommandWebApiEndpoint.WithRequestPlainText<ApiEndpoint>.WithResponseFileStream
+    public class ApiEndpoint : CommandWebApiEndpoint.RequestPlainText.ResponseFileStream
     {
-        protected override Task<Result<ResponseFileStream>> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseFileStream>> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken) =>
             new ResponseFileStream(new FileInfo("./Data/hello-world.txt")).ToResultOkAsync();
     }
 }

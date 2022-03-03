@@ -7,7 +7,7 @@ namespace Futurum.WebApiEndpoint.Internal.AspNetCore;
 
 internal static class HttpResponseExtensions
 {
-    public static Task<Result> SendResponseStreamAsync(this HttpResponse httpResponse, Stream stream, int responseStatusCode, string? fileName = null, long? fileLengthBytes = null,
+    public static Task<Result> TrySendResponseStreamAsync(this HttpResponse httpResponse, Stream stream, int responseStatusCode, string? fileName = null, long? fileLengthBytes = null,
                                                        string contentType = MediaTypeNames.Application.Octet, CancellationToken cancellation = default)
     {
         async Task Execute()
@@ -39,31 +39,31 @@ internal static class HttpResponseExtensions
         return Result.TryAsync(Execute, () => "Failed to send response stream");
     }
 
-    public static Task<Result> SendResponseFileAsync(this HttpResponse httpResponse, FileInfo fileInfo, int responseStatusCode, string contentType = MediaTypeNames.Application.Octet,
+    public static Task<Result> TrySendResponseFileAsync(this HttpResponse httpResponse, FileInfo fileInfo, int responseStatusCode, string contentType = MediaTypeNames.Application.Octet,
                                                      CancellationToken cancellation = default)
     {
         async Task Execute()
         {
             await using var fileStream = fileInfo.OpenRead();
-            await httpResponse.SendResponseStreamAsync(fileStream, responseStatusCode, fileInfo.Name, fileInfo.Length, contentType, cancellation);
+            await httpResponse.TrySendResponseStreamAsync(fileStream, responseStatusCode, fileInfo.Name, fileInfo.Length, contentType, cancellation);
         }
 
         return Result.TryAsync(Execute, () => "Failed to send response file");
     }
 
-    public static Task<Result> SendResponseBytesAsync(this HttpResponse httpResponse, byte[] bytes, int responseStatusCode, string? fileName = null, long? fileLengthBytes = null,
+    public static Task<Result> TrySendResponseBytesAsync(this HttpResponse httpResponse, byte[] bytes, int responseStatusCode, string? fileName = null, long? fileLengthBytes = null,
                                                       string contentType = MediaTypeNames.Application.Octet, CancellationToken cancellation = default)
     {
         async Task Execute()
         {
             await using var memoryStream = new MemoryStream(bytes);
-            await httpResponse.SendResponseStreamAsync(memoryStream, responseStatusCode, fileName, fileLengthBytes, contentType, cancellation);
+            await httpResponse.TrySendResponseStreamAsync(memoryStream, responseStatusCode, fileName, fileLengthBytes, contentType, cancellation);
         }
 
         return Result.TryAsync(Execute, () => "Failed to send response bytes");
     }
 
-    public static Task<Result> WriteAsJsonAsync<TResponse>(this HttpResponse httpResponse, TResponse response, JsonSerializerOptions jsonSerializerOptions, int responseStatusCode,
+    public static Task<Result> TryWriteAsJsonAsync<TResponse>(this HttpResponse httpResponse, TResponse response, JsonSerializerOptions jsonSerializerOptions, int responseStatusCode,
                                                            CancellationToken cancellation)
     {
         Task Execute()
@@ -75,7 +75,7 @@ internal static class HttpResponseExtensions
         return Result.TryAsync(Execute, () => "Failed to write as Json");
     }
 
-    public static Task<Result> WriteAsyncEnumerableAsJsonAsync(this HttpResponse httpResponse, object source, Type type, JsonSerializerOptions jsonSerializerOptions, int responseStatusCode,
+    public static Task<Result> TryWriteAsyncEnumerableAsJsonAsync(this HttpResponse httpResponse, object source, Type type, JsonSerializerOptions jsonSerializerOptions, int responseStatusCode,
                                                                CancellationToken cancellation)
     {
         Task Execute()

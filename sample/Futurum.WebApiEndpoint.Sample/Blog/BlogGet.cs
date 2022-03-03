@@ -4,7 +4,7 @@ namespace Futurum.WebApiEndpoint.Sample.Blog;
 
 public static class BlogGet
 {
-    public class ApiEndpoint : QueryWebApiEndpoint.WithoutRequest.WithResponseDataCollection<ApiEndpoint, BlogDto, Blog>.WithMapper<BlogDataMapper>
+    public class ApiEndpoint : QueryWebApiEndpoint.NoRequest.ResponseDataCollection<BlogDto, Blog>.Mapper<BlogDataMapper>
     {
         private readonly IBlogStorageBroker _storageBroker;
 
@@ -13,7 +13,7 @@ public static class BlogGet
             _storageBroker = storageBroker;
         }
 
-        protected override Task<Result<ResponseDataCollection<Blog>>> ExecuteAsync(CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseDataCollection<Blog>>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken) =>
             _storageBroker.GetAsync()
                           .ToResponseDataCollectionAsync();
     }

@@ -8,9 +8,9 @@ public static class GetUsers
 
     public record User(string FirstName, string LastName);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.WithoutRequest.WithResponseDataCollection<ApiEndpoint, UserDto, User>.WithMapper<Mapper>
+    public class ApiEndpoint : QueryWebApiEndpoint.NoRequest.ResponseDataCollection<UserDto, User>.Mapper<Mapper>
     {
-        protected override Task<Result<ResponseDataCollection<User>>> ExecuteAsync(CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseDataCollection<User>>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken) =>
             Enumerable.Range(0, 10)
                       .Select(i => new User($"First{i}", $"Last{i}"))
                       .ToResponseDataCollectionAsync();

@@ -1,18 +1,30 @@
+using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Internal.AspNetCore;
+using Futurum.WebApiEndpoint.Metadata;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 namespace Futurum.WebApiEndpoint.Internal;
 
-internal partial interface IWebApiEndpointHttpContextDispatcher
+internal interface IWebApiEndpointHttpContextDispatcher
 {
+    Task<Result> HandleFailedResponseAsync(HttpContext httpContext, IResultError error, MetadataRouteDefinition metadataRouteDefinition, CancellationToken cancellation = default);
 }
 
-internal partial class WebApiEndpointHttpContextDispatcher : IWebApiEndpointHttpContextDispatcher
+internal class WebApiEndpointHttpContextDispatcher : IWebApiEndpointHttpContextDispatcher
 {
     private readonly IOptions<JsonOptions> _serializationOptions;
 
     public WebApiEndpointHttpContextDispatcher(IOptions<JsonOptions> serializationOptions)
     {
         _serializationOptions = serializationOptions;
+    }
+    
+    public Task<Result> HandleFailedResponseAsync(HttpContext httpContext, IResultError error, MetadataRouteDefinition metadataRouteDefinition, CancellationToken cancellation = default)
+    {
+        var errorResponse = error.ToErrorStructure();
+
+        return httpContext.Response.TryWriteAsJsonAsync(errorResponse, _serializationOptions.Value.JsonSerializerOptions, metadataRouteDefinition.FailedStatusCode, cancellation);
     }
 }

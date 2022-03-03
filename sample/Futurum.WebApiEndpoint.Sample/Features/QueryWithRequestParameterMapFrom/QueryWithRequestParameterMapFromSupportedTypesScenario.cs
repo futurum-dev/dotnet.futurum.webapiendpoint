@@ -1,4 +1,5 @@
 using Futurum.Core.Result;
+using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Features.QueryWithRequestParameterMapFrom;
 
@@ -20,19 +21,19 @@ public static class QueryWithRequestParameterMapFromSupportedTypesScenario
     
     public record ResponseDto(string String, int Int, long Long, DateTime DateTime, bool Boolean, Guid Guid);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.WithRequest<QueryDto, Query>.WithResponse<ResponseDto, Response>.WithMapper<Mapper>
+    public class ApiEndpoint : QueryWebApiEndpoint.Request<QueryDto, Query>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
-        protected override Task<Result<Response>> ExecuteAsync(Query query, CancellationToken cancellationToken) =>
+        public override Task<Result<Response>> ExecuteAsync(Query query, CancellationToken cancellationToken) =>
             new Response(query.String, query.Int, query.Long, query.DateTime, query.Boolean, query.Guid).ToResultOkAsync();
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<QueryDto, Query>,
-                          IWebApiEndpointResponseMapper<Response, ResponseDto>
+                          IWebApiEndpointResponseDtoMapper<Response, ResponseDto>
     {
-        public Result<Query> Map(HttpContext httpContext, QueryDto dto) =>
-            new Query(dto.String, dto.Int, dto.Long, dto.DateTime, dto.Boolean, dto.Guid).ToResultOk();
+        public Task<Result<Query>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, QueryDto dto, CancellationToken cancellationToken) =>
+            new Query(dto.String, dto.Int, dto.Long, dto.DateTime, dto.Boolean, dto.Guid).ToResultOkAsync();
 
-        public ResponseDto Map(HttpContext httpContext, Response domain) => 
+        public ResponseDto Map(Response domain) => 
             new(domain.String, domain.Int, domain.Long, domain.DateTime, domain.Boolean, domain.Guid);
     }
 }

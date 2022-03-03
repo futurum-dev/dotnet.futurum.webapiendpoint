@@ -644,7 +644,8 @@ public class MapFromRequestMapperTests
         configureHttpContext?.Invoke(httpContext);
 
         var dto = new T();
-        return MapFromRequestMapper<T>.Map(httpContext, dto, CancellationToken.None);
+        return MapFromRequestMapper<T>.Map(httpContext, dto, CancellationToken.None)
+                                      .Map(dto);
     }
 
     private static Result<T> TestRunnerCookieMap<T>(Action<HttpContextMock>? configureHttpContext = null)
@@ -654,7 +655,8 @@ public class MapFromRequestMapperTests
         configureHttpContext?.Invoke(httpContext);
 
         var dto = new T();
-        return MapFromRequestMapper<T>.Map(httpContext, dto, CancellationToken.None);
+        return MapFromRequestMapper<T>.Map(httpContext, dto, CancellationToken.None)
+                                      .Map(dto);
     }
 
     public class when_property_is_readonly_the_fail
