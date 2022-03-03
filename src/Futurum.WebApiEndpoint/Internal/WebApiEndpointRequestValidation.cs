@@ -5,7 +5,7 @@ using Futurum.FluentValidation;
 
 namespace Futurum.WebApiEndpoint.Internal;
 
-internal interface IWebApiEndpointRequestValidation<TRequest>
+public interface IWebApiEndpointRequestValidation<TRequest>
 {
     Task<Result> ExecuteAsync(TRequest request);
 }

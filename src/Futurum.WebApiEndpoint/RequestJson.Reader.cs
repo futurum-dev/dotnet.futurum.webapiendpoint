@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace Futurum.WebApiEndpoint;
 
-internal interface IRequestJsonReader<TRequestDto>
+public interface IRequestJsonReader<TRequestDto>
     where TRequestDto : class
 {
     Task<Result<TRequestDto>> ExecuteAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken);
