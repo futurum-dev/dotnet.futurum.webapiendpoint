@@ -7,22 +7,22 @@ public abstract partial class CommandWebApiEndpoint
     /// <summary>
     /// Configure with request plain text
     /// </summary>
-    public abstract class RequestPlainText<TApiEndpoint>
+    public abstract class RequestPlainText
     {
         /// <summary>
         /// Configure without response
         /// </summary>
-        public abstract class NoResponse : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseEmptyDto, WebApiEndpoint.RequestPlainText<TApiEndpoint>, ResponseEmpty, RequestPlainTextMapper<TApiEndpoint>, ResponseEmptyMapper>
+        public abstract class NoResponse : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseEmptyDto, WebApiEndpoint.RequestPlainText, ResponseEmpty, RequestPlainTextMapper, ResponseEmptyMapper>
         {
             /// <inheritdoc />
-            public Task<Result<ResponseEmpty>> ExecuteCommandAsync(WebApiEndpoint.RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
-                ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken).MapAsync(ResponseEmpty.Default);
+            public Task<Result<ResponseEmpty>> ExecuteCommandAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken) =>
+                ExecuteAsync(command, cancellationToken).MapAsync(ResponseEmpty.Default);
 
             /// <summary>
             /// Execute the WebApiEndpoint
             /// <para>This method is called once for each request received</para>
             /// </summary>
-            protected abstract Task<Result> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken);
+            protected abstract Task<Result> ExecuteAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -30,19 +30,19 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class Response<TResponseDto, TResponseDomain>
         {
-            public abstract class Mapper<TMapper> : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseJsonDto<TResponseDto>, WebApiEndpoint.RequestPlainText<TApiEndpoint>, TResponseDomain, 
-                RequestPlainTextMapper<TApiEndpoint>, ResponseJsonMapper<TResponseDomain, TResponseDto, TMapper>>
+            public abstract class Mapper<TMapper> : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseJsonDto<TResponseDto>, WebApiEndpoint.RequestPlainText, TResponseDomain, 
+                RequestPlainTextMapper, ResponseJsonMapper<TResponseDomain, TResponseDto, TMapper>>
                 where TMapper : IWebApiEndpointResponseDtoMapper<TResponseDomain, TResponseDto>
             {
                 /// <inheritdoc />
-                public Task<Result<TResponseDomain>> ExecuteCommandAsync(WebApiEndpoint.RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken);
+                public Task<Result<TResponseDomain>> ExecuteCommandAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken) =>
+                    ExecuteAsync(command, cancellationToken);
 
                 /// <summary>
                 /// Execute the WebApiEndpoint
                 /// <para>This method is called once for each request received</para>
                 /// </summary>
-                protected abstract Task<Result<TResponseDomain>> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken);
+                protected abstract Task<Result<TResponseDomain>> ExecuteAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken);
             }
         }
 
@@ -51,36 +51,36 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class ResponseAsyncEnumerable<TDataDto, TData>
         {
-            public abstract class Mapper<TResponseDataMapper> : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseAsyncEnumerableDto<TDataDto>, WebApiEndpoint.RequestPlainText<TApiEndpoint>, WebApiEndpoint.ResponseAsyncEnumerable<TApiEndpoint, TData>, RequestPlainTextMapper<TApiEndpoint>, ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TResponseDataMapper>>
+            public abstract class Mapper<TResponseDataMapper> : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseAsyncEnumerableDto<TDataDto>, WebApiEndpoint.RequestPlainText, ResponseAsyncEnumerable<TData>, RequestPlainTextMapper, ResponseAsyncEnumerableMapper<TData, TDataDto, TResponseDataMapper>>
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public Task<Result<WebApiEndpoint.ResponseAsyncEnumerable<TApiEndpoint, TData>>> ExecuteCommandAsync(WebApiEndpoint.RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken).MapAsync(responseAsyncEnumerable => responseAsyncEnumerable.ToApiEndpoint<TApiEndpoint>());
+                public Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteCommandAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken) =>
+                    ExecuteAsync(command, cancellationToken);
 
                 /// <summary>
                 /// Execute the WebApiEndpoint
                 /// <para>This method is called once for each request received</para>
                 /// </summary>
-                protected abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken);
+                protected abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken);
             }
         }
 
         /// <summary>
         /// Configure with response bytes
         /// </summary>
-        public abstract class ResponseBytes : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseBytesDto, WebApiEndpoint.RequestPlainText<TApiEndpoint>, ResponseBytes<TApiEndpoint>,
-            RequestPlainTextMapper<TApiEndpoint>, ResponseBytesMapper<TApiEndpoint>>
+        public abstract class ResponseBytes : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseBytesDto, WebApiEndpoint.RequestPlainText, WebApiEndpoint.ResponseBytes,
+            RequestPlainTextMapper, ResponseBytesMapper>
         {
             /// <inheritdoc />
-            public Task<Result<ResponseBytes<TApiEndpoint>>> ExecuteCommandAsync(WebApiEndpoint.RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
-                ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken).MapAsync(responseBytes => responseBytes.ToApiEndpoint<TApiEndpoint>());
+            public Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteCommandAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken) =>
+                ExecuteAsync(command, cancellationToken);
 
             /// <summary>
             /// Execute the WebApiEndpoint
             /// <para>This method is called once for each request received</para>
             /// </summary>
-            protected abstract Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken);
+            protected abstract Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -88,70 +88,70 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class ResponseDataCollection<TDataDto, TData>
         {
-            public abstract class Mapper<TResponseDataMapper> : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseDataCollectionDto<TDataDto>, WebApiEndpoint.RequestPlainText<TApiEndpoint>, WebApiEndpoint.ResponseDataCollection<TApiEndpoint, TData>, RequestPlainTextMapper<TApiEndpoint>, ResponseDataCollectionMapper<TApiEndpoint, TData, TDataDto, TResponseDataMapper>>
+            public abstract class Mapper<TResponseDataMapper> : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseDataCollectionDto<TDataDto>, WebApiEndpoint.RequestPlainText, ResponseDataCollection<TData>, RequestPlainTextMapper, ResponseDataCollectionMapper<TData, TDataDto, TResponseDataMapper>>
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public Task<Result<WebApiEndpoint.ResponseDataCollection<TApiEndpoint, TData>>> ExecuteCommandAsync(WebApiEndpoint.RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken).MapAsync(responseDataCollection => responseDataCollection.ToApiEndpoint<TApiEndpoint>());
+                public Task<Result<ResponseDataCollection<TData>>> ExecuteCommandAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken) =>
+                    ExecuteAsync(command, cancellationToken);
 
                 /// <summary>
                 /// Execute the WebApiEndpoint
                 /// <para>This method is called once for each request received</para>
                 /// </summary>
-                protected abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken);
+                protected abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken);
             }
         }
 
         /// <summary>
         /// Configure with response empty json
         /// </summary>
-        public abstract class ResponseEmptyJson : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseEmptyJsonDto, WebApiEndpoint.RequestPlainText<TApiEndpoint>, ResponseEmptyJson<TApiEndpoint>,
-            RequestPlainTextMapper<TApiEndpoint>, ResponseEmptyJsonMapper<TApiEndpoint>>
+        public abstract class ResponseEmptyJson : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseEmptyJsonDto, WebApiEndpoint.RequestPlainText, WebApiEndpoint.ResponseEmptyJson,
+            RequestPlainTextMapper, ResponseEmptyJsonMapper>
         {
             /// <inheritdoc />
-            public Task<Result<ResponseEmptyJson<TApiEndpoint>>> ExecuteCommandAsync(WebApiEndpoint.RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
-                ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken).MapAsync(responseEmptyJson => responseEmptyJson.ToApiEndpoint<TApiEndpoint>());
+            public Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteCommandAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken) =>
+                ExecuteAsync(command, cancellationToken);
 
             /// <summary>
             /// Execute the WebApiEndpoint
             /// <para>This method is called once for each request received</para>
             /// </summary>
-            protected abstract Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken);
+            protected abstract Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken);
         }
 
         /// <summary>
         /// Configure with response file stream
         /// </summary>
-        public abstract class ResponseFileStream : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseFileStreamDto, WebApiEndpoint.RequestPlainText<TApiEndpoint>, ResponseFileStream<TApiEndpoint>,
-            RequestPlainTextMapper<TApiEndpoint>, ResponseFileStreamMapper<TApiEndpoint>>
+        public abstract class ResponseFileStream : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseFileStreamDto, WebApiEndpoint.RequestPlainText, WebApiEndpoint.ResponseFileStream,
+            RequestPlainTextMapper, ResponseFileStreamMapper>
         {
             /// <inheritdoc />
-            public Task<Result<ResponseFileStream<TApiEndpoint>>> ExecuteCommandAsync(WebApiEndpoint.RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
-                ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken).MapAsync(responseFileStream => responseFileStream.ToApiEndpoint<TApiEndpoint>());
+            public Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteCommandAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken) =>
+                ExecuteAsync(command, cancellationToken);
 
             /// <summary>
             /// Execute the WebApiEndpoint
             /// <para>This method is called once for each request received</para>
             /// </summary>
-            protected abstract Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken);
+            protected abstract Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken);
         }
 
         /// <summary>
         /// Configure with response stream
         /// </summary>
-        public abstract class ResponseStream : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseStreamDto, WebApiEndpoint.RequestPlainText<TApiEndpoint>, ResponseStream<TApiEndpoint>,
-            RequestPlainTextMapper<TApiEndpoint>, ResponseStreamMapper<TApiEndpoint>>
+        public abstract class ResponseStream : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseStreamDto, WebApiEndpoint.RequestPlainText, WebApiEndpoint.ResponseStream,
+            RequestPlainTextMapper, ResponseStreamMapper>
         {
             /// <inheritdoc />
-            public Task<Result<ResponseStream<TApiEndpoint>>> ExecuteCommandAsync(WebApiEndpoint.RequestPlainText<TApiEndpoint> command, CancellationToken cancellationToken) =>
-                ExecuteAsync(command.ToNonApiEndpoint(), cancellationToken).MapAsync(responseStream => responseStream.ToApiEndpoint<TApiEndpoint>());
+            public Task<Result<WebApiEndpoint.ResponseStream>> ExecuteCommandAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken) =>
+                ExecuteAsync(command, cancellationToken);
 
             /// <summary>
             /// Execute the WebApiEndpoint
             /// <para>This method is called once for each request received</para>
             /// </summary>
-            protected abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken);
+            protected abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken);
         }
     }
 }

@@ -4,7 +4,7 @@ namespace Futurum.WebApiEndpoint.Sample.Features.QueryWithoutRequest;
 
 public static class QueryWithoutRequestWithResponseBytesScenario
 {
-    public class ApiEndpoint : QueryWebApiEndpoint.NoRequest.ResponseBytes<ApiEndpoint>
+    public class ApiEndpoint : QueryWebApiEndpoint.NoRequest.ResponseBytes
     {
         protected override Task<Result<ResponseBytes>> ExecuteAsync(CancellationToken cancellationToken) =>
             new ResponseBytes(File.ReadAllBytes("./Data/hello-world.txt"), "hello-world-bytes").ToResultOkAsync();

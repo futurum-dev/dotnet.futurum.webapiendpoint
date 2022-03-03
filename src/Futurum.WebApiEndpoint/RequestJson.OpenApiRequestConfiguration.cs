@@ -1,10 +1,7 @@
 using System.Net.Mime;
 
-using Futurum.Core.Functional;
-using Futurum.Core.Option;
 using Futurum.WebApiEndpoint.Internal;
 using Futurum.WebApiEndpoint.Metadata;
-using Futurum.WebApiEndpoint.OpenApi;
 
 using Microsoft.OpenApi.Models;
 

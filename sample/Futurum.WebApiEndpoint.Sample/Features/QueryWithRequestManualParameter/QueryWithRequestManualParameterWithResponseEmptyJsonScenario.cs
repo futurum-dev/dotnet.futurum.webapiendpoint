@@ -7,7 +7,7 @@ public static class QueryWithRequestManualParameterWithResponseEmptyJsonScenario
 {
     public record Request(string Id);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.Request<Request>.ResponseEmptyJson<ApiEndpoint>.Mapper<Mapper>
+    public class ApiEndpoint : QueryWebApiEndpoint.Request<Request>.ResponseEmptyJson.Mapper<Mapper>
     {
         protected override Task<Result<ResponseEmptyJson>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
             new ResponseEmptyJson().ToResultOkAsync();

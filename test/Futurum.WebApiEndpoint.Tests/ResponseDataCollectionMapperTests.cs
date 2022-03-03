@@ -20,7 +20,7 @@ public class ResponseDataCollectionMapperTests
     [Fact]
     public async Task Map()
     {
-        var responseDataCollectionMapper = new ResponseDataCollectionMapper<object, Data, DataDto, DataMapper>(Options.Create(new JsonOptions()), new DataMapper());
+        var responseDataCollectionMapper = new ResponseDataCollectionMapper<Data, DataDto, DataMapper>(Options.Create(new JsonOptions()), new DataMapper());
 
         var httpContext = new DefaultHttpContext();
         httpContext.Request.Body = new MemoryStream();
@@ -30,7 +30,7 @@ public class ResponseDataCollectionMapperTests
                                 .Select(i => new Data($"First{i}", i))
                                 .ToList();
 
-        var response = new ResponseDataCollection<object, Data>(data);
+        var response = new ResponseDataCollection<Data>(data);
 
         MetadataRouteDefinition metadataRouteDefinition =
             new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, Option<Action<RouteHandlerBuilder>>.None, null);

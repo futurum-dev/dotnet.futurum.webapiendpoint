@@ -4,7 +4,7 @@ namespace Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestUploadFiles;
 
 public static class CommandWithRequestUploadFilesWithResponseScenario
 {
-    public class ApiEndpoint : CommandWebApiEndpoint.RequestUploadFiles<ApiEndpoint>.Response<FeatureDto, Feature>.Mapper<FeatureMapper>
+    public class ApiEndpoint : CommandWebApiEndpoint.RequestUploadFiles.Response<FeatureDto, Feature>.Mapper<FeatureMapper>
     {
         protected override Task<Result<Feature>> ExecuteAsync(RequestUploadFiles command, CancellationToken cancellationToken) =>
             Enumerable.Range(0, 10)

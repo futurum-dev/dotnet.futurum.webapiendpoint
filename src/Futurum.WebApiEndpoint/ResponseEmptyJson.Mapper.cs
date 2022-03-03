@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace Futurum.WebApiEndpoint;
 
-internal class ResponseEmptyJsonMapper<TApiEndpoint> : IWebApiEndpointResponseMapper<ResponseEmptyJson<TApiEndpoint>, ResponseEmptyJsonDto>
+internal class ResponseEmptyJsonMapper : IWebApiEndpointResponseMapper<ResponseEmptyJson, ResponseEmptyJsonDto>
 {
     private readonly IOptions<JsonOptions> _serializationOptions;
 
@@ -18,6 +18,6 @@ internal class ResponseEmptyJsonMapper<TApiEndpoint> : IWebApiEndpointResponseMa
         _serializationOptions = serializationOptions;
     }
     
-    public Task<Result> MapAsync(HttpContext httpContext, MetadataRouteDefinition metadataRouteDefinition, ResponseEmptyJson<TApiEndpoint> domain, CancellationToken cancellation) => 
+    public Task<Result> MapAsync(HttpContext httpContext, MetadataRouteDefinition metadataRouteDefinition, ResponseEmptyJson domain, CancellationToken cancellation) => 
         httpContext.Response.TryWriteAsJsonAsync(new JsonObject(), _serializationOptions.Value.JsonSerializerOptions, 200, cancellation);
 }

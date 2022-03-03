@@ -12,7 +12,7 @@ public static class QueryWithRequestParameterMapFromWithResponseBytesScenario
 
     public record Request(string Id);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.Request<RequestDto, Request>.ResponseBytes<ApiEndpoint>.Mapper<Mapper>
+    public class ApiEndpoint : QueryWebApiEndpoint.Request<RequestDto, Request>.ResponseBytes.Mapper<Mapper>
     {
         protected override Task<Result<ResponseBytes>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
             new ResponseBytes(File.ReadAllBytes("./Data/hello-world.txt"), $"hello-world-bytes-{query.Id}").ToResultOkAsync();

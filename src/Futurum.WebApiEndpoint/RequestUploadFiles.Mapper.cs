@@ -4,10 +4,10 @@ using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint;
 
-internal class RequestUploadFilesMapper<TApiEndpoint> : IWebApiEndpointRequestMapper<RequestUploadFiles<TApiEndpoint>>
+internal class RequestUploadFilesMapper : IWebApiEndpointRequestMapper<RequestUploadFiles>
 {
-    public Task<Result<RequestUploadFiles<TApiEndpoint>>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
+    public Task<Result<RequestUploadFiles>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
         httpContext.Request.TryReadUploadFilesAsync(cancellationToken)
-                   .MapAsync(files => new RequestUploadFiles<TApiEndpoint>(files))
+                   .MapAsync(files => new RequestUploadFiles(files))
                    .EnhanceWithErrorAsync(() => "Failed to read upload files");
 }

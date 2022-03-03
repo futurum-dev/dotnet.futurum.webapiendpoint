@@ -363,6 +363,6 @@ public class SamplesEndToEndFeaturesRequestsTests
     }
 
     private static HttpClient CreateClient() =>
-        new WebApplicationFactory<Futurum.WebApiEndpoint.Sample.Program>()
+        new WebApplicationFactory<Sample.Program>()
             .CreateClient();
 }

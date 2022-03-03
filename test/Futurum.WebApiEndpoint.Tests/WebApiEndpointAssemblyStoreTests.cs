@@ -11,7 +11,7 @@ public class WebApiEndpointAssemblyStoreTests
     {
         var assemblies = new[]
         {
-            this.GetType().Assembly,
+            GetType().Assembly,
             typeof(string).Assembly
         };
 

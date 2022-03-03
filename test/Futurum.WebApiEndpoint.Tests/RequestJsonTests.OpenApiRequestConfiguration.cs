@@ -8,7 +8,6 @@ using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Internal;
 using Futurum.WebApiEndpoint.Metadata;
 using Futurum.WebApiEndpoint.Middleware;
-using Futurum.WebApiEndpoint.OpenApi;
 using Futurum.WebApiEndpoint.Tests.OpenApi;
 
 using Microsoft.AspNetCore.Builder;

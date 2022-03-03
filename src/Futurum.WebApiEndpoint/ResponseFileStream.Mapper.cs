@@ -4,8 +4,8 @@ using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint;
 
-public class ResponseFileStreamMapper<TApiEndpoint> : IWebApiEndpointResponseMapper<ResponseFileStream<TApiEndpoint>, ResponseFileStreamDto>
+public class ResponseFileStreamMapper : IWebApiEndpointResponseMapper<ResponseFileStream, ResponseFileStreamDto>
 {
-    public Task<Result> MapAsync(HttpContext httpContext, MetadataRouteDefinition metadataRouteDefinition, ResponseFileStream<TApiEndpoint> domain, CancellationToken cancellation) =>
+    public Task<Result> MapAsync(HttpContext httpContext, MetadataRouteDefinition metadataRouteDefinition, ResponseFileStream domain, CancellationToken cancellation) =>
         httpContext.Response.TrySendResponseFileAsync(domain.FileInfo, metadataRouteDefinition.SuccessStatusCode, domain.ContentType, cancellation);
 }

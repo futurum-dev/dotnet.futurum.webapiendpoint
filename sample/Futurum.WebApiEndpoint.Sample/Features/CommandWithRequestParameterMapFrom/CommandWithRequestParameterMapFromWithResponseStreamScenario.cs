@@ -12,7 +12,7 @@ public static class CommandWithRequestParameterMapFromWithResponseStreamScenario
 
     public record Command(string Id);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.ResponseStream<ApiEndpoint>.Mapper<Mapper>
+    public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.ResponseStream.Mapper<Mapper>
     {
         protected override Task<Result<ResponseStream>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             new ResponseStream(new FileInfo("./Data/hello-world.txt").OpenRead(), $"hello-world-stream-{command.Id}").ToResultOkAsync();

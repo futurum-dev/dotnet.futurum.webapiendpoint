@@ -9,7 +9,7 @@ public static class CommandWithRequestWithResponseEmptyJsonScenario
 
     public record Command(string Id);
 
-    public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.ResponseEmptyJson<ApiEndpoint>.Mapper<Mapper>
+    public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.ResponseEmptyJson.Mapper<Mapper>
     {
         protected override Task<Result<ResponseEmptyJson>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             new ResponseEmptyJson().ToResultOkAsync();

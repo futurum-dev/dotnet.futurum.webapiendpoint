@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Futurum.WebApiEndpoint.Tests.Internal;
 

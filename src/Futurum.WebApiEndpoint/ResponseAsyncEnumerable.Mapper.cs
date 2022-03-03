@@ -7,8 +7,8 @@ using Microsoft.Extensions.Options;
 
 namespace Futurum.WebApiEndpoint;
 
-internal class ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TResponseDataMapper> : 
-    IWebApiEndpointResponseMapper<ResponseAsyncEnumerable<TApiEndpoint, TData>, ResponseAsyncEnumerableDto<TDataDto>>
+internal class ResponseAsyncEnumerableMapper<TData, TDataDto, TResponseDataMapper> : 
+    IWebApiEndpointResponseMapper<ResponseAsyncEnumerable<TData>, ResponseAsyncEnumerableDto<TDataDto>>
     where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
 {
     private readonly IOptions<JsonOptions> _serializationOptions;
@@ -21,7 +21,7 @@ internal class ResponseAsyncEnumerableMapper<TApiEndpoint, TData, TDataDto, TRes
         _dataMapper = dataMapper;
     }
 
-    public Task<Result> MapAsync(HttpContext httpContext, MetadataRouteDefinition metadataRouteDefinition, ResponseAsyncEnumerable<TApiEndpoint, TData> domain, CancellationToken cancellation)
+    public Task<Result> MapAsync(HttpContext httpContext, MetadataRouteDefinition metadataRouteDefinition, ResponseAsyncEnumerable<TData> domain, CancellationToken cancellation)
     {
         var data = domain.Data.Select(_dataMapper.Map);
 

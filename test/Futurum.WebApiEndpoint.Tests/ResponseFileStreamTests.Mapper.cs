@@ -18,7 +18,7 @@ public class ResponseFileStreamMapperTests
     [Fact]
     public async Task Map()
     {
-        var responseFileStreamMapper = new ResponseFileStreamMapper<object>();
+        var responseFileStreamMapper = new ResponseFileStreamMapper();
 
         var httpContext = new DefaultHttpContext();
         httpContext.Request.Body = new MemoryStream();
@@ -29,7 +29,7 @@ public class ResponseFileStreamMapperTests
         var sentBytes = new byte[fileStream.Length];
         await fileStream.ReadAsync(sentBytes, CancellationToken.None);
 
-        var response = new ResponseFileStream<object>(new FileInfo("./Data/hello-world.txt"), MediaTypeNames.Application.Octet);
+        var response = new ResponseFileStream(new FileInfo("./Data/hello-world.txt"), MediaTypeNames.Application.Octet);
 
         MetadataRouteDefinition metadataRouteDefinition =
             new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, Option<Action<RouteHandlerBuilder>>.None, null);

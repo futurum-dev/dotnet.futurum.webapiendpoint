@@ -12,7 +12,7 @@ public static class QueryWithRequestParameterMapFromWithResponseDataCollectionSc
 
     public record Request(string Id);
 
-    public class ApiEndpoint : QueryWebApiEndpoint.Request<RequestDto, Request>.ResponseDataCollection<ApiEndpoint, FeatureDto, Feature>.Mapper<Mapper, FeatureDataMapper>
+    public class ApiEndpoint : QueryWebApiEndpoint.Request<RequestDto, Request>.ResponseDataCollection<FeatureDto, Feature>.Mapper<Mapper, FeatureDataMapper>
     {
         protected override Task<Result<ResponseDataCollection<Feature>>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
             new ResponseDataCollection<Feature>(Enumerable.Range(0, 10).Select(i => new Feature($"Name - {i} - {query.Id}"))).ToResultOkAsync();

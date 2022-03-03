@@ -17,7 +17,7 @@ public class RequestUploadFilesMapperTests
 
         var formFile = new FormFile(fileStream, 0, fileStream.Length, "hello-world.txt", "hello-world.txt");
 
-        var requestUploadFilesMapper = new RequestUploadFilesMapper<object>();
+        var requestUploadFilesMapper = new RequestUploadFilesMapper();
 
         var httpContext = new DefaultHttpContext();
         httpContext.Request.Form = new FormCollection(null, new FormFileCollection { formFile });
@@ -39,7 +39,7 @@ public class RequestUploadFilesMapperTests
     [Fact]
     public async Task failure()
     {
-        var requestUploadFilesMapper = new RequestUploadFilesMapper<object>();
+        var requestUploadFilesMapper = new RequestUploadFilesMapper();
 
         var httpContext = new DefaultHttpContext();
 

@@ -3,17 +3,9 @@ using System.Net.Mime;
 namespace Futurum.WebApiEndpoint;
 
 /// <summary>
-/// Response domain for file-stream with <typeparamref name="TApiEndpoint"/>
-/// </summary>
-public record ResponseFileStream<TApiEndpoint>(FileInfo FileInfo, string ContentType = MediaTypeNames.Application.Octet);
-
-/// <summary>
 /// Response domain for file-stream
 /// </summary>
-public record ResponseFileStream(FileInfo FileInfo, string ContentType = MediaTypeNames.Application.Octet)
-{
-    internal ResponseFileStream<TApiEndpoint> ToApiEndpoint<TApiEndpoint>() => new(FileInfo, ContentType);
-}
+public record ResponseFileStream(FileInfo FileInfo, string ContentType = MediaTypeNames.Application.Octet);
 
 /// <summary>
 /// Response dto for file-stream

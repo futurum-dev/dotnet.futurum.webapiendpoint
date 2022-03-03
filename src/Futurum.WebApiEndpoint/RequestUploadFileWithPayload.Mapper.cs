@@ -4,7 +4,7 @@ using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint;
 
-internal class RequestUploadFileWithPayloadMapper<TApiEndpoint, TPayloadDto, TPayload, TRequestPayloadMapper> : IWebApiEndpointRequestMapper<RequestUploadFileWithPayload<TApiEndpoint, TPayload>>
+internal class RequestUploadFileWithPayloadMapper<TPayloadDto, TPayload, TRequestPayloadMapper> : IWebApiEndpointRequestMapper<RequestUploadFileWithPayload<TPayload>>
     where TRequestPayloadMapper : IWebApiEndpointRequestPayloadMapper<TPayloadDto, TPayload>
 {
     private readonly TRequestPayloadMapper _payloadMapper;
@@ -14,9 +14,9 @@ internal class RequestUploadFileWithPayloadMapper<TApiEndpoint, TPayloadDto, TPa
         _payloadMapper = payloadMapper;
     }
 
-    public Task<Result<RequestUploadFileWithPayload<TApiEndpoint, TPayload>>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
+    public Task<Result<RequestUploadFileWithPayload<TPayload>>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
         MapFromRequestMultipartMapper<RequestUploadFileWithPayloadDto<TPayloadDto>>
             .MapAsync(httpContext, new RequestUploadFileWithPayloadDto<TPayloadDto>(), cancellationToken)
             .ThenAsync(dto => _payloadMapper.Map(dto.Payload)
-                                            .Map(payload => new RequestUploadFileWithPayload<TApiEndpoint, TPayload>(dto.File, payload)));
+                                            .Map(payload => new RequestUploadFileWithPayload<TPayload>(dto.File, payload)));
 }

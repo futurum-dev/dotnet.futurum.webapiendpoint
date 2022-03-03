@@ -1,5 +1,3 @@
-using Futurum.Core.Result;
-
 namespace Futurum.WebApiEndpoint;
 
 public class RequestEmpty

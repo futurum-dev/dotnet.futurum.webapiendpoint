@@ -15,13 +15,13 @@ public class RequestPlainTextMapperTests
     {
         var message = Guid.NewGuid().ToString();
 
-        var requestPlainTextMapper = new RequestPlainTextMapper<object>();
+        var requestPlainTextMapper = new RequestPlainTextMapper();
 
         var httpContext = new DefaultHttpContext();
         httpContext.Request.Body = new MemoryStream(Encoding.Default.GetBytes(message));
 
         var result = await requestPlainTextMapper.MapAsync(httpContext, null, CancellationToken.None);
 
-        result.ShouldBeSuccessWithValue(new RequestPlainText<object>(message));
+        result.ShouldBeSuccessWithValue(new RequestPlainText(message));
     }
 }

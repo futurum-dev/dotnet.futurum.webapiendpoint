@@ -20,7 +20,7 @@ public class ResponseAsyncEnumerableMapperTests
     [Fact]
     public async Task Map()
     {
-        var responseAsyncEnumerableMapper = new ResponseAsyncEnumerableMapper<object, Data, DataDto, DataMapper>(Options.Create(new JsonOptions()), new DataMapper());
+        var responseAsyncEnumerableMapper = new ResponseAsyncEnumerableMapper<Data, DataDto, DataMapper>(Options.Create(new JsonOptions()), new DataMapper());
 
         var httpContext = new DefaultHttpContext();
         httpContext.Request.Body = new MemoryStream();
@@ -30,7 +30,7 @@ public class ResponseAsyncEnumerableMapperTests
                              .Select(i => new Data($"First{i}", i))
                              .ToAsyncEnumerable();
 
-        var response = new ResponseAsyncEnumerable<object, Data>(data);
+        var response = new ResponseAsyncEnumerable<Data>(data);
 
         MetadataRouteDefinition metadataRouteDefinition =
             new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, Option<Action<RouteHandlerBuilder>>.None, null);

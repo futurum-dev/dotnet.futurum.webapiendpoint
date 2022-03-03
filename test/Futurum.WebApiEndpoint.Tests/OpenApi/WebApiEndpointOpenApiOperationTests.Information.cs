@@ -63,7 +63,7 @@ public class WebApiEndpointOpenApiOperationInformationTests
         openApiOperation.ExternalDocs.Url.Should().Be(externalDocsUrl);
     }
 
-    public class ApiEndpoint : CommandWebApiEndpoint.RequestUploadFiles<ApiEndpoint>.NoResponse
+    public class ApiEndpoint : CommandWebApiEndpoint.RequestUploadFiles.NoResponse
     {
         protected override Task<Result> ExecuteAsync(RequestUploadFiles command, CancellationToken cancellationToken) =>
             Result.OkAsync();
