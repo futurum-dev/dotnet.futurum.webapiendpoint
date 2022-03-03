@@ -229,7 +229,6 @@ public class WebApiEndpointExecutorServiceTests
 
         var resultErrorStructure = JsonSerializer.Deserialize<ResultErrorStructure>(requestBody, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-        resultErrorStructure.Message.Should().StartWith("WebApiEndpoint error for route");
-        resultErrorStructure.Children.Should().BeEmpty();
+        resultErrorStructure.Message.Should().StartWith("WebApiEndpoint - Internal Server Error");
     }
 }
