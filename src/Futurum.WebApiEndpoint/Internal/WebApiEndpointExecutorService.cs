@@ -26,7 +26,7 @@ internal static class WebApiEndpointExecutorService
 
             Log.Logger.Error(exception, "WebApiEndpoint error - {@eventData}", errorData);
 
-            var errorResponse = $"WebApiEndpoint error for route : '{routePath}'".ToResultError().ToErrorStructure();
+            var errorResponse = exception.ToResultError("WebApiEndpoint - Internal Server Error").ToErrorStructure();
 
             httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
