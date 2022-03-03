@@ -20,8 +20,8 @@ public static class TestWebApiEndpoint
 
     public class ApiEndpoint : CommandWebApiEndpoint.Request<RequestDto, Query>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
-        public override Task<Result<Response>> ExecuteAsync(Query query, CancellationToken cancellationToken) =>
-            new Response(query.Id, query.FirstName + " " + query.LastName, query.Age, query.PhoneNumbers?.FirstOrDefault()).ToResultOkAsync();
+        public override Task<Result<Response>> ExecuteAsync(Query request, CancellationToken cancellationToken) =>
+            new Response(request.Id, request.FirstName + " " + request.LastName, request.Age, request.PhoneNumbers?.FirstOrDefault()).ToResultOkAsync();
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Query>, IWebApiEndpointResponseDtoMapper<Response, ResponseDto>

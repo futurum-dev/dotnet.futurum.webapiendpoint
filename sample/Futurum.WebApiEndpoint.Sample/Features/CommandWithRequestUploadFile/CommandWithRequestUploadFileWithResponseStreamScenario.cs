@@ -6,7 +6,7 @@ public static class CommandWithRequestUploadFileWithResponseStreamScenario
 {
     public class ApiEndpoint : CommandWebApiEndpoint.RequestUploadFile.ResponseStream
     {
-        public override Task<Result<ResponseStream>> ExecuteAsync(RequestUploadFile command, CancellationToken cancellationToken) =>
-            new ResponseStream(new FileInfo("./Data/hello-world.txt").OpenRead(), $"hello-world-stream-{command.File.FileName}").ToResultOkAsync();
+        public override Task<Result<ResponseStream>> ExecuteAsync(RequestUploadFile request, CancellationToken cancellationToken) =>
+            new ResponseStream(new FileInfo("./Data/hello-world.txt").OpenRead(), $"hello-world-stream-{request.File.FileName}").ToResultOkAsync();
     }
 }

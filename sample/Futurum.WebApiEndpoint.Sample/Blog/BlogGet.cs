@@ -13,7 +13,7 @@ public static class BlogGet
             _storageBroker = storageBroker;
         }
 
-        public override Task<Result<ResponseDataCollection<Blog>>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseDataCollection<Blog>>> ExecuteAsync(RequestEmpty request, CancellationToken cancellationToken) =>
             _storageBroker.GetAsync()
                           .ToResponseDataCollectionAsync();
     }

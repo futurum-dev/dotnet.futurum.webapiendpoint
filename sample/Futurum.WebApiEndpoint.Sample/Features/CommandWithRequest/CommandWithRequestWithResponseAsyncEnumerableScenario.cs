@@ -11,8 +11,8 @@ public static class CommandWithRequestWithResponseAsyncEnumerableScenario
 
     public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.ResponseAsyncEnumerable<FeatureDto, Feature>.Mapper<Mapper, FeatureDataMapper>
     {
-        public override Task<Result<ResponseAsyncEnumerable<Feature>>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
-            new ResponseAsyncEnumerable<Feature>(AsyncEnumerable.Range(0, 10).Select(i => new Feature($"Name - {i} - {command.Id}"))).ToResultOkAsync();
+        public override Task<Result<ResponseAsyncEnumerable<Feature>>> ExecuteAsync(Command request, CancellationToken cancellationToken) =>
+            new ResponseAsyncEnumerable<Feature>(AsyncEnumerable.Range(0, 10).Select(i => new Feature($"Name - {i} - {request.Id}"))).ToResultOkAsync();
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>

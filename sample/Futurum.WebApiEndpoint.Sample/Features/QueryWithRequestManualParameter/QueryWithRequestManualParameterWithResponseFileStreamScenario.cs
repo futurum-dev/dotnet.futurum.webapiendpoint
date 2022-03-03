@@ -9,7 +9,7 @@ public static class QueryWithRequestManualParameterWithResponseFileStreamScenari
 
     public class ApiEndpoint : QueryWebApiEndpoint.Request<Request>.ResponseFileStream.Mapper<Mapper>
     {
-        public override Task<Result<ResponseFileStream>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseFileStream>> ExecuteAsync(Request request, CancellationToken cancellationToken) =>
             new ResponseFileStream(new FileInfo("./Data/hello-world.txt")).ToResultOkAsync();
     }
 

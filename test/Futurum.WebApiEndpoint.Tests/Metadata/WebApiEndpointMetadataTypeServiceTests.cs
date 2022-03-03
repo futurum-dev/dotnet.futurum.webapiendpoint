@@ -49,7 +49,7 @@ public class WebApiEndpointMetadataTypeServiceTests
 
     public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
-        public override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken) =>
+        public override Task<Result<Response>> ExecuteAsync(Command request, CancellationToken cancellationToken) =>
             new Response().ToResultOkAsync();
     }
 

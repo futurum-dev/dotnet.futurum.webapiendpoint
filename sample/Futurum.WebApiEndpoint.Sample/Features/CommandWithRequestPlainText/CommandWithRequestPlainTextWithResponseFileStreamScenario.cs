@@ -6,7 +6,7 @@ public static class CommandWithRequestPlainTextWithResponseFileStreamScenario
 {
     public class ApiEndpoint : CommandWebApiEndpoint.RequestPlainText.ResponseFileStream
     {
-        public override Task<Result<ResponseFileStream>> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseFileStream>> ExecuteAsync(RequestPlainText request, CancellationToken cancellationToken) =>
             new ResponseFileStream(new FileInfo("./Data/hello-world.txt")).ToResultOkAsync();
     }
 }

@@ -6,7 +6,7 @@ public static class CommandWithRequestUploadFileWithResponseFileStreamWithConten
 {
     public class ApiEndpoint : CommandWebApiEndpoint.RequestUploadFile.ResponseFileStream
     {
-        public override Task<Result<ResponseFileStream>> ExecuteAsync(RequestUploadFile command, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseFileStream>> ExecuteAsync(RequestUploadFile request, CancellationToken cancellationToken) =>
             new ResponseFileStream(new FileInfo("./Data/dotnet-logo.png"), "image/png").ToResultOkAsync();
     }
 }

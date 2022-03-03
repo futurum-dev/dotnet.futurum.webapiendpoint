@@ -9,8 +9,8 @@ public static class QueryWithRequestManualParameterWithResponseDataCollectionSce
 
     public class ApiEndpoint : QueryWebApiEndpoint.Request<Request>.ResponseDataCollection<FeatureDto, Feature>.Mapper<Mapper, FeatureDataMapper>
     {
-        public override Task<Result<ResponseDataCollection<Feature>>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
-            new ResponseDataCollection<Feature>(Enumerable.Range(0, 10).Select(i => new Feature($"Name - {i} - {query.Id}"))).ToResultOkAsync();
+        public override Task<Result<ResponseDataCollection<Feature>>> ExecuteAsync(Request request, CancellationToken cancellationToken) =>
+            new ResponseDataCollection<Feature>(Enumerable.Range(0, 10).Select(i => new Feature($"Name - {i} - {request.Id}"))).ToResultOkAsync();
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<Request>

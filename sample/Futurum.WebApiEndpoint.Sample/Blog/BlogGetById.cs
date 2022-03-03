@@ -21,8 +21,8 @@ public static class BlogGetById
             _storageBroker = storageBroker;
         }
 
-        public override Task<Result<Blog>> ExecuteAsync(Query query, CancellationToken cancellationToken) =>
-            _storageBroker.GetByIdAsync(query.Id);
+        public override Task<Result<Blog>> ExecuteAsync(Query request, CancellationToken cancellationToken) =>
+            _storageBroker.GetByIdAsync(request.Id);
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<QueryDto, Query>

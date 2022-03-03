@@ -40,7 +40,7 @@ public class DisabledWebApiEndpointMiddlewareExecutorTests
 
         public bool WasCalled { get; private set; }
 
-        public override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken)
+        public override Task<Result<Response>> ExecuteAsync(Command request, CancellationToken cancellationToken)
         {
             WasCalled = true;
 

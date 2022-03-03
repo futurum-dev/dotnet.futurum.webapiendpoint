@@ -6,7 +6,7 @@ public static class CommandWithRequestPlainTextWithResponseEmptyJsonScenario
 {
     public class ApiEndpoint : CommandWebApiEndpoint.RequestPlainText.ResponseEmptyJson
     {
-        public override Task<Result<ResponseEmptyJson>> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseEmptyJson>> ExecuteAsync(RequestPlainText request, CancellationToken cancellationToken) =>
             new ResponseEmptyJson().ToResultOkAsync();
     }
 }

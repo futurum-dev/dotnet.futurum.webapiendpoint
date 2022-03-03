@@ -73,7 +73,7 @@ public class EndpointRouteOpenApiBuilderTagTests
 
     private class CommandApiEndpoint : CommandWebApiEndpoint.Request<RequestDto, Request>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
-        public override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+        public override Task<Result<Response>> ExecuteAsync(Request request, CancellationToken cancellationToken) =>
             new Response().ToResultOkAsync();
     }
 

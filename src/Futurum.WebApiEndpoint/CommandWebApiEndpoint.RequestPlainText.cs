@@ -15,7 +15,7 @@ public abstract partial class CommandWebApiEndpoint
         public abstract class NoResponse : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseEmptyDto, WebApiEndpoint.RequestPlainText, ResponseEmpty, RequestPlainTextMapper, ResponseEmptyMapper>
         {
             /// <inheritdoc />
-            public abstract Task<Result<ResponseEmpty>> ExecuteAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken);
+            public abstract Task<Result<ResponseEmpty>> ExecuteAsync(WebApiEndpoint.RequestPlainText request, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TMapper : IWebApiEndpointResponseDtoMapper<TResponseDomain, TResponseDto>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<TResponseDomain>> ExecuteAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken);
+                public abstract Task<Result<TResponseDomain>> ExecuteAsync(WebApiEndpoint.RequestPlainText request, CancellationToken cancellationToken);
             }
         }
 
@@ -41,7 +41,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(WebApiEndpoint.RequestPlainText request, CancellationToken cancellationToken);
             }
         }
 
@@ -52,7 +52,7 @@ public abstract partial class CommandWebApiEndpoint
             RequestPlainTextMapper, ResponseBytesMapper>
         {
             /// <inheritdoc />
-            public abstract Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteAsync(WebApiEndpoint.RequestPlainText request, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(WebApiEndpoint.RequestPlainText request, CancellationToken cancellationToken);
             }
         }
 
@@ -75,7 +75,7 @@ public abstract partial class CommandWebApiEndpoint
             RequestPlainTextMapper, ResponseEmptyJsonMapper>
         {
             /// <inheritdoc />
-            public abstract Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteAsync(WebApiEndpoint.RequestPlainText request, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ public abstract partial class CommandWebApiEndpoint
             RequestPlainTextMapper, ResponseFileStreamMapper>
         {
             /// <inheritdoc />
-            public abstract Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteAsync(WebApiEndpoint.RequestPlainText request, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ public abstract partial class CommandWebApiEndpoint
             RequestPlainTextMapper, ResponseStreamMapper>
         {
             /// <inheritdoc />
-            public abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(WebApiEndpoint.RequestPlainText command, CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(WebApiEndpoint.RequestPlainText request, CancellationToken cancellationToken);
         }
     }
 }

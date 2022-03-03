@@ -6,7 +6,7 @@ public static class CommandWithRequestUploadFileWithPayloadWithoutResponseScenar
 {
     public class ApiEndpoint : CommandWebApiEndpoint.RequestUploadFileWithPayload<PayloadDto, Payload>.NoResponse.Mapper<PayloadMapper>
     {
-        public override Task<Result<ResponseEmpty>> ExecuteAsync(RequestUploadFileWithPayload<Payload> command, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseEmpty>> ExecuteAsync(RequestUploadFileWithPayload<Payload> request, CancellationToken cancellationToken) =>
             ResponseEmpty.DefaultResultAsync;
     }
 }

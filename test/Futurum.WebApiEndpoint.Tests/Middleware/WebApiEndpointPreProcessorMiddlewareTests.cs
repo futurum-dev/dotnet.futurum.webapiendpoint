@@ -40,7 +40,7 @@ public class WebApiEndpointPreProcessorMiddlewareTests
             _action = action;
         }
 
-        public override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken)
+        public override Task<Result<Response>> ExecuteAsync(Command request, CancellationToken cancellationToken)
         {
             _action();
 
@@ -57,7 +57,7 @@ public class WebApiEndpointPreProcessorMiddlewareTests
             _action = action;
         }
 
-        public override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken)
+        public override Task<Result<Response>> ExecuteAsync(Command request, CancellationToken cancellationToken)
         {
             _action();
 

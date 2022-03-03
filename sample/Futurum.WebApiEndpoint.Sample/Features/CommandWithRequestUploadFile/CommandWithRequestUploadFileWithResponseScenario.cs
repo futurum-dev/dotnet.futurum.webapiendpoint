@@ -6,9 +6,9 @@ public static class CommandWithRequestUploadFileWithResponseScenario
 {
     public class ApiEndpoint : CommandWebApiEndpoint.RequestUploadFile.Response<FeatureDto, Feature>.Mapper<FeatureMapper>
     {
-        public override Task<Result<Feature>> ExecuteAsync(RequestUploadFile command, CancellationToken cancellationToken) =>
+        public override Task<Result<Feature>> ExecuteAsync(RequestUploadFile request, CancellationToken cancellationToken) =>
             Enumerable.Range(0, 10)
-                      .Select(i => new Feature($"Name - {i} - {command.File.FileName}"))
+                      .Select(i => new Feature($"Name - {i} - {request.File.FileName}"))
                       .First()
                       .ToResultOkAsync();
     }

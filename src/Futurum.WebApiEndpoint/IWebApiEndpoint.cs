@@ -18,5 +18,5 @@ internal interface IWebApiEndpoint<TRequestDto, TResponseDto, TRequest, TRespons
     /// Execute the WebApiEndpoint
     /// <para>This method is called once for each request received</para>
     /// </summary>
-    Task<Result<TResponse>> ExecuteAsync(TRequest command, CancellationToken cancellationToken);
+    Task<Result<TResponse>> ExecuteAsync(TRequest request, CancellationToken cancellationToken);
 }

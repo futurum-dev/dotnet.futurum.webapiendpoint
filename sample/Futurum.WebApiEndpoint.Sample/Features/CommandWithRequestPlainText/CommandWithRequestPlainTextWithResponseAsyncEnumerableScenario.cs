@@ -6,7 +6,7 @@ public static class CommandWithRequestPlainTextWithResponseAsyncEnumerableScenar
 {
     public class ApiEndpoint : CommandWebApiEndpoint.RequestPlainText.ResponseAsyncEnumerable<FeatureDto, Feature>.Mapper<FeatureDataMapper>
     {
-        public override Task<Result<ResponseAsyncEnumerable<Feature>>> ExecuteAsync(RequestPlainText command, CancellationToken cancellationToken) =>
-            new ResponseAsyncEnumerable<Feature>(AsyncEnumerable.Range(0, 10).Select(i => new Feature($"Name - {i} - {command.Body}"))).ToResultOkAsync();
+        public override Task<Result<ResponseAsyncEnumerable<Feature>>> ExecuteAsync(RequestPlainText request, CancellationToken cancellationToken) =>
+            new ResponseAsyncEnumerable<Feature>(AsyncEnumerable.Range(0, 10).Select(i => new Feature($"Name - {i} - {request.Body}"))).ToResultOkAsync();
     }
 }

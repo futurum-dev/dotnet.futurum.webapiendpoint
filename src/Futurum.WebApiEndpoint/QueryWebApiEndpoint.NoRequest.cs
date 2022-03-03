@@ -22,7 +22,7 @@ public abstract partial class QueryWebApiEndpoint
                 where TMapper : IWebApiEndpointResponseDtoMapper<TResponseDomain, TResponseDto>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<TResponseDomain>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken);
+                public abstract Task<Result<TResponseDomain>> ExecuteAsync(RequestEmpty request, CancellationToken cancellationToken);
             }
         }
 
@@ -36,7 +36,7 @@ public abstract partial class QueryWebApiEndpoint
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(RequestEmpty request, CancellationToken cancellationToken);
             }
         }
 
@@ -46,7 +46,7 @@ public abstract partial class QueryWebApiEndpoint
         public abstract class ResponseBytes : IQueryWebApiEndpoint<RequestEmptyDto, ResponseBytesDto, RequestEmpty, WebApiEndpoint.ResponseBytes, RequestEmptyMapper, ResponseBytesMapper>
         {
             /// <inheritdoc />
-            public abstract Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteAsync(RequestEmpty request, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ public abstract partial class QueryWebApiEndpoint
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(RequestEmpty request, CancellationToken cancellationToken);
             }
         }
 
@@ -70,7 +70,7 @@ public abstract partial class QueryWebApiEndpoint
             RequestEmptyMapper, ResponseEmptyJsonMapper>
         {
             /// <inheritdoc />
-            public abstract Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteAsync(RequestEmpty request, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ public abstract partial class QueryWebApiEndpoint
             RequestEmptyMapper, ResponseFileStreamMapper>
         {
             /// <inheritdoc />
-            public abstract Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteAsync(RequestEmpty request, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ public abstract partial class QueryWebApiEndpoint
             RequestEmptyMapper, ResponseStreamMapper>
         {
             /// <inheritdoc />
-            public abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(RequestEmpty request, CancellationToken cancellationToken);
         }
     }
 }

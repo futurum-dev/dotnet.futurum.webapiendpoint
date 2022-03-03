@@ -11,7 +11,7 @@ public static class CommandWithRequestWithResponseFileStreamScenario
 
     public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.ResponseFileStream.Mapper<Mapper>
     {
-        public override Task<Result<ResponseFileStream>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseFileStream>> ExecuteAsync(Command request, CancellationToken cancellationToken) =>
             new ResponseFileStream(new FileInfo("./Data/hello-world.txt")).ToResultOkAsync();
     }
 
