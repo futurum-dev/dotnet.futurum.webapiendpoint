@@ -19,14 +19,7 @@ public abstract partial class QueryWebApiEndpoint
                 where TMapper : IWebApiEndpointRequestMapper<TQueryDomain>, IWebApiEndpointResponseDtoMapper<TResponseDomain, TResponseDto>
             {
                 /// <inheritdoc />
-                public Task<Result<TResponseDomain>> ExecuteCommandAsync(TQueryDomain command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(command, cancellationToken);
-
-                /// <summary>
-                /// Execute the WebApiEndpoint
-                /// <para>This method is called once for each request received</para>
-                /// </summary>
-                protected abstract Task<Result<TResponseDomain>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
+                public abstract Task<Result<TResponseDomain>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
             }
             
             public abstract class Mapper<TRequestMapper, TResponseMapper> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseJsonDto<TResponseDto>, TQueryDomain, TResponseDomain, 
@@ -35,14 +28,7 @@ public abstract partial class QueryWebApiEndpoint
                 where TResponseMapper : IWebApiEndpointResponseDtoMapper<TResponseDomain, TResponseDto>
             {
                 /// <inheritdoc />
-                public Task<Result<TResponseDomain>> ExecuteCommandAsync(TQueryDomain command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(command, cancellationToken);
-
-                /// <summary>
-                /// Execute the WebApiEndpoint
-                /// <para>This method is called once for each request received</para>
-                /// </summary>
-                protected abstract Task<Result<TResponseDomain>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
+                public abstract Task<Result<TResponseDomain>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
             }
         }
 
@@ -56,14 +42,7 @@ public abstract partial class QueryWebApiEndpoint
                 where TMapper : IWebApiEndpointRequestMapper<TQueryDomain>, IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteCommandAsync(TQueryDomain command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(command, cancellationToken);
-
-                /// <summary>
-                /// Execute the WebApiEndpoint
-                /// <para>This method is called once for each request received</para>
-                /// </summary>
-                protected abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
             }
             
             public abstract class Mapper<TRequestMapper, TResponseDataMapper> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseAsyncEnumerableDto<TDataDto>, TQueryDomain, ResponseAsyncEnumerable<TData>, 
@@ -72,14 +51,7 @@ public abstract partial class QueryWebApiEndpoint
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteCommandAsync(TQueryDomain command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(command, cancellationToken);
-
-                /// <summary>
-                /// Execute the WebApiEndpoint
-                /// <para>This method is called once for each request received</para>
-                /// </summary>
-                protected abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
             }
         }
 
@@ -93,14 +65,7 @@ public abstract partial class QueryWebApiEndpoint
                 where TRequestMapper : IWebApiEndpointRequestMapper<TQueryDomain>
             {
                 /// <inheritdoc />
-                public Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteCommandAsync(TQueryDomain command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(command, cancellationToken);
-
-                /// <summary>
-                /// Execute the WebApiEndpoint
-                /// <para>This method is called once for each request received</para>
-                /// </summary>
-                protected abstract Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
+                public abstract Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
             }
         }
 
@@ -114,14 +79,7 @@ public abstract partial class QueryWebApiEndpoint
                 where TMapper : IWebApiEndpointRequestMapper<TQueryDomain>, IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public Task<Result<ResponseDataCollection<TData>>> ExecuteCommandAsync(TQueryDomain command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(command, cancellationToken);
-
-                /// <summary>
-                /// Execute the WebApiEndpoint
-                /// <para>This method is called once for each request received</para>
-                /// </summary>
-                protected abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
             }
             
             public abstract class Mapper<TRequestMapper, TResponseDataMapper> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseDataCollectionDto<TDataDto>, TQueryDomain, ResponseDataCollection<TData>, 
@@ -130,14 +88,7 @@ public abstract partial class QueryWebApiEndpoint
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public Task<Result<ResponseDataCollection<TData>>> ExecuteCommandAsync(TQueryDomain command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(command, cancellationToken);
-
-                /// <summary>
-                /// Execute the WebApiEndpoint
-                /// <para>This method is called once for each request received</para>
-                /// </summary>
-                protected abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
             }
         }
 
@@ -151,14 +102,7 @@ public abstract partial class QueryWebApiEndpoint
                 where TRequestMapper : IWebApiEndpointRequestMapper<TQueryDomain>
             {
                 /// <inheritdoc />
-                public Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteCommandAsync(TQueryDomain command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(command, cancellationToken);
-
-                /// <summary>
-                /// Execute the WebApiEndpoint
-                /// <para>This method is called once for each request received</para>
-                /// </summary>
-                protected abstract Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
+                public abstract Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
             }
         }
 
@@ -172,14 +116,7 @@ public abstract partial class QueryWebApiEndpoint
                 where TRequestMapper : IWebApiEndpointRequestMapper<TQueryDomain>
             {
                 /// <inheritdoc />
-                public Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteCommandAsync(TQueryDomain command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(command, cancellationToken);
-
-                /// <summary>
-                /// Execute the WebApiEndpoint
-                /// <para>This method is called once for each request received</para>
-                /// </summary>
-                protected abstract Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
+                public abstract Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
             }
         }
 
@@ -193,14 +130,7 @@ public abstract partial class QueryWebApiEndpoint
                 where TRequestMapper : IWebApiEndpointRequestMapper<TQueryDomain>
             {
                 /// <inheritdoc />
-                public Task<Result<WebApiEndpoint.ResponseStream>> ExecuteCommandAsync(TQueryDomain command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(command, cancellationToken);
-
-                /// <summary>
-                /// Execute the WebApiEndpoint
-                /// <para>This method is called once for each request received</para>
-                /// </summary>
-                protected abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
+                public abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(TQueryDomain query, CancellationToken cancellationToken);
             }
         }
     }

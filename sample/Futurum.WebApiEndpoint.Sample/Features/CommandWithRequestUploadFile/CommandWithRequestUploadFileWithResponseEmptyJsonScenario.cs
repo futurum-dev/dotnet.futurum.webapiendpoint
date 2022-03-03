@@ -6,7 +6,7 @@ public static class CommandWithRequestUploadFileWithResponseEmptyJsonScenario
 {
     public class ApiEndpoint : CommandWebApiEndpoint.RequestUploadFile.ResponseEmptyJson
     {
-        protected override Task<Result<ResponseEmptyJson>> ExecuteAsync(RequestUploadFile command, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseEmptyJson>> ExecuteAsync(RequestUploadFile command, CancellationToken cancellationToken) =>
             new ResponseEmptyJson().ToResultOkAsync();
     }
 }

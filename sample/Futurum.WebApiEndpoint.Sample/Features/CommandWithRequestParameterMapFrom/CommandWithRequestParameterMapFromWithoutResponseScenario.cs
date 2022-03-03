@@ -14,8 +14,8 @@ public static class CommandWithRequestParameterMapFromWithoutResponseScenario
 
     public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.NoResponse.Mapper<Mapper>
     {
-        protected override Task<Result> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
-            Result.OkAsync();
+        public override Task<Result<ResponseEmpty>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+            ResponseEmpty.DefaultResultAsync;
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>

@@ -298,7 +298,7 @@ public class EndpointRouteBuilderExtensionsTests
 
     private class CommandApiEndpoint : CommandWebApiEndpoint.Request<RequestDto, Request>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
-        protected override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+        public override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
             new Response().ToResultOkAsync();
     }
 

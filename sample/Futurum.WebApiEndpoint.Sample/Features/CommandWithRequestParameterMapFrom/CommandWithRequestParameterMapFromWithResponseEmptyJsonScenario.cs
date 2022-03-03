@@ -14,7 +14,7 @@ public static class CommandWithRequestParameterMapFromWithResponseEmptyJsonScena
 
     public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.ResponseEmptyJson.Mapper<Mapper>
     {
-        protected override Task<Result<ResponseEmptyJson>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseEmptyJson>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             new ResponseEmptyJson().ToResultOkAsync();
     }
 

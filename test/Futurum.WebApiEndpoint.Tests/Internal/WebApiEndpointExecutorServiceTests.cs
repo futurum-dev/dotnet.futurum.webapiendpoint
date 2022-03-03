@@ -43,7 +43,7 @@ public class WebApiEndpointExecutorServiceTests
 
     private class SuccessApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
-        protected override Task<Result<Response>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+        public override Task<Result<Response>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             new Response("FirstName", 10).ToResultOkAsync();
     }
 
@@ -51,7 +51,7 @@ public class WebApiEndpointExecutorServiceTests
     {
         public const string ERROR_MESSAGE = "Error-Message";
 
-        protected override Task<Result<Response>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+        public override Task<Result<Response>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             Result.FailAsync<Response>(ERROR_MESSAGE);
     }
 

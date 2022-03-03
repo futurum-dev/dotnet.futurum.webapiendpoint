@@ -21,7 +21,7 @@ public static class BlogGetById
             _storageBroker = storageBroker;
         }
 
-        protected override Task<Result<Blog>> ExecuteAsync(Query query, CancellationToken cancellationToken) =>
+        public override Task<Result<Blog>> ExecuteAsync(Query query, CancellationToken cancellationToken) =>
             _storageBroker.GetByIdAsync(query.Id);
     }
 

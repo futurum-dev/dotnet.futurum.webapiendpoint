@@ -18,7 +18,7 @@ public static class BlogUpdate
             _storageBroker = storageBroker;
         }
 
-        protected override Task<Result<Blog>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+        public override Task<Result<Blog>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             _storageBroker.UpdateAsync(command.Blog);
     }
 

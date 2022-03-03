@@ -28,7 +28,7 @@ public static class Login
             _configuration = configuration;
         }
 
-        protected override Task<Result<Response>> ExecuteAsync(Command command, CancellationToken cancellationToken)
+        public override Task<Result<Response>> ExecuteAsync(Command command, CancellationToken cancellationToken)
         {
             if (command.Username != "user1" || command.Password != "password1")
             {

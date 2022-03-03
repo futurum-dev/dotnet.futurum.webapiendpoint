@@ -1,3 +1,5 @@
+using Futurum.Core.Result;
+
 namespace Futurum.WebApiEndpoint;
 
 public class ResponseEmpty
@@ -7,6 +9,8 @@ public class ResponseEmpty
     }
 
     public static readonly ResponseEmpty Default = new();
+    
+    public static readonly Task<Result<ResponseEmpty>> DefaultResultAsync = Result.OkAsync(Default);
 }
 
 public class ResponseEmptyDto

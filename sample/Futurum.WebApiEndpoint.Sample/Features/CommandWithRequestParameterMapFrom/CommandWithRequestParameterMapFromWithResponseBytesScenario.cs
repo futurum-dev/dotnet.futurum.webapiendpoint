@@ -14,7 +14,7 @@ public static class CommandWithRequestParameterMapFromWithResponseBytesScenario
 
     public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.ResponseBytes.Mapper<Mapper>
     {
-        protected override Task<Result<ResponseBytes>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseBytes>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             new ResponseBytes(File.ReadAllBytes("./Data/hello-world.txt"), $"hello-world-bytes-{command.Id}").ToResultOkAsync();
     }
 

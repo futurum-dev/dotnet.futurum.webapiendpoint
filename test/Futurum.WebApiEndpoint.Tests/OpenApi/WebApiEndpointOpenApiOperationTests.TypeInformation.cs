@@ -77,8 +77,8 @@ public class WebApiEndpointOpenApiOperationTypeInformationTests
 
     public class ApiEndpoint : CommandWebApiEndpoint.RequestUploadFiles.NoResponse
     {
-        protected override Task<Result> ExecuteAsync(RequestUploadFiles command, CancellationToken cancellationToken) =>
-            Result.OkAsync();
+        public override Task<Result<ResponseEmpty>> ExecuteAsync(RequestUploadFiles command, CancellationToken cancellationToken) =>
+            ResponseEmpty.Default.ToResultOkAsync();
     }
 
     private class TestWebApiEndpointMetadataCache : IWebApiEndpointMetadataCache

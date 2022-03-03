@@ -191,8 +191,8 @@ public class RequestJsonOpenApiRequestConfigurationTests
 
             public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.NoResponse.Mapper<Mapper>
             {
-                protected override Task<Result> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
-                    Result.OkAsync();
+                public override Task<Result<ResponseEmpty>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+                    ResponseEmpty.Default.ToResultOkAsync();
             }
 
             public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>
@@ -256,8 +256,8 @@ public class RequestJsonOpenApiRequestConfigurationTests
 
             public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.NoResponse.Mapper<Mapper>
             {
-                protected override Task<Result> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
-                    Result.OkAsync();
+                public override Task<Result<ResponseEmpty>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+                    ResponseEmpty.Default.ToResultOkAsync();
             }
 
             public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>
@@ -265,23 +265,6 @@ public class RequestJsonOpenApiRequestConfigurationTests
                 public Task<Result<Command>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CommandDto dto, CancellationToken cancellationToken) =>
                     new Command(dto.Id).ToResultOkAsync();
             }
-        }
-
-        private class TestWebApiEndpointMetadataCache : IWebApiEndpointMetadataCache
-        {
-            private readonly Dictionary<WebApiEndpointMetadataCacheKey, MetadataDefinition> _cache = new();
-
-            public TestWebApiEndpointMetadataCache(MetadataDefinition metadataDefinition)
-            {
-                _cache.Add(new WebApiEndpointMetadataCacheKey(metadataDefinition.MetadataRouteDefinition.HttpMethod.ToString(), metadataDefinition.MetadataRouteDefinition.RouteTemplate),
-                           metadataDefinition);
-            }
-
-            public IEnumerable<KeyValuePair<WebApiEndpointMetadataCacheKey, MetadataDefinition>> GetAll() =>
-                _cache;
-
-            public Result<MetadataDefinition> Get(WebApiEndpointMetadataCacheKey key) =>
-                _cache.TryGetValue(key, () => $"Unable to find WebApiEndpoint Metadata for Key '{key}'");
         }
     }
 }

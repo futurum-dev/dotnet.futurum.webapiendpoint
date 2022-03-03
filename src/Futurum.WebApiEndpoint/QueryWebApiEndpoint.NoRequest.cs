@@ -22,14 +22,7 @@ public abstract partial class QueryWebApiEndpoint
                 where TMapper : IWebApiEndpointResponseDtoMapper<TResponseDomain, TResponseDto>
             {
                 /// <inheritdoc />
-                public Task<Result<TResponseDomain>> ExecuteCommandAsync(RequestEmpty command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(cancellationToken);
-
-                /// <summary>
-                /// Execute the WebApiEndpoint
-                /// <para>This method is called once for each request received</para>
-                /// </summary>
-                protected abstract Task<Result<TResponseDomain>> ExecuteAsync(CancellationToken cancellationToken);
+                public abstract Task<Result<TResponseDomain>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken);
             }
         }
 
@@ -43,14 +36,7 @@ public abstract partial class QueryWebApiEndpoint
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteCommandAsync(RequestEmpty command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(cancellationToken);
-
-                /// <summary>
-                /// Execute the WebApiEndpoint
-                /// <para>This method is called once for each request received</para>
-                /// </summary>
-                protected abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken);
             }
         }
 
@@ -60,14 +46,7 @@ public abstract partial class QueryWebApiEndpoint
         public abstract class ResponseBytes : IQueryWebApiEndpoint<RequestEmptyDto, ResponseBytesDto, RequestEmpty, WebApiEndpoint.ResponseBytes, RequestEmptyMapper, ResponseBytesMapper>
         {
             /// <inheritdoc />
-            public Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteCommandAsync(RequestEmpty command, CancellationToken cancellationToken) =>
-                ExecuteAsync(cancellationToken);
-
-            /// <summary>
-            /// Execute the WebApiEndpoint
-            /// <para>This method is called once for each request received</para>
-            /// </summary>
-            protected abstract Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteAsync(CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -80,14 +59,7 @@ public abstract partial class QueryWebApiEndpoint
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public Task<Result<ResponseDataCollection<TData>>> ExecuteCommandAsync(RequestEmpty command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(cancellationToken);
-
-                /// <summary>
-                /// Execute the WebApiEndpoint
-                /// <para>This method is called once for each request received</para>
-                /// </summary>
-                protected abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken);
             }
         }
 
@@ -98,14 +70,7 @@ public abstract partial class QueryWebApiEndpoint
             RequestEmptyMapper, ResponseEmptyJsonMapper>
         {
             /// <inheritdoc />
-            public Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteCommandAsync(RequestEmpty command, CancellationToken cancellationToken) =>
-                ExecuteAsync(cancellationToken);
-
-            /// <summary>
-            /// Execute the WebApiEndpoint
-            /// <para>This method is called once for each request received</para>
-            /// </summary>
-            protected abstract Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteAsync(CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -115,14 +80,7 @@ public abstract partial class QueryWebApiEndpoint
             RequestEmptyMapper, ResponseFileStreamMapper>
         {
             /// <inheritdoc />
-            public Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteCommandAsync(RequestEmpty command, CancellationToken cancellationToken) =>
-                ExecuteAsync(cancellationToken);
-
-            /// <summary>
-            /// Execute the WebApiEndpoint
-            /// <para>This method is called once for each request received</para>
-            /// </summary>
-            protected abstract Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteAsync(CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -132,14 +90,7 @@ public abstract partial class QueryWebApiEndpoint
             RequestEmptyMapper, ResponseStreamMapper>
         {
             /// <inheritdoc />
-            public Task<Result<WebApiEndpoint.ResponseStream>> ExecuteCommandAsync(RequestEmpty command, CancellationToken cancellationToken) =>
-                ExecuteAsync(cancellationToken);
-
-            /// <summary>
-            /// Execute the WebApiEndpoint
-            /// <para>This method is called once for each request received</para>
-            /// </summary>
-            protected abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken);
         }
     }
 }

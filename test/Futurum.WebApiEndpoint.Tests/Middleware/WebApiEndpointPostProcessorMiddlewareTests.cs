@@ -40,7 +40,7 @@ public class WebApiEndpointPostProcessorMiddlewareTests
             _action = action;
         }
 
-        protected override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken)
+        public override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken)
         {
             _action();
 
@@ -57,7 +57,7 @@ public class WebApiEndpointPostProcessorMiddlewareTests
             _action = action;
         }
 
-        protected override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken)
+        public override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken)
         {
             _action();
 
@@ -129,7 +129,7 @@ public class WebApiEndpointPostProcessorMiddlewareTests
 
         var httpContext = new DefaultHttpContext();
 
-        var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteCommandAsync(c, ct), CancellationToken.None);
+        var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteAsync(c, ct), CancellationToken.None);
 
         result.ShouldBeSuccess();
         apiEndpointWasCalled.Should().BeTrue();
@@ -178,7 +178,7 @@ public class WebApiEndpointPostProcessorMiddlewareTests
 
         var httpContext = new DefaultHttpContext();
 
-        var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteCommandAsync(c, ct), CancellationToken.None);
+        var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteAsync(c, ct), CancellationToken.None);
 
         result.ShouldBeSuccess();
         apiEndpointWasCalled.Should().BeTrue();
@@ -229,7 +229,7 @@ public class WebApiEndpointPostProcessorMiddlewareTests
 
         var httpContext = new DefaultHttpContext();
 
-        var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteCommandAsync(c, ct), CancellationToken.None);
+        var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteAsync(c, ct), CancellationToken.None);
 
         apiEndpointWasCalled.Should().BeTrue();
         middleware1WasCalled.Should().BeFalse();
@@ -281,7 +281,7 @@ public class WebApiEndpointPostProcessorMiddlewareTests
 
         var httpContext = new DefaultHttpContext();
 
-        var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteCommandAsync(c, ct), CancellationToken.None);
+        var result = await middlewareExecutor.ExecuteAsync(httpContext, command, (c, ct) => apiEndpoint.ExecuteAsync(c, ct), CancellationToken.None);
 
         apiEndpointWasCalled.Should().BeTrue();
         middleware1WasCalled.Should().BeFalse();

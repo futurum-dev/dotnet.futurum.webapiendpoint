@@ -14,7 +14,7 @@ public static class QueryWithRequestParameterMapFromWithResponseStreamScenario
 
     public class ApiEndpoint : QueryWebApiEndpoint.Request<RequestDto, Request>.ResponseStream.Mapper<Mapper>
     {
-        protected override Task<Result<ResponseStream>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseStream>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
             new ResponseStream(new FileInfo("./Data/hello-world.txt").OpenRead(), $"hello-world-stream-{query.Id}").ToResultOkAsync();
     }
 

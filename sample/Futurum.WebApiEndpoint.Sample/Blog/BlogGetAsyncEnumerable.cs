@@ -13,7 +13,7 @@ public static class BlogGetAsyncEnumerable
             _storageBroker = storageBroker;
         }
 
-        protected override async Task<Result<ResponseAsyncEnumerable<Blog>>> ExecuteAsync(CancellationToken cancellationToken) =>
+        public override async Task<Result<ResponseAsyncEnumerable<Blog>>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken) =>
             _storageBroker.GetAsAsyncEnumerable()
                           .ToResponseAsyncEnumerable();
     }

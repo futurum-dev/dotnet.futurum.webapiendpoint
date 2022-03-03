@@ -23,7 +23,7 @@ public static class CommandWithRequestParameterMapFromSupportedTypesScenario
 
     public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
-        protected override Task<Result<Response>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+        public override Task<Result<Response>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
             new Response(command.String, command.Int, command.Long, command.DateTime, command.Boolean, command.Guid).ToResultOkAsync();
     }
 

@@ -6,7 +6,7 @@ public static class CommandWithRequestUploadFileWithPayloadWithResponseBytesScen
 {
     public class ApiEndpoint : CommandWebApiEndpoint.RequestUploadFileWithPayload<PayloadDto, Payload>.ResponseBytes.Mapper<PayloadMapper>
     {
-        protected override Task<Result<ResponseBytes>> ExecuteAsync(RequestUploadFileWithPayload<Payload> command, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseBytes>> ExecuteAsync(RequestUploadFileWithPayload<Payload> command, CancellationToken cancellationToken) =>
             new ResponseBytes(File.ReadAllBytes("./Data/hello-world.txt"), $"hello-world-bytes-{command.File.FileName}-{command.Payload.Id}").ToResultOkAsync();
     }
 }

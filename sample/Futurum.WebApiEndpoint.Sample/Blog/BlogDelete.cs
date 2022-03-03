@@ -16,8 +16,8 @@ public static class BlogDelete
             _storageBroker = storageBroker;
         }
 
-        protected override Task<Result> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
-            _storageBroker.DeleteAsync(command.Id);
+        public override Task<Result<ResponseEmpty>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+            _storageBroker.DeleteAsync(command.Id).ToResponseEmptyAsync();
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<Command>

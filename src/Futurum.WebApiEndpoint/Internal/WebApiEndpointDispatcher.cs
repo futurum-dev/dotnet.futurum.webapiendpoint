@@ -39,7 +39,7 @@ internal class WebApiEndpointDispatcher<TRequestDto, TResponseDto, TRequest, TRe
 
         return _requestMapper.MapAsync(httpContext, metadataDefinition, cancellationToken)
                              .DoAsync(command => _logger.RequestReceived<TRequest, TResponse>(command))
-                             .ThenAsync(command => middlewareExecutorTyped.ExecuteAsync(httpContext, command, (endpoint, ct) => apiEndpointTyped.ExecuteCommandAsync(endpoint, ct), cancellationToken))
+                             .ThenAsync(command => middlewareExecutorTyped.ExecuteAsync(httpContext, command, (endpoint, ct) => apiEndpointTyped.ExecuteAsync(endpoint, ct), cancellationToken))
                              .SwitchAsync(response => _responseMapper.MapAsync(httpContext, metadataDefinition.MetadataRouteDefinition, response, cancellationToken),
                                           error => _httpContextDispatcher.HandleFailedResponseAsync(httpContext, error, metadataDefinition.MetadataRouteDefinition, cancellationToken))
                              .DoWhenFailureAsync(error => _logger.Error(httpContext.Request.Path, error));

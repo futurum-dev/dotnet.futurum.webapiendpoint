@@ -16,14 +16,7 @@ public abstract partial class CommandWebApiEndpoint
             RequestUploadFilesMapper, ResponseEmptyMapper>
         {
             /// <inheritdoc />
-            public Task<Result<ResponseEmpty>> ExecuteCommandAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken) =>
-                ExecuteAsync(command, cancellationToken).MapAsync(ResponseEmpty.Default);
-
-            /// <summary>
-            /// Execute the WebApiEndpoint
-            /// <para>This method is called once for each request received</para>
-            /// </summary>
-            protected abstract Task<Result> ExecuteAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken);
+            public abstract Task<Result<ResponseEmpty>> ExecuteAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -36,14 +29,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TMapper : IWebApiEndpointResponseDtoMapper<TResponseDomain, TResponseDto>
             {
                 /// <inheritdoc />
-                public Task<Result<TResponseDomain>> ExecuteCommandAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(command, cancellationToken);
-
-                /// <summary>
-                /// Execute the WebApiEndpoint
-                /// <para>This method is called once for each request received</para>
-                /// </summary>
-                protected abstract Task<Result<TResponseDomain>> ExecuteAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken);
+                public abstract Task<Result<TResponseDomain>> ExecuteAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken);
             }
         }
 
@@ -56,14 +42,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteCommandAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(command, cancellationToken);
-
-                /// <summary>
-                /// Execute the WebApiEndpoint
-                /// <para>This method is called once for each request received</para>
-                /// </summary>
-                protected abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken);
             }
         }
 
@@ -74,14 +53,7 @@ public abstract partial class CommandWebApiEndpoint
             RequestUploadFilesMapper, ResponseBytesMapper>
         {
             /// <inheritdoc />
-            public Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteCommandAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken) =>
-                ExecuteAsync(command, cancellationToken);
-
-            /// <summary>
-            /// Execute the WebApiEndpoint
-            /// <para>This method is called once for each request received</para>
-            /// </summary>
-            protected abstract Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -93,14 +65,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public Task<Result<ResponseDataCollection<TData>>> ExecuteCommandAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken) =>
-                    ExecuteAsync(command, cancellationToken);
-
-                /// <summary>
-                /// Execute the WebApiEndpoint
-                /// <para>This method is called once for each request received</para>
-                /// </summary>
-                protected abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken);
             }
         }
 
@@ -111,14 +76,7 @@ public abstract partial class CommandWebApiEndpoint
             RequestUploadFilesMapper, ResponseEmptyJsonMapper>
         {
             /// <inheritdoc />
-            public Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteCommandAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken) =>
-                ExecuteAsync(command, cancellationToken);
-
-            /// <summary>
-            /// Execute the WebApiEndpoint
-            /// <para>This method is called once for each request received</para>
-            /// </summary>
-            protected abstract Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -128,14 +86,7 @@ public abstract partial class CommandWebApiEndpoint
             RequestUploadFilesMapper, ResponseFileStreamMapper>
         {
             /// <inheritdoc />
-            public Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteCommandAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken) =>
-                ExecuteAsync(command, cancellationToken);
-
-            /// <summary>
-            /// Execute the WebApiEndpoint
-            /// <para>This method is called once for each request received</para>
-            /// </summary>
-            protected abstract Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -145,14 +96,7 @@ public abstract partial class CommandWebApiEndpoint
             RequestUploadFilesMapper, ResponseStreamMapper>
         {
             /// <inheritdoc />
-            public Task<Result<WebApiEndpoint.ResponseStream>> ExecuteCommandAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken) =>
-                ExecuteAsync(command, cancellationToken);
-
-            /// <summary>
-            /// Execute the WebApiEndpoint
-            /// <para>This method is called once for each request received</para>
-            /// </summary>
-            protected abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(WebApiEndpoint.RequestUploadFiles command, CancellationToken cancellationToken);
         }
     }
 }

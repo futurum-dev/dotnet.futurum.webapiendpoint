@@ -40,7 +40,7 @@ public class DisabledWebApiEndpointMiddlewareExecutorTests
 
         public bool WasCalled { get; private set; }
 
-        protected override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken)
+        public override Task<Result<Response>> ExecuteAsync(Command query, CancellationToken cancellationToken)
         {
             WasCalled = true;
 
@@ -71,7 +71,7 @@ public class DisabledWebApiEndpointMiddlewareExecutorTests
         var request = new Command();
 
         var result = await middlewareExecutor.ExecuteAsync(httpContext, request,
-                                                           (c, ct) => apiEndpoint.ExecuteCommandAsync(c, ct),
+                                                           (c, ct) => apiEndpoint.ExecuteAsync(c, ct),
                                                            CancellationToken.None);
         
         result.ShouldBeSuccessWithValue(new Response());
@@ -91,7 +91,7 @@ public class DisabledWebApiEndpointMiddlewareExecutorTests
         var request = new Command();
 
         var result = await middlewareExecutor.ExecuteAsync(httpContext, request,
-                                                           (c, ct) => apiEndpoint.ExecuteCommandAsync(c, ct),
+                                                           (c, ct) => apiEndpoint.ExecuteAsync(c, ct),
                                                            CancellationToken.None);
         
         result.ShouldBeFailureWithError(ApiEndpoint.ErrorMessage);
