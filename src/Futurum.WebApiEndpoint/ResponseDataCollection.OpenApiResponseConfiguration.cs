@@ -22,7 +22,7 @@ public class ResponseDataCollectionOpenApiResponseConfiguration : IWebApiOpenApi
     {
         var (metadataRouteDefinition, _, _, _) = metadataDefinition;
 
-        var responseDtoType = metadataDefinition.MetadataTypeDefinition.UnderlyingResponseDtoType;
+        var responseDtoType = metadataDefinition.MetadataTypeDefinition.ResponseDtoType;
         
         routeHandlerBuilder.Produces(metadataRouteDefinition.SuccessStatusCode, responseDtoType, MediaTypeNames.Application.Json);
     }

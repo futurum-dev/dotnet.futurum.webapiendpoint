@@ -127,10 +127,10 @@ internal static class MapFromRequestMultipartMapper<TRequestDto>
         return Result.TryAsync(Execute, () => $"Failed to MapMultipart");
     }
 
-    public static Task<Result<TRequestDto>> MapAsync(HttpContext httpContext, TRequestDto dto, CancellationToken cancellationToken) =>
+    public static Task<Result> MapAsync(HttpContext httpContext, TRequestDto dto, CancellationToken cancellationToken) =>
         PropertiesToMap.Count switch
         {
-            0 => dto.ToResultOkAsync(),
-            _ => MapMultipartAsync(httpContext, dto, cancellationToken).MapAsync(() => dto)
+            0 => Result.OkAsync(),
+            _ => MapMultipartAsync(httpContext, dto, cancellationToken)
         };
 }

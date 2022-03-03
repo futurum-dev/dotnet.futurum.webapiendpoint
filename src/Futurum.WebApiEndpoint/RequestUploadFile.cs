@@ -8,4 +8,4 @@ public record RequestUploadFile(IFormFile File);
 /// <summary>
 /// Request dto for upload file
 /// </summary>
-public record RequestUploadFileDto(IFormFile File);
+public record RequestUploadFileDto;

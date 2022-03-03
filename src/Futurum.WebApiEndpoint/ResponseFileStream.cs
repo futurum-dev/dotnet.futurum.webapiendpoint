@@ -10,4 +10,4 @@ public record ResponseFileStream(FileInfo FileInfo, string ContentType = MediaTy
 /// <summary>
 /// Response dto for file-stream
 /// </summary>
-public record ResponseFileStreamDto(FileInfo FileInfo, string ContentType);
+public record ResponseFileStreamDto;

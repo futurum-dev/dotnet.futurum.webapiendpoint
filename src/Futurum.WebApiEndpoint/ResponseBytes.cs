@@ -10,4 +10,4 @@ public record ResponseBytes(byte[] Bytes, string? FileName = null, string Conten
 /// <summary>
 /// Response dto for bytes
 /// </summary>
-public record ResponseBytesDto(byte[] Bytes, string ContentType, string? FileName = null);
+public record ResponseBytesDto;

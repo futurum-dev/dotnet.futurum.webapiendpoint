@@ -1,5 +1,8 @@
 namespace Futurum.WebApiEndpoint;
 
+/// <summary>
+/// Request domain for empty
+/// </summary>
 public class RequestEmpty
 {
     private RequestEmpty()
@@ -9,11 +12,7 @@ public class RequestEmpty
     public static readonly RequestEmpty Default = new();
 }
 
-public class RequestEmptyDto
-{
-    private RequestEmptyDto()
-    {
-    }
-    
-    public static readonly RequestEmptyDto Default = new();
-}
+/// <summary>
+/// Request dto for empty
+/// </summary>
+public record RequestEmptyDto;

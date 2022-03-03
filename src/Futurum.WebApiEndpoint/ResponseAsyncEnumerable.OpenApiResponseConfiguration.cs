@@ -22,9 +22,9 @@ public class ResponseAsyncEnumerableOpenApiResponseConfiguration : IWebApiOpenAp
     {
         var (metadataRouteDefinition, _, _, _) = metadataDefinition;
 
-        var responseDtoType = metadataDefinition.MetadataTypeDefinition.ResponseDtoType;
+        var responseDtoType = metadataDefinition.MetadataTypeDefinition.UnderlyingResponseDtoType;
 
-        var type = typeof(IEnumerable<>).MakeGenericType(responseDtoType.GetGenericArguments()[0]);
+        var type = typeof(IEnumerable<>).MakeGenericType(responseDtoType);
 
         routeHandlerBuilder.Produces(metadataRouteDefinition.SuccessStatusCode, type, MediaTypeNames.Application.Json);
     }

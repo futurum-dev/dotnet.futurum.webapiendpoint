@@ -23,7 +23,7 @@ public class ResponseDataCollectionOpenApiRequestConfigurationTests
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, "test-route", null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,
                                                                   Option<Action<RouteHandlerBuilder>>.None, Option<MetadataSecurityDefinition>.None);
 
-        var metadataTypeDefinition = new MetadataTypeDefinition(null, null, typeof(ResponseDataCollectionDto<int>), typeof(ResponseDataCollectionDto<int>), null, null, null, null, null, null);
+        var metadataTypeDefinition = new MetadataTypeDefinition(null, null, typeof(ResponseDataCollectionDto<int>), typeof(int), null, null, null, null, null, null);
 
         var endpoint = TestRunner(metadataRouteDefinition, metadataTypeDefinition, null, null);
 

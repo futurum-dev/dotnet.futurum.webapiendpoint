@@ -115,11 +115,11 @@ internal static class MapFromRequestMapper<TRequestDto>
         return (_, _, _) => Result.Fail($"Failed to MapFromCookie property : '{propertyInfo.Name}', unknown PropertyType : '{propertyInfo.PropertyType}'");
     }
 
-    public static Result<TRequestDto> Map(HttpContext httpContext, TRequestDto dto, CancellationToken cancellationToken) =>
+    public static Result Map(HttpContext httpContext, TRequestDto dto, CancellationToken cancellationToken) =>
         PropertiesToMap.Length switch
         {
-            0 => dto.ToResultOk(),
-            1 => PropertiesToMap[0](dto, httpContext, cancellationToken).Map(() => dto),
-            _ => PropertiesToMap.FlatMapSequentialUntilFailure(func => func(dto, httpContext, cancellationToken)).Map(() => dto)
+            0 => Result.Ok(),
+            1 => PropertiesToMap[0](dto, httpContext, cancellationToken),
+            _ => PropertiesToMap.FlatMapSequentialUntilFailure(func => func(dto, httpContext, cancellationToken))
         };
 }

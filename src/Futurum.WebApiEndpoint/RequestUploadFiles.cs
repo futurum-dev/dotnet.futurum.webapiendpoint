@@ -8,4 +8,4 @@ public record RequestUploadFiles(IEnumerable<IFormFile> Files);
 /// <summary>
 /// Request dto for upload files
 /// </summary>
-public record RequestUploadFilesDto(IEnumerable<IFormFile> Files);
+public record RequestUploadFilesDto;

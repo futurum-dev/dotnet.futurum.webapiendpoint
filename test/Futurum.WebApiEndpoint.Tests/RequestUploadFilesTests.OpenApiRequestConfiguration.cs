@@ -91,9 +91,9 @@ public class RequestUploadFilesOpenApiRequestConfigurationTests
                                                    .Select(x => x.Value)
                                                    .Single();
             openApiMediaType.Schema.Type.Should().Be("object");
-            openApiMediaType.Schema.Required.Should().BeEquivalentTo(EnumerableExtensions.Return(nameof(RequestUploadFilesDto.Files)));
+            openApiMediaType.Schema.Required.Should().BeEquivalentTo(EnumerableExtensions.Return("files"));
             openApiMediaType.Schema.Properties.Count.Should().Be(1);
-            openApiMediaType.Schema.Properties[nameof(RequestUploadFilesDto.Files)].Should()
+            openApiMediaType.Schema.Properties["files"].Should()
                             .BeEquivalentTo(new OpenApiSchema { Type = "array", Items = new OpenApiSchema { Type = "string", Format = "binary" } });
         }
     }

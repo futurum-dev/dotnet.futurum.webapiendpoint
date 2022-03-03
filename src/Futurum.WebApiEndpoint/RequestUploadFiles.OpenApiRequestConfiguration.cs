@@ -30,11 +30,11 @@ public class RequestUploadFilesOpenApiRequestConfiguration : IWebApiOpenApiReque
             content.Value.Schema = new OpenApiSchema
             {
                 Type = "object",
-                Required = new HashSet<string> { nameof(RequestUploadFilesDto.Files) },
+                Required = new HashSet<string> { "files" },
                 Properties = new Dictionary<string, OpenApiSchema>
                 {
                     {
-                        nameof(RequestUploadFilesDto.Files), WebApiEndpointDotnetTypeToOpenApiSchemaMapper.Execute(typeof(IEnumerable<IFormFile>))
+                        "files", WebApiEndpointDotnetTypeToOpenApiSchemaMapper.Execute(typeof(IEnumerable<IFormFile>))
                     }
                 }
             };

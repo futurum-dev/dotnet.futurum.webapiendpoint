@@ -5,4 +5,7 @@ namespace Futurum.WebApiEndpoint;
 /// </summary>
 public record RequestPlainText(string Body);
 
+/// <summary>
+/// Request dto for plain text
+/// </summary>
 internal record RequestPlainTextDto;

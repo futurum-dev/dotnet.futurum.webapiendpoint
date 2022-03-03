@@ -14,9 +14,13 @@ internal class RequestUploadFileWithPayloadMapper<TPayloadDto, TPayload, TReques
         _payloadMapper = payloadMapper;
     }
 
-    public Task<Result<RequestUploadFileWithPayload<TPayload>>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
-        MapFromRequestMultipartMapper<RequestUploadFileWithPayloadDto<TPayloadDto>>
-            .MapAsync(httpContext, new RequestUploadFileWithPayloadDto<TPayloadDto>(), cancellationToken)
-            .ThenAsync(dto => _payloadMapper.Map(dto.Payload)
-                                            .Map(payload => new RequestUploadFileWithPayload<TPayload>(dto.File, payload)));
+    public Task<Result<RequestUploadFileWithPayload<TPayload>>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken)
+    {
+        var dto = new RequestUploadFileWithPayloadDto<TPayloadDto>();
+        
+        return MapFromRequestMultipartMapper<RequestUploadFileWithPayloadDto<TPayloadDto>>
+               .MapAsync(httpContext, dto, cancellationToken)
+               .ThenAsync(() => _payloadMapper.Map(dto.Payload)
+                                              .Map(payload => new RequestUploadFileWithPayload<TPayload>(dto.File, payload)));
+    }
 }

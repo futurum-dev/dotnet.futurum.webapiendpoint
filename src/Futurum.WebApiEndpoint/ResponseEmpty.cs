@@ -2,6 +2,9 @@ using Futurum.Core.Result;
 
 namespace Futurum.WebApiEndpoint;
 
+/// <summary>
+/// Response domain for empty
+/// </summary>
 public class ResponseEmpty
 {
     private ResponseEmpty()
@@ -13,11 +16,7 @@ public class ResponseEmpty
     public static readonly Task<Result<ResponseEmpty>> DefaultResultAsync = Result.OkAsync(Default);
 }
 
-public class ResponseEmptyDto
-{
-    private ResponseEmptyDto()
-    {
-    }
-
-    public static readonly ResponseEmptyDto Default = new();
-}
+/// <summary>
+/// Response dto for empty
+/// </summary>
+public record ResponseEmptyDto;

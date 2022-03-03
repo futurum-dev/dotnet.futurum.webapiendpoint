@@ -24,18 +24,16 @@ internal class RequestJsonReader<TRequestDto> : IRequestJsonReader<TRequestDto>
     }
 
     public Task<Result<TRequestDto>> ExecuteAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
-        ReadRequestDto<TRequestDto>(httpContext, metadataDefinition.MetadataMapFromDefinition, metadataDefinition.MetadataMapFromMultipartDefinition, cancellationToken)
+        ReadRequestDto(httpContext, metadataDefinition.MetadataMapFromDefinition, metadataDefinition.MetadataMapFromMultipartDefinition, cancellationToken)
             .ThenAsync(requestDto => ApplyMapFromMappingsAsync(httpContext, metadataDefinition.MetadataMapFromDefinition, requestDto, cancellationToken)
-                           .ThenAsync(requestDto => ApplyMapFromMultipartMappingsAsyncAsync(httpContext, requestDto, metadataDefinition.MetadataMapFromMultipartDefinition, cancellationToken)));
+                           .ThenAsync(() => ApplyMapFromMultipartMappingsAsyncAsync(httpContext, requestDto, metadataDefinition.MetadataMapFromMultipartDefinition, cancellationToken)));
 
-
-    private Task<Result<TRequestDto>> ReadRequestDto<TRequestDto>(HttpContext httpContext, MetadataMapFromDefinition? metadataMapFromDefinition,
-                                                                  MetadataMapFromMultipartDefinition? metadataMapFromMultipartDefinition, CancellationToken cancellationToken)
-        where TRequestDto : class
+    private Task<Result<TRequestDto>> ReadRequestDto(HttpContext httpContext, MetadataMapFromDefinition? metadataMapFromDefinition,
+                                                     MetadataMapFromMultipartDefinition? metadataMapFromMultipartDefinition, CancellationToken cancellationToken)
     {
         if (httpContext.Request.HasJsonContentType() && httpContext.Request.ContentLength > 0)
         {
-            return ReadFromJsonAsync<TRequestDto>(httpContext, cancellationToken);
+            return ReadFromJsonAsync(httpContext, cancellationToken);
         }
 
         if (metadataMapFromDefinition != null || metadataMapFromMultipartDefinition != null)
@@ -48,22 +46,18 @@ internal class RequestJsonReader<TRequestDto> : IRequestJsonReader<TRequestDto>
         return Result.FailAsync<TRequestDto>($"Unable to read request, unknown type : '{typeof(TRequestDto).FullName}'");
     }
 
-    private static Result<TRequestDto> ApplyMapFromMappingsAsync<TRequestDto>(HttpContext httpContext, MetadataMapFromDefinition? metadataMapFromDefinition, TRequestDto requestDto,
-                                                                              CancellationToken cancellationToken)
-        where TRequestDto : class =>
+    private static Result ApplyMapFromMappingsAsync(HttpContext httpContext, MetadataMapFromDefinition? metadataMapFromDefinition, TRequestDto requestDto, CancellationToken cancellationToken) =>
         metadataMapFromDefinition != null
             ? MapFromRequestMapper<TRequestDto>.Map(httpContext, requestDto, cancellationToken)
-            : requestDto.ToResultOk();
+            : Result.Ok();
 
-    private static async Task<Result<TRequestDto>> ApplyMapFromMultipartMappingsAsyncAsync<TRequestDto>(HttpContext httpContext, TRequestDto requestDto,
-                                                                                                        MetadataMapFromMultipartDefinition? metadataMapFromMultipartDefinition,
-                                                                                                        CancellationToken cancellationToken)
-        where TRequestDto : class =>
+    private static Task<Result> ApplyMapFromMultipartMappingsAsyncAsync(HttpContext httpContext, TRequestDto requestDto, MetadataMapFromMultipartDefinition? metadataMapFromMultipartDefinition,
+                                                                        CancellationToken cancellationToken) =>
         metadataMapFromMultipartDefinition != null
-            ? await MapFromRequestMultipartMapper<TRequestDto>.MapAsync(httpContext, requestDto, cancellationToken)
-            : requestDto.ToResultOk();
+            ? MapFromRequestMultipartMapper<TRequestDto>.MapAsync(httpContext, requestDto, cancellationToken)
+            : Result.OkAsync();
 
-    private Task<Result<TRequestDto?>> ReadFromJsonAsync<TRequestDto>(HttpContext httpContext, CancellationToken cancellationToken)
+    private Task<Result<TRequestDto?>> ReadFromJsonAsync(HttpContext httpContext, CancellationToken cancellationToken)
     {
         ValueTask<TRequestDto?> Execute() =>
             httpContext.Request.ReadFromJsonAsync<TRequestDto>(_serializationOptions.Value.JsonSerializerOptions, cancellationToken);

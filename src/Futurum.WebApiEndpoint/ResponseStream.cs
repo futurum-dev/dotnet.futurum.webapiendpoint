@@ -10,4 +10,4 @@ public record ResponseStream(Stream Stream, string? FileName = null, long? FileL
 /// <summary>
 /// Response dto for stream
 /// </summary>
-public record ResponseStreamDto(Stream Stream, string ContentType, string? FileName = null, long? FileLengthBytes = null);
+public record ResponseStreamDto;
