@@ -1,9 +1,8 @@
 using Futurum.WebApiEndpoint.Metadata;
-using Futurum.WebApiEndpoint.OpenApi;
 
 using Microsoft.OpenApi.Models;
 
-namespace Futurum.WebApiEndpoint;
+namespace Futurum.WebApiEndpoint.OpenApi;
 
 public static class OpenApiRequestParameterConfiguration
 {

@@ -4,6 +4,9 @@ using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint;
 
+/// <summary>
+/// Mapper for RequestUploadFileWithPayload
+/// </summary>
 public class RequestUploadFileWithPayloadMapper<TPayloadDto, TPayload, TRequestPayloadMapper> : IWebApiEndpointRequestMapper<RequestUploadFileWithPayload<TPayload>>
     where TRequestPayloadMapper : IWebApiEndpointRequestPayloadMapper<TPayloadDto, TPayload>
 {

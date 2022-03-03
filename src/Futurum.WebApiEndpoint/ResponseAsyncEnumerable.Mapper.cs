@@ -7,6 +7,9 @@ using Microsoft.Extensions.Options;
 
 namespace Futurum.WebApiEndpoint;
 
+/// <summary>
+/// Mapper for ResponseAsyncEnumerable
+/// </summary>
 public class ResponseAsyncEnumerableMapper<TData, TDataDto, TResponseDataMapper> : 
     IWebApiEndpointResponseMapper<ResponseAsyncEnumerable<TData>, ResponseAsyncEnumerableDto<TDataDto>>
     where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>

@@ -9,6 +9,9 @@ using Microsoft.Extensions.Options;
 
 namespace Futurum.WebApiEndpoint;
 
+/// <summary>
+/// Mapper for ResponseEmptyJson
+/// </summary>
 public class ResponseEmptyJsonMapper : IWebApiEndpointResponseMapper<ResponseEmptyJson, ResponseEmptyJsonDto>
 {
     private readonly IOptions<JsonOptions> _serializationOptions;
