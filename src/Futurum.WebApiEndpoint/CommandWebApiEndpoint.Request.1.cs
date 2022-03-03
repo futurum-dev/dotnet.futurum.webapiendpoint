@@ -22,7 +22,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TRequestMapper : IWebApiEndpointRequestMapper<TCommandDomain>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<ResponseEmpty>> ExecuteAsync(TCommandDomain command, CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseEmpty>> ExecuteAsync(TCommandDomain request, CancellationToken cancellationToken);
             }
         }
 
@@ -36,7 +36,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TMapper : IWebApiEndpointRequestMapper<TCommandDomain>, IWebApiEndpointResponseDtoMapper<TResponseDomain, TResponseDto>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<TResponseDomain>> ExecuteAsync(TCommandDomain command, CancellationToken cancellationToken);
+                public abstract Task<Result<TResponseDomain>> ExecuteAsync(TCommandDomain request, CancellationToken cancellationToken);
             }
 
             public abstract class Mapper<TRequestMapper, TResponseMapper> : ICommandWebApiEndpoint<RequestEmptyDto, ResponseJsonDto<TResponseDto>, TCommandDomain, TResponseDomain, 
@@ -45,7 +45,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TResponseMapper : IWebApiEndpointResponseDtoMapper<TResponseDomain, TResponseDto>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<TResponseDomain>> ExecuteAsync(TCommandDomain command, CancellationToken cancellationToken);
+                public abstract Task<Result<TResponseDomain>> ExecuteAsync(TCommandDomain request, CancellationToken cancellationToken);
             }
         }
 
@@ -59,7 +59,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TMapper : IWebApiEndpointRequestMapper<TCommandDomain>, IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(TCommandDomain command, CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(TCommandDomain request, CancellationToken cancellationToken);
             }
 
             public abstract class Mapper<TRequestMapper, TResponseDataMapper> : ICommandWebApiEndpoint<RequestEmptyDto, ResponseAsyncEnumerableDto<TDataDto>, TCommandDomain,
@@ -68,7 +68,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(TCommandDomain command, CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(TCommandDomain request, CancellationToken cancellationToken);
             }
         }
 
@@ -82,7 +82,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TRequestMapper : IWebApiEndpointRequestMapper<TCommandDomain>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteAsync(TCommandDomain command, CancellationToken cancellationToken);
+                public abstract Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteAsync(TCommandDomain request, CancellationToken cancellationToken);
             }
         }
 
@@ -96,7 +96,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TMapper : IWebApiEndpointRequestMapper<TCommandDomain>, IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(TCommandDomain command, CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(TCommandDomain request, CancellationToken cancellationToken);
             }
 
             public abstract class Mapper<TRequestMapper, TResponseDataMapper> : ICommandWebApiEndpoint<RequestEmptyDto, ResponseDataCollectionDto<TDataDto>, TCommandDomain,
@@ -106,7 +106,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(TCommandDomain command, CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(TCommandDomain request, CancellationToken cancellationToken);
             }
         }
 
@@ -120,7 +120,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TRequestMapper : IWebApiEndpointRequestMapper<TCommandDomain>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteAsync(TCommandDomain command, CancellationToken cancellationToken);
+                public abstract Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteAsync(TCommandDomain request, CancellationToken cancellationToken);
             }
         }
 
@@ -134,7 +134,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TRequestMapper : IWebApiEndpointRequestMapper<TCommandDomain>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteAsync(TCommandDomain command, CancellationToken cancellationToken);
+                public abstract Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteAsync(TCommandDomain request, CancellationToken cancellationToken);
             }
         }
 
@@ -148,7 +148,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TRequestMapper : IWebApiEndpointRequestMapper<TCommandDomain>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(TCommandDomain command, CancellationToken cancellationToken);
+                public abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(TCommandDomain request, CancellationToken cancellationToken);
             }
         }
     }

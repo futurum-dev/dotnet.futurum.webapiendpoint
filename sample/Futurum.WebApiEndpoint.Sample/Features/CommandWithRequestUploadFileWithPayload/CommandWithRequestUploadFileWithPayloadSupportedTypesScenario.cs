@@ -14,8 +14,8 @@ public static class CommandWithRequestUploadFileWithPayloadSupportedTypesScenari
 
     public class ApiEndpoint : CommandWebApiEndpoint.RequestUploadFileWithPayload<CustomPayloadDto, CustomPayload>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
-        public override Task<Result<Response>> ExecuteAsync(RequestUploadFileWithPayload<CustomPayload> command, CancellationToken cancellationToken) =>
-            new Response(command.File.FileName, command.Payload.String, command.Payload.Int, command.Payload.Long, command.Payload.DateTime, command.Payload.Boolean, command.Payload.Guid).ToResultOkAsync();
+        public override Task<Result<Response>> ExecuteAsync(RequestUploadFileWithPayload<CustomPayload> request, CancellationToken cancellationToken) =>
+            new Response(request.File.FileName, request.Payload.String, request.Payload.Int, request.Payload.Long, request.Payload.DateTime, request.Payload.Boolean, request.Payload.Guid).ToResultOkAsync();
     }
 
     public class Mapper : IWebApiEndpointRequestPayloadMapper<CustomPayloadDto, CustomPayload>,

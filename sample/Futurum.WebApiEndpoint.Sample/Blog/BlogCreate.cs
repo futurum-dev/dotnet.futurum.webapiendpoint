@@ -21,8 +21,8 @@ public static class BlogCreate
             _storageBroker = storageBroker;
         }
 
-        public override Task<Result<Blog>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
-            _storageBroker.AddAsync(command.Blog);
+        public override Task<Result<Blog>> ExecuteAsync(Command request, CancellationToken cancellationToken) =>
+            _storageBroker.AddAsync(request.Blog);
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>

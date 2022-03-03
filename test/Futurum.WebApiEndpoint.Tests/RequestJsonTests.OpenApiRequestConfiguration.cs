@@ -191,7 +191,7 @@ public class RequestJsonOpenApiRequestConfigurationTests
 
             public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.NoResponse.Mapper<Mapper>
             {
-                public override Task<Result<ResponseEmpty>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+                public override Task<Result<ResponseEmpty>> ExecuteAsync(Command request, CancellationToken cancellationToken) =>
                     ResponseEmpty.Default.ToResultOkAsync();
             }
 
@@ -256,7 +256,7 @@ public class RequestJsonOpenApiRequestConfigurationTests
 
             public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.NoResponse.Mapper<Mapper>
             {
-                public override Task<Result<ResponseEmpty>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
+                public override Task<Result<ResponseEmpty>> ExecuteAsync(Command request, CancellationToken cancellationToken) =>
                     ResponseEmpty.Default.ToResultOkAsync();
             }
 

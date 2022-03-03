@@ -11,8 +11,8 @@ public static class ErrorResultScenario
 
     public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.NoResponse.Mapper<Mapper>
     {
-        public override Task<Result<ResponseEmpty>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
-            Result.FailAsync<ResponseEmpty>($"An result error has occured - {command.Id}");
+        public override Task<Result<ResponseEmpty>> ExecuteAsync(Command request, CancellationToken cancellationToken) =>
+            Result.FailAsync<ResponseEmpty>($"An result error has occured - {request.Id}");
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>

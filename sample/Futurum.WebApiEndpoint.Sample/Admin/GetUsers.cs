@@ -10,7 +10,7 @@ public static class GetUsers
 
     public class ApiEndpoint : QueryWebApiEndpoint.NoRequest.ResponseDataCollection<UserDto, User>.Mapper<Mapper>
     {
-        public override Task<Result<ResponseDataCollection<User>>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseDataCollection<User>>> ExecuteAsync(RequestEmpty request, CancellationToken cancellationToken) =>
             Enumerable.Range(0, 10)
                       .Select(i => new User($"First{i}", $"Last{i}"))
                       .ToResponseDataCollectionAsync();

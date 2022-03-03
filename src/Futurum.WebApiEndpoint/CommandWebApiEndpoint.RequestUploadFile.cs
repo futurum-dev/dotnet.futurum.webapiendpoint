@@ -15,7 +15,7 @@ public abstract partial class CommandWebApiEndpoint
         public abstract class NoResponse : ICommandWebApiEndpoint<RequestUploadFileDto, ResponseEmptyDto, WebApiEndpoint.RequestUploadFile, ResponseEmpty, RequestUploadFileMapper, ResponseEmptyMapper>
         {
             /// <inheritdoc />
-            public abstract Task<Result<ResponseEmpty>> ExecuteAsync(WebApiEndpoint.RequestUploadFile command, CancellationToken cancellationToken);
+            public abstract Task<Result<ResponseEmpty>> ExecuteAsync(WebApiEndpoint.RequestUploadFile request, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TMapper : IWebApiEndpointResponseDtoMapper<TResponseDomain, TResponseDto>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<TResponseDomain>> ExecuteAsync(WebApiEndpoint.RequestUploadFile command, CancellationToken cancellationToken);
+                public abstract Task<Result<TResponseDomain>> ExecuteAsync(WebApiEndpoint.RequestUploadFile request, CancellationToken cancellationToken);
             }
         }
 
@@ -41,7 +41,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(WebApiEndpoint.RequestUploadFile command, CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseAsyncEnumerable<TData>>> ExecuteAsync(WebApiEndpoint.RequestUploadFile request, CancellationToken cancellationToken);
             }
         }
 
@@ -51,7 +51,7 @@ public abstract partial class CommandWebApiEndpoint
         public abstract class ResponseBytes : ICommandWebApiEndpoint<RequestUploadFileDto, ResponseBytesDto, WebApiEndpoint.RequestUploadFile, WebApiEndpoint.ResponseBytes, RequestUploadFileMapper, ResponseBytesMapper>
         {
             /// <inheritdoc />
-            public abstract Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteAsync(WebApiEndpoint.RequestUploadFile command, CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseBytes>> ExecuteAsync(WebApiEndpoint.RequestUploadFile request, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ public abstract partial class CommandWebApiEndpoint
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
-                public abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(WebApiEndpoint.RequestUploadFile command, CancellationToken cancellationToken);
+                public abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(WebApiEndpoint.RequestUploadFile request, CancellationToken cancellationToken);
             }
         }
 
@@ -73,7 +73,7 @@ public abstract partial class CommandWebApiEndpoint
         public abstract class ResponseEmptyJson : ICommandWebApiEndpoint<RequestUploadFileDto, ResponseEmptyJsonDto, WebApiEndpoint.RequestUploadFile, WebApiEndpoint.ResponseEmptyJson, RequestUploadFileMapper, ResponseEmptyJsonMapper>
         {
             /// <inheritdoc />
-            public abstract Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteAsync(WebApiEndpoint.RequestUploadFile command, CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseEmptyJson>> ExecuteAsync(WebApiEndpoint.RequestUploadFile request, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ public abstract partial class CommandWebApiEndpoint
         public abstract class ResponseFileStream : ICommandWebApiEndpoint<RequestUploadFileDto, ResponseFileStreamDto, WebApiEndpoint.RequestUploadFile, WebApiEndpoint.ResponseFileStream, RequestUploadFileMapper, ResponseFileStreamMapper>
         {
             /// <inheritdoc />
-            public abstract Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteAsync(WebApiEndpoint.RequestUploadFile command, CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseFileStream>> ExecuteAsync(WebApiEndpoint.RequestUploadFile request, CancellationToken cancellationToken);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ public abstract partial class CommandWebApiEndpoint
         public abstract class ResponseStream : ICommandWebApiEndpoint<RequestUploadFileDto, ResponseStreamDto, WebApiEndpoint.RequestUploadFile, WebApiEndpoint.ResponseStream, RequestUploadFileMapper, ResponseStreamMapper>
         {
             /// <inheritdoc />
-            public abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(WebApiEndpoint.RequestUploadFile command, CancellationToken cancellationToken);
+            public abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(WebApiEndpoint.RequestUploadFile request, CancellationToken cancellationToken);
         }
     }
 }

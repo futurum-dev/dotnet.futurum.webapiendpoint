@@ -9,8 +9,8 @@ public static class QueryWithRequestManualParameterWithResponseBytesScenario
 
     public class ApiEndpoint : QueryWebApiEndpoint.Request<Request>.ResponseBytes.Mapper<Mapper>
     {
-        public override Task<Result<ResponseBytes>> ExecuteAsync(Request query, CancellationToken cancellationToken) =>
-            new ResponseBytes(File.ReadAllBytes("./Data/hello-world.txt"), $"hello-world-bytes-{query.Id}").ToResultOkAsync();
+        public override Task<Result<ResponseBytes>> ExecuteAsync(Request request, CancellationToken cancellationToken) =>
+            new ResponseBytes(File.ReadAllBytes("./Data/hello-world.txt"), $"hello-world-bytes-{request.Id}").ToResultOkAsync();
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<Request>

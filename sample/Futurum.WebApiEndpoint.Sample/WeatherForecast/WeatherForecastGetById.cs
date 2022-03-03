@@ -16,9 +16,9 @@ public static class WeatherForecastGetById
     {
         private static readonly string[] Summaries = { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
 
-        public override Task<Result<WeatherForecast>> ExecuteAsync(Query query, CancellationToken cancellationToken) =>
+        public override Task<Result<WeatherForecast>> ExecuteAsync(Query request, CancellationToken cancellationToken) =>
             Enumerable.Range(1, 5)
-                      .Select(index => new WeatherForecast(DateTime.Now.AddDays(index), Random.Shared.Next(-20, 55), $"{query.Id}-{Summaries[Random.Shared.Next(Summaries.Length)]}"))
+                      .Select(index => new WeatherForecast(DateTime.Now.AddDays(index), Random.Shared.Next(-20, 55), $"{request.Id}-{Summaries[Random.Shared.Next(Summaries.Length)]}"))
                       .First()
                       .ToResultOkAsync();
     }

@@ -6,7 +6,7 @@ public static class QueryWithoutRequestWithResponseBytesScenario
 {
     public class ApiEndpoint : QueryWebApiEndpoint.NoRequest.ResponseBytes
     {
-        public override Task<Result<ResponseBytes>> ExecuteAsync(RequestEmpty command, CancellationToken cancellationToken) =>
+        public override Task<Result<ResponseBytes>> ExecuteAsync(RequestEmpty request, CancellationToken cancellationToken) =>
             new ResponseBytes(File.ReadAllBytes("./Data/hello-world.txt"), "hello-world-bytes").ToResultOkAsync();
     }
 }

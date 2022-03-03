@@ -11,8 +11,8 @@ public static class ErrorExceptionScenario
 
     public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.NoResponse.Mapper<Mapper>
     {
-        public override Task<Result<ResponseEmpty>> ExecuteAsync(Command command, CancellationToken cancellationToken) =>
-            throw new Exception($"An exception has occured - {command.Id}");
+        public override Task<Result<ResponseEmpty>> ExecuteAsync(Command request, CancellationToken cancellationToken) =>
+            throw new Exception($"An exception has occured - {request.Id}");
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>

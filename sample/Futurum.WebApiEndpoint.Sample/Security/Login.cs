@@ -28,24 +28,24 @@ public static class Login
             _configuration = configuration;
         }
 
-        public override Task<Result<Response>> ExecuteAsync(Command command, CancellationToken cancellationToken)
+        public override Task<Result<Response>> ExecuteAsync(Command request, CancellationToken cancellationToken)
         {
-            if (command.Username != "user1" || command.Password != "password1")
+            if (request.Username != "user1" || request.Password != "password1")
             {
                 return Result.FailAsync<Response>($"Username or password entered is not recognised.");
             }
 
             var claims = new List<Claim>();
 
-            if (command.SetPermission)
+            if (request.SetPermission)
             {
                 claims.Add(new Claim(AuthorizationConstants.ClaimType.Permissions, Authorization.Permission.Admin));
             }
-            if (command.SetClaim)
+            if (request.SetClaim)
             {
                 claims.Add(new Claim(Authorization.ClaimType.Admin, Authorization.Claim.Admin));
             }
-            if (command.SetRole)
+            if (request.SetRole)
             {
                 claims.Add(new Claim(ClaimTypes.Role, Authorization.Role.Admin));
             }

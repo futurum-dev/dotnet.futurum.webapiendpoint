@@ -122,7 +122,7 @@ public class WebApiEndpointDispatcherTests
 
         public bool WasCalled { get; private set; }
 
-        public override Task<Result<Response>> ExecuteAsync(Request query, CancellationToken cancellationToken)
+        public override Task<Result<Response>> ExecuteAsync(Request request, CancellationToken cancellationToken)
         {
             WasCalled = true;
 
