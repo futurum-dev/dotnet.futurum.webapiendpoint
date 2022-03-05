@@ -1,5 +1,6 @@
 using FluentAssertions;
 
+using Futurum.Core.Option;
 using Futurum.Core.Result;
 using Futurum.Test.Result;
 using Futurum.WebApiEndpoint.Internal;
@@ -369,6 +370,16 @@ public class MapFromRequestMapperTests
             [MapFromHeader(Key)] public System.Guid Id { get; set; }
         }
 
+        public record RequestHeaderRange
+        {
+            [MapFromHeader(Key)] public WebApiEndpoint.Range Id { get; set; }
+        }
+
+        public record RequestHeaderOptionRange
+        {
+            [MapFromHeader(Key)] public Option<WebApiEndpoint.Range> Id { get; set; }
+        }
+
         public class String
         {
             [Fact]
@@ -483,6 +494,48 @@ public class MapFromRequestMapperTests
                 var result = TestRunnerMap<RequestHeaderGuid>();
 
                 result.ShouldBeFailureWithError($"Unable to get Request Header Parameter - '{Key}'. Request Header Parameters available are ''");
+            }
+        }
+
+        public class Range
+        {
+            [Theory]
+            [InlineData(0, 10)]
+            [InlineData(5, 15)]
+            public void success(int from, int to)
+            {
+                var result = TestRunnerMap<RequestHeaderRange>(httpContext => httpContext.Request.Headers.Add("Range", $"bytes={from}-{to}"));
+
+                result.ShouldBeSuccessWithValueEquivalentTo(new RequestHeaderRange { Id = new WebApiEndpoint.Range(from, to) });
+            }
+
+            [Fact]
+            public void failure()
+            {
+                var result = TestRunnerMap<RequestHeaderRange>();
+
+                result.ShouldBeFailureWithError($"Failed to MapFromHeader for Futurum.WebApiEndpoint.Range for property : '{nameof(RequestHeaderRange.Id)}'");
+            }
+        }
+
+        public class OptionRange
+        {
+            [Theory]
+            [InlineData(0, 10)]
+            [InlineData(5, 15)]
+            public void success(int from, int to)
+            {
+                var result = TestRunnerMap<RequestHeaderOptionRange>(httpContext => httpContext.Request.Headers.Add("Range", $"bytes={from}-{to}"));
+
+                result.ShouldBeSuccessWithValueEquivalentTo(new RequestHeaderOptionRange { Id = new WebApiEndpoint.Range(from, to) });
+            }
+
+            [Fact]
+            public void failure()
+            {
+                var result = TestRunnerMap<RequestHeaderOptionRange>();
+
+                result.ShouldBeSuccess();
             }
         }
     }

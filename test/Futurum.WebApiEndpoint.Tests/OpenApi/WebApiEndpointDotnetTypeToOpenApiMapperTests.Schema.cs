@@ -1,5 +1,6 @@
 using FluentAssertions;
 
+using Futurum.Core.Option;
 using Futurum.WebApiEndpoint.OpenApi;
 
 using Microsoft.AspNetCore.Http;
@@ -29,6 +30,8 @@ public class WebApiEndpointDotnetTypeToOpenApiSchemaMapperTests
     [InlineData(typeof(bool), "boolean", null)]
     [InlineData(typeof(Guid), Type.String, "uuid")]
     [InlineData(typeof(IFormFile), Type.String, "binary")]
+    [InlineData(typeof(WebApiEndpoint.Range), Type.String, null)]
+    [InlineData(typeof(Option<WebApiEndpoint.Range>), Type.String, null)]
     public void check(System.Type type, string schemaType, string? schemaFormat)
     {
         var openApiSchema = WebApiEndpointDotnetTypeToOpenApiSchemaMapper.Execute(type);

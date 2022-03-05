@@ -1,4 +1,5 @@
 using Futurum.ApiEndpoint;
+using Futurum.Core.Option;
 using Futurum.WebApiEndpoint.Metadata;
 using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequest;
 using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestManualParameter;
@@ -32,6 +33,8 @@ public class ApiEndpointDefinition : IApiEndpointDefinition
                          .Query<QueryWithRequestParameterMapFromWithResponseScenario.ApiEndpoint>(builder => builder.Route("query-with-request-parameter-map-from-with-response/{Id}"))
                          .Query<QueryWithRequestParameterMapFromWithResponseAsyncEnumerableScenario.ApiEndpoint>(builder => builder.Route("query-with-request-parameter-map-from-with-response-async-enumerable/{Id}"))
                          .Query<QueryWithRequestParameterMapFromWithResponseBytesScenario.ApiEndpoint>(builder => builder.Route("query-with-request-parameter-map-from-with-response-bytes/{Id}"))
+                         .Query<QueryWithRequestParameterMapFromWithResponseBytesRangeScenario.ApiEndpoint>(builder => builder.Route("query-with-request-parameter-map-from-with-response-bytes-range/{Content}"))
+                         .Query<QueryWithRequestParameterMapFromWithResponseBytesOptionRangeScenario.ApiEndpoint>(builder => builder.Route("query-with-request-parameter-map-from-with-response-bytes-option-range/{Content}"))
                          .Query<QueryWithRequestParameterMapFromWithResponseDataCollectionScenario.ApiEndpoint>(builder => builder.Route("query-with-request-parameter-map-from-with-data-collection/{Id}"))
                          .Query<QueryWithRequestParameterMapFromWithResponseEmptyJsonScenario.ApiEndpoint>(builder => builder.Route("query-with-request-parameter-map-from-with-response-empty-json/{Id}"))
                          .Query<QueryWithRequestParameterMapFromWithResponseFileStreamScenario.ApiEndpoint>(builder => builder.Route("query-with-request-parameter-map-from-with-response-file-stream/{Id}"))
@@ -42,6 +45,8 @@ public class ApiEndpointDefinition : IApiEndpointDefinition
                          .Query<QueryWithRequestManualParameterWithResponseScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
                          .Query<QueryWithRequestManualParameterWithResponseAsyncEnumerableScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-async-enumerable/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
                          .Query<QueryWithRequestManualParameterWithResponseBytesScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-bytes/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
+                         .Query<QueryWithRequestManualParameterWithResponseBytesRangeScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-bytes-range/{Content}", ("Content", MetadataRouteParameterDefinitionType.Path, typeof(string)), ("Range", MetadataRouteParameterDefinitionType.Header, typeof(Range))))
+                         .Query<QueryWithRequestManualParameterWithResponseBytesOptionRangeScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-bytes-option-range/{Content}", ("Content", MetadataRouteParameterDefinitionType.Path, typeof(string)), ("Range", MetadataRouteParameterDefinitionType.Header, typeof(Option<Range>))))
                          .Query<QueryWithRequestManualParameterWithResponseDataCollectionScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-data-collection/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
                          .Query<QueryWithRequestManualParameterWithResponseEmptyJsonScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-empty-json/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))
                          .Query<QueryWithRequestManualParameterWithResponseFileStreamScenario.ApiEndpoint>(builder => builder.Route("query-with-request-manual-parameter-with-response-file-stream/{Id}", ("Id", MetadataRouteParameterDefinitionType.Path, typeof(string))))

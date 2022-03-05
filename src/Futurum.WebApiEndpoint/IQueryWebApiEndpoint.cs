@@ -7,7 +7,7 @@ public interface IQueryWebApiEndpoint : IWebApiEndpoint
 {
 }
 
-internal interface IQueryWebApiEndpoint<TRequestDto, TResponseDto, TRequest, TResponse, TRequestMapper, TResponseMapper>
+public interface IQueryWebApiEndpoint<TRequestDto, TResponseDto, TRequest, TResponse, TRequestMapper, TResponseMapper>
     : IWebApiEndpoint<TRequestDto, TResponseDto, TRequest, TResponse, TRequestMapper, TResponseMapper>,
       IQueryWebApiEndpoint
     where TRequestMapper : IWebApiEndpointRequestMapper<TRequest>

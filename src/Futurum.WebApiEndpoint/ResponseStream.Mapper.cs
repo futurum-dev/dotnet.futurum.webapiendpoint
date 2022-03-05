@@ -10,5 +10,5 @@ namespace Futurum.WebApiEndpoint;
 public class ResponseStreamMapper : IWebApiEndpointResponseMapper<ResponseStream, ResponseStreamDto>
 {
     public Task<Result> MapAsync(HttpContext httpContext, MetadataRouteDefinition metadataRouteDefinition, ResponseStream domain, CancellationToken cancellation) => 
-        httpContext.Response.TrySendResponseStreamAsync(domain.Stream, metadataRouteDefinition.SuccessStatusCode, domain.FileName, domain.FileLengthBytes, domain.ContentType, cancellation);
+        httpContext.Response.TrySendResponseStreamAsync(domain.Stream, domain.Range, metadataRouteDefinition.SuccessStatusCode, domain.FileName, domain.FileLengthBytes, domain.ContentType, cancellation);
 }

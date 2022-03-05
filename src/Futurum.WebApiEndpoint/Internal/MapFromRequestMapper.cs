@@ -2,6 +2,8 @@ using System.Reflection;
 
 using FastMember;
 
+using Futurum.Core.Functional;
+using Futurum.Core.Option;
 using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Metadata;
 
@@ -93,6 +95,26 @@ internal static class MapFromRequestMapper<TRequestDto>
             return (requestDto, httpContext, _) => httpContext.GetRequestHeaderFirstParameterAsBool(mapFromAttribute.Name).Do(value => typeAccessor[requestDto, propertyInfo.Name] = value);
         if (propertyInfo.PropertyType == typeof(Guid))
             return (requestDto, httpContext, _) => httpContext.GetRequestHeaderFirstParameterAsGuid(mapFromAttribute.Name).Do(value => typeAccessor[requestDto, propertyInfo.Name] = value);
+        if (propertyInfo.PropertyType == typeof(WebApiEndpoint.Range))
+            return (requestDto, httpContext, _) =>
+            {
+                return RangeHeaderMapper.Map(httpContext)
+                                 .Switch(value =>
+                                           {
+                                               typeAccessor[requestDto, propertyInfo.Name] = value;
+                                               return Result.Ok();
+                                           },
+                                           () => Result.Fail($"Failed to MapFromHeader for {typeof(WebApiEndpoint.Range).FullName} for property : '{propertyInfo.Name}'"));
+            };
+        if (propertyInfo.PropertyType == typeof(Option<WebApiEndpoint.Range>))
+            return (requestDto, httpContext, _) =>
+            {
+                RangeHeaderMapper.Map(httpContext)
+                                 .DoSwitch(value => typeAccessor[requestDto, propertyInfo.Name] = value.ToOption(),
+                                           Function.DoNothing);
+
+                return Result.Ok();
+            };
 
         return (_, _, _) => Result.Fail($"Failed to MapFromHeader property : '{propertyInfo.Name}', unknown PropertyType : '{propertyInfo.PropertyType}'");
     }
