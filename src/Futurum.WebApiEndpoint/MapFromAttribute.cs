@@ -58,4 +58,9 @@ public sealed class MapFromHeaderAttribute : MapFromAttribute
         : base(name, MapFrom.Header)
     {
     }
+    
+    public MapFromHeaderAttribute()
+        : base(string.Empty, MapFrom.Header)
+    {
+    }
 }

@@ -1,23 +1,27 @@
+using System.Text;
+
+using Futurum.Core.Option;
 using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Features.QueryWithRequestParameterMapFrom;
 
-public static class QueryWithRequestParameterMapFromWithResponseBytesScenario
+public static class QueryWithRequestParameterMapFromWithResponseBytesRangeScenario
 {
     public record RequestDto
     {
-        [MapFromPath("Id")] public string Id { get; set; }
-    }
+        [MapFromPath("Content")] public string Content { get; set; }
+        [MapFromHeader] public Range Range { get; set; }
+    };
 
-    public record Request(string Id);
+    public record Request(string Content, Option<Range> Range);
 
     public class ApiEndpoint : QueryWebApiEndpoint.Request<RequestDto, Request>.ResponseBytes.Mapper<Mapper>
     {
         public override Task<Result<ResponseBytes>> ExecuteAsync(Request request, CancellationToken cancellationToken) =>
-            new ResponseBytes(File.ReadAllBytes("./Data/hello-world.txt"))
+            new ResponseBytes(Encoding.UTF8.GetBytes(request.Content))
                 {
-                    FileName = $"hello-world-bytes-{request.Id}"
+                    Range = request.Range
                 }
                 .ToResultOkAsync();
     }
@@ -25,6 +29,6 @@ public static class QueryWithRequestParameterMapFromWithResponseBytesScenario
     public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Request>
     {
         public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, RequestDto dto, CancellationToken cancellationToken) =>
-            new Request(dto.Id).ToResultOkAsync();
+            new Request(dto.Content, dto.Range).ToResultOkAsync();
     }
 }

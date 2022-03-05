@@ -29,7 +29,10 @@ public class ResponseBytesMapperTests
         var sentBytes = new byte[fileStream.Length];
         await fileStream.ReadAsync(sentBytes, CancellationToken.None);
 
-        var responseDto = new ResponseBytes(sentBytes, MediaTypeNames.Application.Octet);
+        var responseDto = new ResponseBytes(sentBytes)
+        {
+            ContentType = MediaTypeNames.Application.Octet
+        };
 
         MetadataRouteDefinition metadataRouteDefinition =
             new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, Option<Action<RouteHandlerBuilder>>.None, null);

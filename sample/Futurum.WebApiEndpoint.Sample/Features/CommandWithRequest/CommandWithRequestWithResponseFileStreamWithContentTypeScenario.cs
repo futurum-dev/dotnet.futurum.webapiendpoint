@@ -12,7 +12,11 @@ public static class CommandWithRequestWithResponseFileStreamWithContentTypeScena
     public class ApiEndpoint : CommandWebApiEndpoint.Request<CommandDto, Command>.ResponseFileStream.Mapper<Mapper>
     {
         public override Task<Result<ResponseFileStream>> ExecuteAsync(Command request, CancellationToken cancellationToken) =>
-            new ResponseFileStream(new FileInfo("./Data/dotnet-logo.png"), "image/png").ToResultOkAsync();
+            new ResponseFileStream(new FileInfo("./Data/dotnet-logo.png"))
+                {
+                    ContentType = "image/png"
+                }
+                .ToResultOkAsync();
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<CommandDto, Command>

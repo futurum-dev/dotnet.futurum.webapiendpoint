@@ -1,3 +1,5 @@
+using Futurum.Core.Option;
+
 using Microsoft.OpenApi.Models;
 
 namespace Futurum.WebApiEndpoint.OpenApi;
@@ -6,7 +8,7 @@ namespace Futurum.WebApiEndpoint.OpenApi;
 /// Maps dotnet types to OpenApiSchema
 /// https://swagger.io/specification/
 /// </summary>
-internal static class WebApiEndpointDotnetTypeToOpenApiSchemaMapper
+public  static class WebApiEndpointDotnetTypeToOpenApiSchemaMapper
 {
     public static OpenApiSchema Execute(Type type)
     {
@@ -63,6 +65,16 @@ internal static class WebApiEndpointDotnetTypeToOpenApiSchemaMapper
         if (type == typeof(IEnumerable<IFormFile>))
         {
             return new OpenApiSchema { Type = "array", Items = new OpenApiSchema { Type = "string", Format = "binary" } };
+        }
+        
+        if (type == typeof(WebApiEndpoint.Range))
+        {
+            return new OpenApiSchema { Type = "string" };
+        }
+        
+        if (type == typeof(Option<WebApiEndpoint.Range>))
+        {
+            return new OpenApiSchema { Type = "string" };
         }
 
         if (type.IsClass && !type.IsPrimitive)

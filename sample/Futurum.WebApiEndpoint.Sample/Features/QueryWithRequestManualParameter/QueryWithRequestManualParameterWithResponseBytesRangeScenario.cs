@@ -1,18 +1,21 @@
+using System.Text;
+
+using Futurum.Core.Option;
 using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Metadata;
 
 namespace Futurum.WebApiEndpoint.Sample.Features.QueryWithRequestManualParameter;
 
-public static class QueryWithRequestManualParameterWithResponseBytesScenario
+public static class QueryWithRequestManualParameterWithResponseBytesRangeScenario
 {
-    public record Request(string Id);
+    public record Request(string Content, Range Range);
 
     public class ApiEndpoint : QueryWebApiEndpoint.Request<Request>.ResponseBytes.Mapper<Mapper>
     {
         public override Task<Result<ResponseBytes>> ExecuteAsync(Request request, CancellationToken cancellationToken) =>
-            new ResponseBytes(File.ReadAllBytes("./Data/hello-world.txt"))
+            new ResponseBytes(Encoding.UTF8.GetBytes(request.Content))
                 {
-                    FileName = $"hello-world-bytes-{request.Id}"
+                    Range = request.Range
                 }
                 .ToResultOkAsync();
     }
@@ -20,8 +23,9 @@ public static class QueryWithRequestManualParameterWithResponseBytesScenario
     public class Mapper : IWebApiEndpointRequestMapper<Request>
     {
         public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
-            httpContext.GetRequestPathParameterAsString("Id")
-                       .Map(id => new Request(id))
-                       .ToResultAsync();
+            RangeHeaderMapper.Map(httpContext).ToResult(() => "Unable to get range")
+                             .Then(range => httpContext.GetRequestPathParameterAsString("Content")
+                                                       .Map(content => new Request(content, range)))
+                             .ToResultAsync();
     }
 }

@@ -29,7 +29,10 @@ public class ResponseFileStreamMapperTests
         var sentBytes = new byte[fileStream.Length];
         await fileStream.ReadAsync(sentBytes, CancellationToken.None);
 
-        var response = new ResponseFileStream(new FileInfo("./Data/hello-world.txt"), MediaTypeNames.Application.Octet);
+        var response = new ResponseFileStream(new FileInfo("./Data/hello-world.txt"))
+        {
+            ContentType = MediaTypeNames.Application.Octet
+        };
 
         MetadataRouteDefinition metadataRouteDefinition =
             new(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400, Option<Action<RouteHandlerBuilder>>.None, null);

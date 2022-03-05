@@ -7,6 +7,10 @@ public static class CommandWithRequestUploadFileWithPayloadWithResponseFileStrea
     public class ApiEndpoint : CommandWebApiEndpoint.RequestUploadFileWithPayload<PayloadDto, Payload>.ResponseFileStream.Mapper<PayloadMapper>
     {
         public override Task<Result<ResponseFileStream>> ExecuteAsync(RequestUploadFileWithPayload<Payload> request, CancellationToken cancellationToken) =>
-            new ResponseFileStream(new FileInfo("./Data/dotnet-logo.png"), "image/png").ToResultOkAsync();
+            new ResponseFileStream(new FileInfo("./Data/dotnet-logo.png"))
+                {
+                    ContentType = "image/png"
+                }
+                .ToResultOkAsync();
     }
 }
