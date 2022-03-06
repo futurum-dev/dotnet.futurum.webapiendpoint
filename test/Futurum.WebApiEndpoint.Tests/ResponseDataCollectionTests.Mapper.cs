@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using System.Text.Json;
 
 using FluentAssertions;
@@ -8,7 +9,7 @@ using Futurum.WebApiEndpoint.Metadata;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 
 using Xunit;
@@ -40,6 +41,7 @@ public class ResponseDataCollectionMapperTests
         result.ShouldBeSuccess();
 
         httpContext.Response.StatusCode.Should().Be(metadataRouteDefinition.SuccessStatusCode);
+        httpContext.Response.ContentType.Should().Be(MediaTypeNames.Application.Json);
 
         httpContext.Response.Body.Seek(0, SeekOrigin.Begin);
         using var streamReader = new StreamReader(httpContext.Response.Body);

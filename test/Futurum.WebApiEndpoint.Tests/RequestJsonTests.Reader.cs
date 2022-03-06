@@ -6,7 +6,7 @@ using Futurum.Test.Result;
 using Futurum.WebApiEndpoint.Metadata;
 
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
 

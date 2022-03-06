@@ -1,4 +1,6 @@
 using System.Net;
+using System.Net.Mime;
+using System.Text.Json;
 
 using Futurum.Core.Result;
 using Futurum.Microsoft.Extensions.DependencyInjection;
@@ -30,7 +32,9 @@ internal static class WebApiEndpointExecutorService
 
             httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            await httpContext.Response.WriteAsJsonAsync(errorResponse, typeof(ResultErrorStructure), cancellationToken);
+            httpContext.Response.ContentType = MediaTypeNames.Application.Json;
+            
+            await JsonSerializer.SerializeAsync(httpContext.Response.Body, errorResponse, (JsonSerializerOptions)null, cancellationToken);
         }
     }
 
@@ -57,7 +61,9 @@ internal static class WebApiEndpointExecutorService
 
         httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
-        return httpContext.Response.WriteAsJsonAsync(errorResponse, typeof(ResultErrorStructure), cancellationToken);
+        httpContext.Response.ContentType = MediaTypeNames.Application.Json;
+            
+        return JsonSerializer.SerializeAsync(httpContext.Response.Body, errorResponse, (JsonSerializerOptions)null, cancellationToken);
     }
 
     private record struct WebApiEndpointNotFoundData(string RoutePath, string HttpMethod);

@@ -9,6 +9,7 @@ using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestUploadFile;
 using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestUploadFiles;
 using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequestUploadFileWithPayload;
 using Futurum.WebApiEndpoint.Sample.Features.Error;
+using Futurum.WebApiEndpoint.Sample.Features.JsonSourceGenerator;
 using Futurum.WebApiEndpoint.Sample.Features.QueryWithoutRequest;
 using Futurum.WebApiEndpoint.Sample.Features.QueryWithRequestManualParameter;
 using Futurum.WebApiEndpoint.Sample.Features.QueryWithRequestParameterMapFrom;
@@ -127,6 +128,8 @@ public class ApiEndpointDefinition : IApiEndpointDefinition
                          
                          .Command<ErrorResultScenario.ApiEndpoint>(builder => builder.Post("error-result"))
                          .Command<ErrorExceptionScenario.ApiEndpoint>(builder => builder.Post("error-exception"))
+                         
+                         .Command<CommandWithRequestWithoutResponseJsonSourceGeneratorScenario.ApiEndpoint>(builder => builder.Post("command-with-request-with-response-json-source-generator"))
                          ;
     }
 }

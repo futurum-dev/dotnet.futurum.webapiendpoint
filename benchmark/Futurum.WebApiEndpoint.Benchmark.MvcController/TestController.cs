@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 using FluentValidation;
 
 using Microsoft.AspNetCore.Authorization;
@@ -37,4 +39,10 @@ public class Validator : AbstractValidator<RequestDto>
         RuleFor(x => x.Age).GreaterThan(21).WithMessage("You must be at least 18 years old");
         RuleFor(x => x.PhoneNumbers).NotEmpty().WithMessage("Phone Number needed");
     }
+}
+
+[JsonSerializable(typeof(RequestDto))]
+[JsonSerializable(typeof(ResponseDto))]
+public partial class WebApiEndpointJsonSerializerContext : JsonSerializerContext
+{
 }

@@ -9,7 +9,7 @@ using Futurum.WebApiEndpoint.Metadata;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 
 using Xunit;

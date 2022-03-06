@@ -101,19 +101,23 @@ internal static class HttpResponseExtensions
         Task Execute()
         {
             httpResponse.StatusCode = responseStatusCode;
-            return httpResponse.WriteAsJsonAsync(response, jsonSerializerOptions, cancellation);
+            httpResponse.ContentType = MediaTypeNames.Application.Json;
+            
+            return JsonSerializer.SerializeAsync(httpResponse.Body, response, jsonSerializerOptions, cancellation);
         }
 
         return Result.TryAsync(Execute, () => "Failed to write as Json");
     }
 
-    public static Task<Result> TryWriteAsyncEnumerableAsJsonAsync(this HttpResponse httpResponse, object source, Type type, JsonSerializerOptions jsonSerializerOptions, int responseStatusCode,
+    public static Task<Result> TryWriteAsyncEnumerableAsJsonAsync<T>(this HttpResponse httpResponse, T source, JsonSerializerOptions jsonSerializerOptions, int responseStatusCode,
                                                                   CancellationToken cancellation)
     {
         Task Execute()
         {
             httpResponse.StatusCode = responseStatusCode;
-            return httpResponse.WriteAsJsonAsync(source, type, jsonSerializerOptions, cancellation);
+            httpResponse.ContentType = MediaTypeNames.Application.Json;
+            
+            return JsonSerializer.SerializeAsync(httpResponse.Body, source, jsonSerializerOptions, cancellation);
         }
 
         return Result.TryAsync(Execute, () => "Failed to write AsyncEnumerable as Json");

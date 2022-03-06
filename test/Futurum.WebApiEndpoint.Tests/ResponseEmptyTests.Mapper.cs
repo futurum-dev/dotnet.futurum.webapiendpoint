@@ -28,5 +28,6 @@ public class ResponseEmptyMapperTests
         result.ShouldBeSuccess();
 
         httpContext.Response.StatusCode.Should().Be(metadataRouteDefinition.SuccessStatusCode);
+        httpContext.Response.ContentType.Should().BeNull();
     }
 }

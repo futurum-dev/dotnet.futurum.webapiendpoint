@@ -1,8 +1,10 @@
+using System.Text.Json;
+
 using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Internal;
 using Futurum.WebApiEndpoint.Metadata;
 
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 
 namespace Futurum.WebApiEndpoint;
@@ -16,27 +18,25 @@ public interface IRequestJsonReader<TRequestDto>
 internal class RequestJsonReader<TRequestDto> : IRequestJsonReader<TRequestDto>
     where TRequestDto : class
 {
-    private readonly IOptions<JsonOptions> _serializationOptions;
+    private readonly JsonSerializerOptions _jsonSerializerOptions;
 
     public RequestJsonReader(IOptions<JsonOptions> serializationOptions)
     {
-        _serializationOptions = serializationOptions;
+        _jsonSerializerOptions = serializationOptions.Value.SerializerOptions;
     }
 
     public Task<Result<TRequestDto>> ExecuteAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
-        ReadRequestDto(httpContext, metadataDefinition.MetadataMapFromDefinition, metadataDefinition.MetadataMapFromMultipartDefinition, cancellationToken)
-            .ThenAsync(requestDto => ApplyMapFromMappingsAsync(httpContext, metadataDefinition.MetadataMapFromDefinition, requestDto, cancellationToken)
-                           .ThenAsync(() => ApplyMapFromMultipartMappingsAsyncAsync(httpContext, requestDto, metadataDefinition.MetadataMapFromMultipartDefinition, cancellationToken)));
+        ReadRequestDto(httpContext, metadataDefinition.MetadataMapFromDefinition, cancellationToken)
+            .ThenAsync(requestDto => ApplyMapFromMappingsAsync(httpContext, metadataDefinition.MetadataMapFromDefinition, requestDto, cancellationToken));
 
-    private Task<Result<TRequestDto>> ReadRequestDto(HttpContext httpContext, MetadataMapFromDefinition? metadataMapFromDefinition,
-                                                     MetadataMapFromMultipartDefinition? metadataMapFromMultipartDefinition, CancellationToken cancellationToken)
+    private Task<Result<TRequestDto>> ReadRequestDto(HttpContext httpContext, MetadataMapFromDefinition? metadataMapFromDefinition, CancellationToken cancellationToken)
     {
         if (httpContext.Request.HasJsonContentType() && httpContext.Request.ContentLength > 0)
         {
             return ReadFromJsonAsync(httpContext, cancellationToken);
         }
 
-        if (metadataMapFromDefinition != null || metadataMapFromMultipartDefinition != null)
+        if (metadataMapFromDefinition != null)
         {
             return typeof(TRequestDto).GetConstructor(Type.EmptyTypes) != null
                 ? (Activator.CreateInstance(typeof(TRequestDto)) as TRequestDto).ToResultOkAsync()
@@ -51,16 +51,10 @@ internal class RequestJsonReader<TRequestDto> : IRequestJsonReader<TRequestDto>
             ? MapFromRequestMapper<TRequestDto>.Map(httpContext, requestDto, cancellationToken)
             : Result.Ok();
 
-    private static Task<Result> ApplyMapFromMultipartMappingsAsyncAsync(HttpContext httpContext, TRequestDto requestDto, MetadataMapFromMultipartDefinition? metadataMapFromMultipartDefinition,
-                                                                        CancellationToken cancellationToken) =>
-        metadataMapFromMultipartDefinition != null
-            ? MapFromRequestMultipartMapper<TRequestDto>.MapAsync(httpContext, requestDto, cancellationToken)
-            : Result.OkAsync();
-
     private Task<Result<TRequestDto?>> ReadFromJsonAsync(HttpContext httpContext, CancellationToken cancellationToken)
     {
         ValueTask<TRequestDto?> Execute() =>
-            httpContext.Request.ReadFromJsonAsync<TRequestDto>(_serializationOptions.Value.JsonSerializerOptions, cancellationToken);
+            JsonSerializer.DeserializeAsync<TRequestDto>(httpContext.Request.Body, _jsonSerializerOptions, cancellationToken);
 
         return Result.TryAsync(Execute, () => "Failed to deserialize request as json");
     }
