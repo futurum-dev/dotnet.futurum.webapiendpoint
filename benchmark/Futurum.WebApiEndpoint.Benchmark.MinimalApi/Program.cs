@@ -2,6 +2,8 @@ using FluentValidation;
 
 using Futurum.WebApiEndpoint.Benchmark.MinimalApi;
 
+using Microsoft.AspNetCore.Http.Json;
+
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -25,6 +27,11 @@ try
     // builder.Services.AddSwaggerGen();
 
     builder.Services.AddAuthorization();
+
+    builder.Services.Configure<JsonOptions>(options =>
+    {
+        options.SerializerOptions.AddContext<WebApiEndpointJsonSerializerContext>();
+    });
     
     var application = builder.Build();
     

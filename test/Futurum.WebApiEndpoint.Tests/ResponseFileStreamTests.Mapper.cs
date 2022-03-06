@@ -42,6 +42,7 @@ public class ResponseFileStreamMapperTests
         result.ShouldBeSuccess();
 
         httpContext.Response.StatusCode.Should().Be(metadataRouteDefinition.SuccessStatusCode);
+        httpContext.Response.ContentType.Should().Be(MediaTypeNames.Application.Octet);
 
         httpContext.Response.Body.Seek(0, SeekOrigin.Begin);
         using var streamReader = new StreamReader(httpContext.Response.Body);

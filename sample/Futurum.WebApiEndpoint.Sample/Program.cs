@@ -2,6 +2,9 @@ using Futurum.Microsoft.Extensions.DependencyInjection;
 using Futurum.WebApiEndpoint;
 using Futurum.WebApiEndpoint.OpenApi;
 using Futurum.WebApiEndpoint.Sample;
+using Futurum.WebApiEndpoint.Sample.Features.JsonSourceGenerator;
+
+using Microsoft.AspNetCore.Http.Json;
 
 using Serilog;
 
@@ -37,6 +40,11 @@ try
     builder.Services.AddWebApiEndpointAuthorization(typeof(AssemblyHook).Assembly);
     builder.Services.AddAuthenticationJwtBearer(builder.Configuration["Jwt:Issuer"], builder.Configuration["Jwt:Audience"], builder.Configuration["Jwt:Key"]);
 
+    builder.Services.Configure<JsonOptions>(options =>
+    {
+        options.SerializerOptions.AddContext<WebApiEndpointJsonSerializerContext>();
+    });
+    
     var application = builder.Build();
     
     application.UseAuthentication();

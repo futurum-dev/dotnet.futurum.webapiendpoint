@@ -1,8 +1,10 @@
+using System.Text.Json;
+
 using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Internal.AspNetCore;
 using Futurum.WebApiEndpoint.Metadata;
 
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 
 namespace Futurum.WebApiEndpoint;
@@ -10,17 +12,16 @@ namespace Futurum.WebApiEndpoint;
 /// <summary>
 /// Mapper for ResponseAsyncEnumerable
 /// </summary>
-public class ResponseAsyncEnumerableMapper<TData, TDataDto, TResponseDataMapper> : 
-    IWebApiEndpointResponseMapper<ResponseAsyncEnumerable<TData>, ResponseAsyncEnumerableDto<TDataDto>>
+public class ResponseAsyncEnumerableMapper<TData, TDataDto, TResponseDataMapper> : IWebApiEndpointResponseMapper<ResponseAsyncEnumerable<TData>, ResponseAsyncEnumerableDto<TDataDto>>
     where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
 {
-    private readonly IOptions<JsonOptions> _serializationOptions;
+    private readonly JsonSerializerOptions _jsonSerializerOptions;
     private readonly TResponseDataMapper _dataMapper;
 
     public ResponseAsyncEnumerableMapper(IOptions<JsonOptions> serializationOptions,
                                          TResponseDataMapper dataMapper)
     {
-        _serializationOptions = serializationOptions;
+        _jsonSerializerOptions = serializationOptions.Value.SerializerOptions;
         _dataMapper = dataMapper;
     }
 
@@ -28,7 +29,6 @@ public class ResponseAsyncEnumerableMapper<TData, TDataDto, TResponseDataMapper>
     {
         var data = domain.Data.Select(_dataMapper.Map);
 
-        return httpContext.Response.TryWriteAsyncEnumerableAsJsonAsync(data, typeof(IAsyncEnumerable<TDataDto>), _serializationOptions.Value.JsonSerializerOptions,
-                                                                       metadataRouteDefinition.SuccessStatusCode, cancellation);
+        return httpContext.Response.TryWriteAsyncEnumerableAsJsonAsync(data, _jsonSerializerOptions, metadataRouteDefinition.SuccessStatusCode, cancellation);
     }
 }

@@ -24,15 +24,20 @@ try
 
 // Add services to the container.
 
-    builder.Services.AddControllers();
+    builder.Services.AddControllers()
+           .AddJsonOptions(options =>
+           {
+               options.JsonSerializerOptions.AddContext<WebApiEndpointJsonSerializerContext>();
+           });
+    
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 // builder.Services.AddEndpointsApiExplorer();
 // builder.Services.AddSwaggerGen();
 
     builder.Services.AddAuthorization();
-    
+
     var application = builder.Build();
-    
+
     application.UseAuthorization();
 
 // Configure the HTTP request pipeline.

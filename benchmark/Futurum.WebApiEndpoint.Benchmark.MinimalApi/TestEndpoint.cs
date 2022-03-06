@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 using FluentValidation;
 
 using Microsoft.AspNetCore.Mvc;
@@ -27,4 +29,10 @@ public static class TestEndpoint
     public record RequestDto(string? FirstName, string? LastName, int Age, IEnumerable<string>? PhoneNumbers);
 
     public record ResponseDto(int Id, string? Name, int Age, string? PhoneNumber);
+}
+
+[JsonSerializable(typeof(TestEndpoint.RequestDto))]
+[JsonSerializable(typeof(TestEndpoint.ResponseDto))]
+public partial class WebApiEndpointJsonSerializerContext : JsonSerializerContext
+{
 }

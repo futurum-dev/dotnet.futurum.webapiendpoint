@@ -1,6 +1,11 @@
+using System.Text.Json;
+
 using Futurum.Microsoft.Extensions.DependencyInjection;
 using Futurum.WebApiEndpoint;
 using Futurum.WebApiEndpoint.Benchmark.WebApiEndpoint;
+using Futurum.WebApiEndpoint.OpenApi;
+
+using Microsoft.AspNetCore.Http.Json;
 
 using Serilog;
 
@@ -21,10 +26,16 @@ try
     
     builder.Host.ConfigureServices(serviceCollection => serviceCollection.RegisterModule(new WebApiEndpointModule(typeof(AssemblyHook).Assembly)));
 
-    // builder.Services.AddEndpointsApiExplorer();
-    // builder.Services.AddSwaggerGen(options => options.EnableWebApiEndpointOpenApi("WebApiEndpoint Benchmark", WebApiEndpointVersions.V1_0));
+    // builder.Services.EnableOpenApiForWebApiEndpoint();
+    //
+    // builder.Services.AddOpenApiVersion("WebApiEndpoint Benchmark", WebApiEndpointVersions.V1_0);
 
     builder.Services.AddAuthorization();
+
+    builder.Services.Configure<JsonOptions>(options =>
+    {
+        options.SerializerOptions.AddContext<WebApiEndpointJsonSerializerContext>();
+    });
     
     var application = builder.Build();
     
@@ -32,8 +43,7 @@ try
 
     // if (application.Environment.IsDevelopment())
     // {
-    //     application.UseSwagger();
-    //     application.UseSwaggerUI(options => options.UseWebApiEndpointOpenApiUI("WebApiEndpoint Benchmark", WebApiEndpointVersions.V1_0));
+    //     application.UseOpenApiUIForWebApiEndpoint();
     // }
 
     application.UseWebApiEndpoints();

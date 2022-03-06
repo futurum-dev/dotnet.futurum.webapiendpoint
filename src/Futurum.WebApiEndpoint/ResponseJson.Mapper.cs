@@ -1,8 +1,10 @@
+using System.Text.Json;
+
 using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Internal.AspNetCore;
 using Futurum.WebApiEndpoint.Metadata;
 
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 
 namespace Futurum.WebApiEndpoint;
@@ -13,13 +15,13 @@ namespace Futurum.WebApiEndpoint;
 public class ResponseJsonMapper<TResponse, TResponseDto, TMapper> : IWebApiEndpointResponseMapper<TResponse, ResponseJsonDto<TResponseDto>>
     where TMapper : IWebApiEndpointResponseDtoMapper<TResponse, TResponseDto>
 {
-    private readonly IOptions<JsonOptions> _serializationOptions;
+    private readonly JsonSerializerOptions _jsonSerializerOptions;
     private readonly TMapper _mapper;
 
     public ResponseJsonMapper(IOptions<JsonOptions> serializationOptions,
                               TMapper mapper)
     {
-        _serializationOptions = serializationOptions;
+        _jsonSerializerOptions = serializationOptions.Value.SerializerOptions;
         _mapper = mapper;
     }
 
@@ -27,6 +29,6 @@ public class ResponseJsonMapper<TResponse, TResponseDto, TMapper> : IWebApiEndpo
     {
         var dto = _mapper.Map(domain);
         
-        return httpContext.Response.TryWriteAsJsonAsync(dto, _serializationOptions.Value.JsonSerializerOptions, metadataRouteDefinition.SuccessStatusCode, cancellation);
+        return httpContext.Response.TryWriteAsJsonAsync(dto, _jsonSerializerOptions, metadataRouteDefinition.SuccessStatusCode, cancellation);
     }
 }

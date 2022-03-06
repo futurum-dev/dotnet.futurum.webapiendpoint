@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 using FluentValidation;
 
 using Futurum.Core.Result;
@@ -7,16 +9,16 @@ namespace Futurum.WebApiEndpoint.Benchmark.WebApiEndpoint;
 
 public static class TestWebApiEndpoint
 {
-    public record RequestDto(string? FirstName, string? LastName, int Age, IEnumerable<string>? PhoneNumbers)
+    public record RequestDto(string FirstName, string LastName, int Age, IEnumerable<string> PhoneNumbers)
     {
         [MapFromPath("Id")] public int Id { get; set; }
     }
 
-    public record ResponseDto(int Id, string? Name, int Age, string? PhoneNumber);
+    public record ResponseDto(int Id, string Name, int Age, string PhoneNumber);
 
-    public record Query(int Id, string? FirstName, string? LastName, int Age, IEnumerable<string>? PhoneNumbers);
+    public record Query(int Id, string FirstName, string LastName, int Age, IEnumerable<string> PhoneNumbers);
 
-    public record Response(int Id, string? Name, int Age, string? PhoneNumber);
+    public record Response(int Id, string Name, int Age, string PhoneNumber);
 
     public class ApiEndpoint : CommandWebApiEndpoint.Request<RequestDto, Query>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
@@ -43,4 +45,10 @@ public static class TestWebApiEndpoint
             RuleFor(x => x.PhoneNumbers).NotEmpty().WithMessage("Phone Number needed");
         }
     }
+}
+
+[JsonSerializable(typeof(TestWebApiEndpoint.RequestDto))]
+[JsonSerializable(typeof(TestWebApiEndpoint.ResponseDto))]
+public partial class WebApiEndpointJsonSerializerContext : JsonSerializerContext
+{
 }

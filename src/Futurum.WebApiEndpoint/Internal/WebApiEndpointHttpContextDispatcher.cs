@@ -2,7 +2,7 @@ using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Internal.AspNetCore;
 using Futurum.WebApiEndpoint.Metadata;
 
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 
 namespace Futurum.WebApiEndpoint.Internal;
@@ -25,6 +25,6 @@ internal class WebApiEndpointHttpContextDispatcher : IWebApiEndpointHttpContextD
     {
         var errorResponse = error.ToErrorStructure();
 
-        return httpContext.Response.TryWriteAsJsonAsync(errorResponse, _serializationOptions.Value.JsonSerializerOptions, metadataRouteDefinition.FailedStatusCode, cancellation);
+        return httpContext.Response.TryWriteAsJsonAsync(errorResponse, _serializationOptions.Value.SerializerOptions, metadataRouteDefinition.FailedStatusCode, cancellation);
     }
 }

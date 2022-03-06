@@ -14,7 +14,7 @@ namespace Futurum.WebApiEndpoint.Internal;
 
 internal static class MapFromRequestMultipartMapper<TRequestDto>
 {
-    private static readonly Dictionary<int, Func<TRequestDto, MultipartSection, CancellationToken, Task<Result>>> PropertiesToMap = new();
+    private static readonly Dictionary<int, Func<TRequestDto, JsonSerializerOptions, MultipartSection, CancellationToken, Task<Result>>> PropertiesToMap = new();
 
     static MapFromRequestMultipartMapper()
     {
@@ -33,17 +33,17 @@ internal static class MapFromRequestMultipartMapper<TRequestDto>
         }
     }
 
-    private static Func<TRequestDto, MultipartSection, CancellationToken, Task<Result>> GetMapper(PropertyInfo propertyInfo, TypeAccessor typeAccessor,
-                                                                                                  MapFromMultipartAttribute mapFromMultipartAttribute) =>
+    private static Func<TRequestDto, JsonSerializerOptions, MultipartSection, CancellationToken, Task<Result>> GetMapper(PropertyInfo propertyInfo, TypeAccessor typeAccessor,
+                                                                                                                         MapFromMultipartAttribute mapFromMultipartAttribute) =>
         mapFromMultipartAttribute.MapFromMultipart switch
         {
             MapFromMultipart.File => GetMapFromFileMapper(propertyInfo, typeAccessor, mapFromMultipartAttribute),
             MapFromMultipart.Json => GetMapFromJsonMapper(propertyInfo, typeAccessor, mapFromMultipartAttribute),
-            _                     => (_, _, _) => Result.FailAsync($"Failed to MapFrom property : '{propertyInfo.Name}' using MapFrom : '{mapFromMultipartAttribute}'")
+            _                     => (_, _, _, _) => Result.FailAsync($"Failed to MapFrom property : '{propertyInfo.Name}' using MapFrom : '{mapFromMultipartAttribute}'")
         };
 
-    private static Func<TRequestDto, MultipartSection, CancellationToken, Task<Result>> GetMapFromFileMapper(PropertyInfo propertyInfo, TypeAccessor typeAccessor,
-                                                                                                             MapFromMultipartAttribute mapFromMultipartAttribute)
+    private static Func<TRequestDto, JsonSerializerOptions, MultipartSection, CancellationToken, Task<Result>> GetMapFromFileMapper(PropertyInfo propertyInfo, TypeAccessor typeAccessor,
+                                                                                                                                    MapFromMultipartAttribute mapFromMultipartAttribute)
     {
         Result Map(MultipartSection multipartSection, TRequestDto requestDto, CancellationToken cancellationToken)
         {
@@ -70,33 +70,31 @@ internal static class MapFromRequestMultipartMapper<TRequestDto>
             return Map(multipartSection, dto, cancellationToken);
         }
 
-        return (requestDto, multipartSection, cancellationToken) => Result.Try(() => Execute(multipartSection, requestDto, cancellationToken),
+        return (requestDto, _, multipartSection, cancellationToken) => Result.Try(() => Execute(multipartSection, requestDto, cancellationToken),
                                                                                () => $"Failed to Files MapMultipart for SectionPosition : '{mapFromMultipartAttribute.SectionPosition}'")
                                                                           .ToResultAsync();
     }
 
-    private static readonly JsonSerializerOptions JsonSerializerOptions = new(JsonSerializerDefaults.Web);
-
-    private static Func<TRequestDto, MultipartSection, CancellationToken, Task<Result>> GetMapFromJsonMapper(PropertyInfo propertyInfo, TypeAccessor typeAccessor,
-                                                                                                             MapFromMultipartAttribute mapFromMultipartAttribute)
+    private static Func<TRequestDto, JsonSerializerOptions, MultipartSection, CancellationToken, Task<Result>> GetMapFromJsonMapper(PropertyInfo propertyInfo, TypeAccessor typeAccessor,
+                                                                                                                                    MapFromMultipartAttribute mapFromMultipartAttribute)
     {
-        async Task MapAsync(MultipartSection multipartSection, TRequestDto requestDto, CancellationToken cancellationToken)
+        async Task MapAsync(MultipartSection multipartSection, TRequestDto requestDto, JsonSerializerOptions jsonSerializerOptions, CancellationToken cancellationToken)
         {
             multipartSection.Body.Seek(0, SeekOrigin.Begin);
-            var value = await JsonSerializer.DeserializeAsync(multipartSection.Body, propertyInfo.PropertyType, JsonSerializerOptions, cancellationToken);
+            var value = await JsonSerializer.DeserializeAsync(multipartSection.Body, propertyInfo.PropertyType, jsonSerializerOptions, cancellationToken);
             typeAccessor[requestDto, propertyInfo.Name] = value;
         }
 
-        Task Execute(MultipartSection multipartSection, TRequestDto dto, CancellationToken cancellationToken)
+        Task Execute(MultipartSection multipartSection, TRequestDto dto, JsonSerializerOptions jsonSerializerOptions, CancellationToken cancellationToken)
         {
-            return MapAsync(multipartSection, dto, cancellationToken);
+            return MapAsync(multipartSection, dto, jsonSerializerOptions, cancellationToken);
         }
 
-        return (requestDto, multipartSection, cancellationToken) => Result.TryAsync(() => Execute(multipartSection, requestDto, cancellationToken),
-                                                                                    () => $"Failed to Json MapMultipart for SectionPosition : '{mapFromMultipartAttribute.SectionPosition}'");
+        return (requestDto, jsonSerializerOptions, multipartSection, cancellationToken) => Result.TryAsync(() => Execute(multipartSection, requestDto, jsonSerializerOptions, cancellationToken),
+                                                                                                           () => $"Failed to Json MapMultipart for SectionPosition : '{mapFromMultipartAttribute.SectionPosition}'");
     }
 
-    private static Task<Result> MapMultipartAsync(HttpContext httpContext, TRequestDto dto, CancellationToken cancellationToken)
+    private static Task<Result> MapMultipartAsync(HttpContext httpContext, JsonSerializerOptions jsonSerializerOptions, TRequestDto dto, CancellationToken cancellationToken)
     {
         async Task<Result> Execute()
         {
@@ -112,7 +110,7 @@ internal static class MapFromRequestMultipartMapper<TRequestDto>
             {
                 if (PropertiesToMap.TryGetValue(sectionCount, out var mapper))
                 {
-                    var result = await mapper(dto, section, cancellationToken);
+                    var result = await mapper(dto, jsonSerializerOptions, section, cancellationToken);
 
                     results.Add(result);
                 }
@@ -127,10 +125,10 @@ internal static class MapFromRequestMultipartMapper<TRequestDto>
         return Result.TryAsync(Execute, () => $"Failed to MapMultipart");
     }
 
-    public static Task<Result> MapAsync(HttpContext httpContext, TRequestDto dto, CancellationToken cancellationToken) =>
+    public static Task<Result> MapAsync(HttpContext httpContext, JsonSerializerOptions jsonSerializerOptions, TRequestDto dto, CancellationToken cancellationToken) =>
         PropertiesToMap.Count switch
         {
             0 => Result.OkAsync(),
-            _ => MapMultipartAsync(httpContext, dto, cancellationToken)
+            _ => MapMultipartAsync(httpContext, jsonSerializerOptions, dto, cancellationToken)
         };
 }
