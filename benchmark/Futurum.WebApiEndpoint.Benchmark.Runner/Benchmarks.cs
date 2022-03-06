@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
@@ -10,8 +9,8 @@ using Microsoft.AspNetCore.Mvc.Testing;
 namespace Futurum.WebApiEndpoint.Benchmark.Runner;
 
 [
-    SimpleJob(launchCount: 1, warmupCount: 5, targetCount: 20, invocationCount: 10000),
-    MemoryDiagnoser
+    MemoryDiagnoser,
+    SimpleJob(launchCount: 1, warmupCount: 5, targetCount: 20, invocationCount: 20000)
 ]
 public class Benchmarks
 {
@@ -19,81 +18,76 @@ public class Benchmarks
     private static readonly HttpClient MvcControllerClient = new WebApplicationFactory<Futurum.WebApiEndpoint.Benchmark.MvcController.Program>().CreateClient();
     private static readonly HttpClient MinimalApiClient = new WebApplicationFactory<Futurum.WebApiEndpoint.Benchmark.MinimalApi.Program>().CreateClient();
 
-    private static readonly WebApiEndpoint.TestWebApiEndpoint.RequestDto WebApiEndpointRequest = new("FirstName", "LastName", 55, new[]
-    {
-        "1111111111",
-        "2222222222",
-        "3333333333",
-        "4444444444",
-        "5555555555"
-    });
+    private static readonly StringContent WebApiEndpointRequestPayload =
+        new(JsonSerializer.Serialize(new WebApiEndpoint.TestWebApiEndpoint.RequestDto("FirstName", "LastName", 55, new[]
+                                         {
+                                             "1111111111",
+                                             "2222222222",
+                                             "3333333333",
+                                             "4444444444",
+                                             "5555555555"
+                                         }
+                                     )),
+            Encoding.UTF8, MediaTypeNames.Application.Json);
 
-    private static readonly MvcController.RequestDto MvcControllerRequest = new("FirstName", "LastName", 55, new[]
-    {
-        "1111111111",
-        "2222222222",
-        "3333333333",
-        "4444444444",
-        "5555555555"
-    });
+    private static readonly StringContent MvcControllerRequestPayload =
+        new(JsonSerializer.Serialize(new MvcController.RequestDto("FirstName", "LastName", 55, new[]
+            {
+                "1111111111",
+                "2222222222",
+                "3333333333",
+                "4444444444",
+                "5555555555"
+            })),
+            Encoding.UTF8, MediaTypeNames.Application.Json);
 
-    private static readonly MinimalApi.TestEndpoint.RequestDto MinimalApiRequest = new("FirstName", "LastName", 55, new[]
+    private static readonly StringContent MinimalApiRequestPayload =
+        new(JsonSerializer.Serialize(new MinimalApi.TestEndpoint.RequestDto("FirstName", "LastName", 55, new[]
+            {
+                "1111111111",
+                "2222222222",
+                "3333333333",
+                "4444444444",
+                "5555555555"
+            })),
+            Encoding.UTF8, MediaTypeNames.Application.Json);
+
+    [Benchmark(Baseline = true)]
+    public Task WebApiEndpoints()
     {
-        "1111111111",
-        "2222222222",
-        "3333333333",
-        "4444444444",
-        "5555555555"
-    });
-    
-    [Benchmark]
-    public async Task WebApiEndpoints()
-    {
-        var json = JsonSerializer.Serialize(WebApiEndpointRequest);
-            
-        var request = new HttpRequestMessage {
+        var request = new HttpRequestMessage
+        {
             Method = HttpMethod.Post,
             RequestUri = new Uri("/api/1.0/benchmark/22"),
-            Content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json)
+            Content = WebApiEndpointRequestPayload
         };
 
-        var httpResponseMessage = await WebApiEndpointClient.SendAsync(request);
-
-        httpResponseMessage.EnsureSuccessStatusCode();
-        var body = await httpResponseMessage.Content.ReadFromJsonAsync<WebApiEndpoint.TestWebApiEndpoint.ResponseDto>();
+        return WebApiEndpointClient.SendAsync(request);
     }
 
     [Benchmark]
-    public async Task MvcControllers()
+    public Task MvcControllers()
     {
-        var json = JsonSerializer.Serialize(MvcControllerRequest);
-            
-        var request = new HttpRequestMessage {
+        var request = new HttpRequestMessage
+        {
             Method = HttpMethod.Post,
             RequestUri = new Uri("/api/benchmark/22"),
-            Content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json)
+            Content = MvcControllerRequestPayload
         };
 
-        var httpResponseMessage = await MvcControllerClient.SendAsync(request);
-
-        httpResponseMessage.EnsureSuccessStatusCode();
-        var body = await httpResponseMessage.Content.ReadFromJsonAsync<MvcController.ResponseDto>();
+        return MvcControllerClient.SendAsync(request);
     }
 
     [Benchmark]
-    public async Task MinimalApis()
+    public Task MinimalApis()
     {
-        var json = JsonSerializer.Serialize(MinimalApiRequest);
-            
-        var request = new HttpRequestMessage {
+        var request = new HttpRequestMessage
+        {
             Method = HttpMethod.Post,
             RequestUri = new Uri("/api/benchmark/22"),
-            Content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json)
+            Content = MinimalApiRequestPayload
         };
 
-        var httpResponseMessage = await MinimalApiClient.SendAsync(request);
-
-        httpResponseMessage.EnsureSuccessStatusCode();
-        var body = await httpResponseMessage.Content.ReadFromJsonAsync<MinimalApi.TestEndpoint.ResponseDto>();
+        return MinimalApiClient.SendAsync(request);
     }
 }

@@ -4,59 +4,32 @@ using Futurum.WebApiEndpoint.Benchmark.MinimalApi;
 
 using Microsoft.AspNetCore.Http.Json;
 
-using Serilog;
+var builder = WebApplication.CreateBuilder(args);
+builder.Logging.ClearProviders();
 
-Log.Logger = new LoggerConfiguration()
-             .Enrich.FromLogContext()
-             .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
-             .CreateBootstrapLogger();
+builder.Host.ConfigureServices(serviceCollection => serviceCollection.AddSingleton<IValidator<TestEndpoint.RequestDto>, TestEndpoint.Validator>());
 
-try
-{
-    Log.Information("Application starting up");
+// builder.Services.AddEndpointsApiExplorer();
+// builder.Services.AddSwaggerGen();
 
-    var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddAuthorization();
 
-    builder.Host.UseSerilog((hostBuilderContext, loggerConfiguration) =>
-                                loggerConfiguration.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
-                                                   .ReadFrom.Configuration(hostBuilderContext.Configuration));
+builder.Services.Configure<JsonOptions>(options => { options.SerializerOptions.AddContext<WebApiEndpointJsonSerializerContext>(); });
 
-    builder.Host.ConfigureServices(serviceCollection => serviceCollection.AddSingleton<IValidator<TestEndpoint.RequestDto>, TestEndpoint.Validator>());
+var application = builder.Build();
 
-    // builder.Services.AddEndpointsApiExplorer();
-    // builder.Services.AddSwaggerGen();
+application.UseAuthorization();
 
-    builder.Services.AddAuthorization();
+// if (application.Environment.IsDevelopment())
+// {
+//     application.UseSwagger();
+//     application.UseSwaggerUI();
+// }
 
-    builder.Services.Configure<JsonOptions>(options =>
-    {
-        options.SerializerOptions.AddContext<WebApiEndpointJsonSerializerContext>();
-    });
-    
-    var application = builder.Build();
-    
-    application.UseAuthorization();
+application.MapPost("api/benchmark/{id}", TestEndpoint.Execute)
+           .AllowAnonymous();
 
-    // if (application.Environment.IsDevelopment())
-    // {
-    //     application.UseSwagger();
-    //     application.UseSwaggerUI();
-    // }
-
-    application.MapPost("api/benchmark/{id}", TestEndpoint.Execute)
-               .AllowAnonymous();
-
-    application.Run();
-}
-catch (Exception exception)
-{
-    Log.Fatal(exception, "Application start-up failed");
-}
-finally
-{
-    Log.Information("Application shut down complete");
-    Log.CloseAndFlush();
-}
+application.Run();
 
 namespace Futurum.WebApiEndpoint.Benchmark.MinimalApi
 {

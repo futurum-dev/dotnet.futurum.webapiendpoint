@@ -38,8 +38,6 @@ public class WebApiEndpointModule : IModule
 
         RegisterConfiguration(services, _configuration);
 
-        RegisterLogger(services);
-
         RegisterHttpContextDispatcher(services);
 
         RegisterDispatcher(services);
@@ -56,12 +54,6 @@ public class WebApiEndpointModule : IModule
     private static void RegisterConfiguration(IServiceCollection services, WebApiEndpointConfiguration configuration)
     {
         services.AddSingleton(configuration);
-    }
-
-    private static void RegisterLogger(IServiceCollection services)
-    {
-        services.AddSingleton<IWebApiEndpointLogger, WebApiEndpointLogger>();
-        services.AddSingleton<IApiEndpointLogger, WebApiEndpointLogger>();
     }
 
     private static void RegisterHttpContextDispatcher(IServiceCollection services)

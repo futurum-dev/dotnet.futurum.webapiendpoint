@@ -26,7 +26,8 @@ try
     builder.Host.ConfigureServices(serviceCollection =>
     {
         serviceCollection.RegisterModule(new WebApiEndpointModule(typeof(AssemblyHook).Assembly));
-
+        serviceCollection.RegisterModule<WebApiEndpointSerilogLoggerModule>();
+        
         serviceCollection.RegisterModule<ApplicationModule>();
     });
     

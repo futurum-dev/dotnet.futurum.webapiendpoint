@@ -16,6 +16,7 @@ public static class EndpointRouteBuilderExtensions
     /// </summary>
     public static IEndpointRouteBuilder UseWebApiEndpoints(this IEndpointRouteBuilder endpointRouteBuilder)
     {
+        var webApiEndpointLogger = endpointRouteBuilder.ServiceProvider.GetService<IWebApiEndpointLogger>();
         var metadataCache = endpointRouteBuilder.ServiceProvider.GetService<IWebApiEndpointMetadataCache>();
 
         var metadataDefinitions = GetAllMetadataDefinitions(metadataCache);
@@ -40,16 +41,15 @@ public static class EndpointRouteBuilderExtensions
 
             ConfigureExtendedOptions(metadataDefinition, routeHandlerBuilder);
 
-            LogConfiguration(route, metadataDefinition.MetadataRouteDefinition);
+            LogConfiguration(webApiEndpointLogger, route, metadataDefinition.MetadataRouteDefinition);
         }
 
         return endpointRouteBuilder;
     }
 
-    private static void LogConfiguration(string route, MetadataRouteDefinition metadataDefinition)
+    private static void LogConfiguration(IWebApiEndpointLogger webApiEndpointLogger, string route, MetadataRouteDefinition metadataRouteDefinition)
     {
-        var eventData = new { Route = route, MetadataDefinition = metadataDefinition };
-        Log.Logger.Debug("WebApiEndpoint configuring - {@eventData}", eventData);
+        webApiEndpointLogger.EndpointConfiguring(route, metadataRouteDefinition);
     }
 
     private static IEnumerable<MetadataDefinition> GetAllMetadataDefinitions(IWebApiEndpointMetadataCache metadataCache) =>
