@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 
+using Moq;
 using Moq.AutoMock;
 
 using Xunit;
@@ -62,7 +63,9 @@ public class WebApiEndpointDispatcherTests
         var httpContext = new DefaultHttpContext();
         httpContext.Response.Body = new MemoryStream();
 
-        var result = await TestRunner(httpContext, apiEndpoint);
+        var mockWebApiEndpointLogger = new Mock<IWebApiEndpointLogger>();
+        
+        var result = await TestRunner(httpContext, apiEndpoint, autoMocker => autoMocker.Use<IWebApiEndpointLogger>(mockWebApiEndpointLogger.Object));
 
         result.ShouldBeSuccess();
 
@@ -78,9 +81,11 @@ public class WebApiEndpointDispatcherTests
 
         resultErrorStructure.Message.Should().Be(ApiEndpoint.ErrorMessage);
         resultErrorStructure.Children.Should().BeEmpty();
+        
+        mockWebApiEndpointLogger.Verify(x => x.Error(MetadataRouteDefinition.RouteTemplate, It.IsAny<IResultError>()), Times.Once);
     }
 
-    private static async Task<Result> TestRunner(HttpContext httpContext, ApiEndpoint apiEndpoint)
+    private static async Task<Result> TestRunner(HttpContext httpContext, ApiEndpoint apiEndpoint, Action<AutoMocker>? autoMockerConfig = null)
     {
         var mocker = new AutoMocker();
         mocker.Use<IWebApiEndpointHttpContextDispatcher>(new WebApiEndpointHttpContextDispatcher(Options.Create(new JsonOptions())));
@@ -89,6 +94,7 @@ public class WebApiEndpointDispatcherTests
         mocker.Use<IWebApiEndpointResponseDtoMapper<Response, ResponseDto>>(new Mapper());
         mocker.Use(new RequestJsonMapper<RequestDto, Request, Mapper>(new RequestJsonReader<RequestDto>(Options.Create(new JsonOptions())), new Mapper(), new WebApiEndpointRequestValidation<RequestDto>(EnumerableExtensions.Return(new Validator())) ));
         mocker.Use(new ResponseJsonMapper<Response, ResponseDto, Mapper>(Options.Create(new JsonOptions()), new Mapper()));
+        autoMockerConfig?.Invoke(mocker);
 
         var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestJsonDto<RequestDto>),typeof(RequestDto), typeof(ResponseJsonDto<ResponseDto>),typeof(ResponseDto), typeof(ApiEndpoint),
                                                                 typeof(ICommandWebApiEndpoint<RequestJsonDto<RequestDto>, ResponseJsonDto<ResponseDto>, Request, Response,
