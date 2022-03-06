@@ -24,9 +24,10 @@ internal static class WebApiEndpointExecutorService
         }
         catch (Exception exception)
         {
-            var errorData = new WebApiRouteErrorData(routePath, httpContext.Request.Path, "Internal Server Error", (int)HttpStatusCode.InternalServerError, exception.Message);
+            var errorData = new IWebApiEndpointLogger.WebApiRouteErrorData(routePath, httpContext.Request.Path, "Internal Server Error", (int)HttpStatusCode.InternalServerError, exception.Message);
 
-            Log.Logger.Error(exception, "WebApiEndpoint error - {@eventData}", errorData);
+            var webApiEndpointLogger = httpContext.RequestServices.GetService<IWebApiEndpointLogger>();
+            webApiEndpointLogger.Error(exception, errorData);
 
             var errorResponse = exception.ToResultError("WebApiEndpoint - Internal Server Error").ToErrorStructure();
 
@@ -54,8 +55,10 @@ internal static class WebApiEndpointExecutorService
 
     private static Task WebApiEndpointNotFoundAsync(HttpContext httpContext, string routePath, CancellationToken cancellationToken)
     {
-        var eventData = new WebApiEndpointNotFoundData(routePath, httpContext.Request.Method);
-        Log.Logger.Error("Unable to find WebApiEndpoint - {@eventData}", eventData);
+        var eventData = new IWebApiEndpointLogger.WebApiEndpointNotFoundData(routePath, httpContext.Request.Method);
+        
+        var webApiEndpointLogger = httpContext.RequestServices.GetService<IWebApiEndpointLogger>();
+        webApiEndpointLogger.Error(eventData);
 
         var errorResponse = $"WebApiEndpoint - Unable to find WebApiEndpoint for route : '{routePath}'".ToResultError().ToErrorStructure();
 
@@ -65,8 +68,4 @@ internal static class WebApiEndpointExecutorService
             
         return JsonSerializer.SerializeAsync(httpContext.Response.Body, errorResponse, (JsonSerializerOptions)null, cancellationToken);
     }
-
-    private record struct WebApiEndpointNotFoundData(string RoutePath, string HttpMethod);
-
-    private record struct WebApiRouteErrorData(string Route, string Path, string Status, int StatusCode, string Reason);
 }

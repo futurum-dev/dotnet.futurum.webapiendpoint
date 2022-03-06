@@ -73,6 +73,10 @@ public class WebApiEndpointExecutorServiceTests
     {
         var httpContext = new DefaultHttpContext();
         httpContext.Response.Body = new MemoryStream();
+        
+        var services = new ServiceCollection();
+        services.AddSingleton<IWebApiEndpointLogger>(new Mock<IWebApiEndpointLogger>().Object);
+        httpContext.RequestServices = services.BuildServiceProvider();
 
         var routePath = string.Empty;
 
@@ -197,10 +201,11 @@ public class WebApiEndpointExecutorServiceTests
     [Fact]
     public async Task when_unknown_error()
     {
-        var services = new ServiceCollection();
-
         var httpContext = new DefaultHttpContext();
         httpContext.Response.Body = new MemoryStream();
+        
+        var services = new ServiceCollection();
+        services.AddSingleton<IWebApiEndpointLogger>(new Mock<IWebApiEndpointLogger>().Object);
         httpContext.RequestServices = services.BuildServiceProvider();
 
         var metadataRouteDefinition = new MetadataRouteDefinition(MetadataRouteHttpMethod.Get, string.Empty, null, new List<MetadataRouteParameterDefinition>(), null, 200, 400,

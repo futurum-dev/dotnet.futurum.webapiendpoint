@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 
+using Moq;
+
 using Xunit;
 using Xunit.Abstractions;
 
@@ -51,6 +53,7 @@ public class EndpointRouteBuilderExtensionsTests
             serviceCollection.AddSingleton<IEndpointRouteSecurityBuilder>(new TestEndpointRouteSecurityBuilder());
             serviceCollection.AddSingleton(WebApiEndpointConfiguration.Default);
             serviceCollection.AddSingleton<IRequestOpenApiTypeCreator>(new RequestOpenApiTypeCreator());
+            serviceCollection.AddSingleton(new Mock<IWebApiEndpointLogger>().Object);
         });
 
         var application = builder.Build();
@@ -90,6 +93,7 @@ public class EndpointRouteBuilderExtensionsTests
             serviceCollection.AddSingleton<IEndpointRouteSecurityBuilder>(new TestEndpointRouteSecurityBuilder());
             serviceCollection.AddSingleton(WebApiEndpointConfiguration.Default);
             serviceCollection.AddSingleton<IRequestOpenApiTypeCreator>(new RequestOpenApiTypeCreator());
+            serviceCollection.AddSingleton(new Mock<IWebApiEndpointLogger>().Object);
         });
 
         var application = builder.Build();
@@ -132,6 +136,7 @@ public class EndpointRouteBuilderExtensionsTests
             serviceCollection.AddSingleton<IEndpointRouteSecurityBuilder>(testEndpointRouteSecurityBuilder);
             serviceCollection.AddSingleton(WebApiEndpointConfiguration.Default);
             serviceCollection.AddSingleton<IRequestOpenApiTypeCreator>(new RequestOpenApiTypeCreator());
+            serviceCollection.AddSingleton(new Mock<IWebApiEndpointLogger>().Object);
         });
 
         var application = builder.Build();
@@ -171,6 +176,7 @@ public class EndpointRouteBuilderExtensionsTests
             serviceCollection.AddSingleton<IEndpointRouteSecurityBuilder>(new TestEndpointRouteSecurityBuilder());
             serviceCollection.AddSingleton(WebApiEndpointConfiguration.Default);
             serviceCollection.AddSingleton<IRequestOpenApiTypeCreator>(new RequestOpenApiTypeCreator());
+            serviceCollection.AddSingleton(new Mock<IWebApiEndpointLogger>().Object);
         });
 
         var application = builder.Build();
@@ -235,6 +241,7 @@ public class EndpointRouteBuilderExtensionsTests
                 serviceCollection.AddSingleton<IEndpointRouteSecurityBuilder>(new TestEndpointRouteSecurityBuilder());
                 serviceCollection.AddSingleton(WebApiEndpointConfiguration.Default);
                 serviceCollection.AddSingleton<IRequestOpenApiTypeCreator>(new RequestOpenApiTypeCreator());
+                serviceCollection.AddSingleton(new Mock<IWebApiEndpointLogger>().Object);
             });
 
             var application = builder.Build();
