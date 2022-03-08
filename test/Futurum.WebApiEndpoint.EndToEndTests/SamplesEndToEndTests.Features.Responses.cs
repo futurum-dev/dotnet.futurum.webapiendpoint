@@ -442,7 +442,32 @@ public class SamplesEndToEndFeaturesResponsesTests
         httpResponseMessage.Content.Headers.GetValues("Content-Type").Single().Should().Be(MediaTypeNames.Application.Octet);
     }
 
+    [Fact]
+    public async Task Redirect()
+    {
+        var httpClient = CreateClientWithoutRedirect();
+
+        var commandDto = new CommandWithRequestWithResponseScenario.CommandDto(Guid.NewGuid().ToString());
+        var json = JsonSerializer.Serialize(commandDto);
+
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Post,
+            RequestUri = new Uri("/api/1.0/command-with-request-with-response-redirect"),
+            Content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json)
+        };
+
+        var httpResponseMessage = await httpClient.SendAsync(request);
+
+        httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.Moved);
+        httpResponseMessage.Headers.Location.OriginalString.Should().Be("api/1.0/command-with-request-with-response");
+    }
+
     private static HttpClient CreateClient() =>
         new WebApplicationFactory<Sample.Program>()
             .CreateClient();
+
+    private static HttpClient CreateClientWithoutRedirect() =>
+        new WebApplicationFactory<Sample.Program>()
+            .CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
 }

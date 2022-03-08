@@ -125,6 +125,7 @@ public class ApiEndpointDefinition : IApiEndpointDefinition
                          .Command<CommandWithRequestWithResponseFileStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-with-response-file-stream"))
                          .Command<CommandWithRequestWithResponseFileStreamWithContentTypeScenario.ApiEndpoint>(builder => builder.Post("command-with-request-with-response-file-stream-with-content-type"))
                          .Command<CommandWithRequestWithResponseStreamScenario.ApiEndpoint>(builder => builder.Post("command-with-request-with-response-stream"))
+                         .Command<CommandWithRequestWithResponseRedirectScenario.ApiEndpoint>(builder => builder.Post("command-with-request-with-response-redirect"))
                          
                          .Command<ErrorResultScenario.ApiEndpoint>(builder => builder.Post("error-result"))
                          .Command<ErrorExceptionScenario.ApiEndpoint>(builder => builder.Post("error-exception"))

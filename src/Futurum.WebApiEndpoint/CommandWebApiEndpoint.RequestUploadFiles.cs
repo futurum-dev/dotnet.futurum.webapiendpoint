@@ -98,5 +98,15 @@ public abstract partial class CommandWebApiEndpoint
             /// <inheritdoc />
             public abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(WebApiEndpoint.RequestUploadFiles request, CancellationToken cancellationToken);
         }
+
+        /// <summary>
+        /// Configure with response redirect
+        /// </summary>
+        public abstract class ResponseRedirect : ICommandWebApiEndpoint<RequestUploadFilesDto, ResponseRedirectDto, WebApiEndpoint.RequestUploadFiles, WebApiEndpoint.ResponseRedirect,
+            RequestUploadFilesMapper, ResponseRedirectMapper>
+        {
+            /// <inheritdoc />
+            public abstract Task<Result<WebApiEndpoint.ResponseRedirect>> ExecuteAsync(WebApiEndpoint.RequestUploadFiles request, CancellationToken cancellationToken);
+        }
     }
 }

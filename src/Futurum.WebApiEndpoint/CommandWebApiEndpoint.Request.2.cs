@@ -150,5 +150,19 @@ public abstract partial class CommandWebApiEndpoint
                 public abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(TCommandDomain request, CancellationToken cancellationToken);
             }
         }
+
+        /// <summary>
+        /// Configure with response redirect
+        /// </summary>
+        public abstract class ResponseRedirect
+        {
+            public abstract class Mapper<TRequestMapper> : ICommandWebApiEndpoint<RequestJsonDto<TCommandDto>, ResponseRedirectDto, TCommandDomain, WebApiEndpoint.ResponseRedirect,
+                RequestJsonMapper<TCommandDto, TCommandDomain, TRequestMapper>, ResponseRedirectMapper>
+                where TRequestMapper : IWebApiEndpointRequestMapper<TCommandDto, TCommandDomain>
+            {
+                /// <inheritdoc />
+                public abstract Task<Result<WebApiEndpoint.ResponseRedirect>> ExecuteAsync(TCommandDomain request, CancellationToken cancellationToken);
+            }
+        }
     }
 }
