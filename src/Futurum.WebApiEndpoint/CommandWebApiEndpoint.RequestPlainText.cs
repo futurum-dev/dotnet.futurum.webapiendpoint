@@ -97,5 +97,15 @@ public abstract partial class CommandWebApiEndpoint
             /// <inheritdoc />
             public abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(WebApiEndpoint.RequestPlainText request, CancellationToken cancellationToken);
         }
+
+        /// <summary>
+        /// Configure with response redirect
+        /// </summary>
+        public abstract class ResponseRedirect : ICommandWebApiEndpoint<RequestPlainTextDto, ResponseRedirectDto, WebApiEndpoint.RequestPlainText, WebApiEndpoint.ResponseRedirect,
+            RequestPlainTextMapper, ResponseRedirectMapper>
+        {
+            /// <inheritdoc />
+            public abstract Task<Result<WebApiEndpoint.ResponseRedirect>> ExecuteAsync(WebApiEndpoint.RequestPlainText request, CancellationToken cancellationToken);
+        }
     }
 }

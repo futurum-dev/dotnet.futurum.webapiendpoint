@@ -133,5 +133,19 @@ public abstract partial class QueryWebApiEndpoint
                 public abstract Task<Result<WebApiEndpoint.ResponseStream>> ExecuteAsync(TQueryDomain request, CancellationToken cancellationToken);
             }
         }
+
+        /// <summary>
+        /// Configure with response redirect
+        /// </summary>
+        public abstract class ResponseRedirect
+        {
+            public abstract class Mapper<TRequestMapper> : IQueryWebApiEndpoint<RequestEmptyDto, ResponseRedirectDto, TQueryDomain, WebApiEndpoint.ResponseRedirect,
+                RequestEmptyMapper<TQueryDomain, TRequestMapper>, ResponseRedirectMapper>
+                where TRequestMapper : IWebApiEndpointRequestMapper<TQueryDomain>
+            {
+                /// <inheritdoc />
+                public abstract Task<Result<WebApiEndpoint.ResponseRedirect>> ExecuteAsync(TQueryDomain request, CancellationToken cancellationToken);
+            }
+        }
     }
 }
