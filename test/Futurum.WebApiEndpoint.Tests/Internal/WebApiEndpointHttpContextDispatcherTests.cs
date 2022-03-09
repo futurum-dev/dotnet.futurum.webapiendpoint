@@ -10,10 +10,12 @@ using Futurum.WebApiEndpoint.Metadata;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 using Xunit;
+
+using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 namespace Futurum.WebApiEndpoint.Tests.Internal;
 
@@ -45,9 +47,9 @@ public class WebApiEndpointHttpContextDispatcherTests
         using var streamReader = new StreamReader(httpContext.Response.Body);
         var requestBody = await streamReader.ReadToEndAsync();
 
-        var resultErrorStructure = JsonSerializer.Deserialize<ResultErrorStructure>(requestBody, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        var problemDetails = JsonSerializer.Deserialize<ProblemDetails>(requestBody, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-        resultErrorStructure.Message.Should().Be(ErrorMessage);
-        resultErrorStructure.Children.Should().BeEmpty();
+        problemDetails.Title.Should().Be(ErrorMessage);
+        problemDetails.Title.Should().Be(ErrorMessage);
     }
 }

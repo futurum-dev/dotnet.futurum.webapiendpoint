@@ -14,13 +14,15 @@ using Futurum.WebApiEndpoint.Middleware;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 using Moq;
 using Moq.AutoMock;
 
 using Xunit;
+
+using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 namespace Futurum.WebApiEndpoint.Tests;
 
@@ -77,10 +79,10 @@ public class WebApiEndpointDispatcherTests
         using var streamReader = new StreamReader(httpContext.Response.Body);
         var requestBody = await streamReader.ReadToEndAsync();
 
-        var resultErrorStructure = JsonSerializer.Deserialize<ResultErrorStructure>(requestBody, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        var problemDetails = JsonSerializer.Deserialize<ProblemDetails>(requestBody, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-        resultErrorStructure.Message.Should().Be(ApiEndpoint.ErrorMessage);
-        resultErrorStructure.Children.Should().BeEmpty();
+        problemDetails.Title.Should().Be(ApiEndpoint.ErrorMessage);
+        problemDetails.Detail.Should().Be(ApiEndpoint.ErrorMessage);
         
         mockWebApiEndpointLogger.Verify(x => x.Error(MetadataRouteDefinition.RouteTemplate, It.IsAny<IResultError>()), Times.Once);
     }
