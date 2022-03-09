@@ -109,6 +109,20 @@ internal static class HttpResponseExtensions
         return Result.TryAsync(Execute, () => "Failed to write as Json");
     }
 
+    public static Task<Result> TryWriteAsProblemJsonAsync<TResponse>(this HttpResponse httpResponse, TResponse response, JsonSerializerOptions jsonSerializerOptions, int responseStatusCode,
+                                                              CancellationToken cancellation)
+    {
+        Task Execute()
+        {
+            httpResponse.StatusCode = responseStatusCode;
+            httpResponse.ContentType = WebApiEndpointContentType.ProblemJson;
+            
+            return JsonSerializer.SerializeAsync(httpResponse.Body, response, jsonSerializerOptions, cancellation);
+        }
+
+        return Result.TryAsync(Execute, () => "Failed to write as Problem Json");
+    }
+
     public static Task<Result> TryWriteAsyncEnumerableAsJsonAsync<T>(this HttpResponse httpResponse, T source, JsonSerializerOptions jsonSerializerOptions, int responseStatusCode,
                                                                   CancellationToken cancellation)
     {

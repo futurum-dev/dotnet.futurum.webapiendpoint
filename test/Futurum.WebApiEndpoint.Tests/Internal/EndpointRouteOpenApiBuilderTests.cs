@@ -1,15 +1,14 @@
 using System.Net;
-using System.Net.Mime;
 
 using FluentAssertions;
 
 using Futurum.Core.Option;
-using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Internal;
 using Futurum.WebApiEndpoint.Metadata;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Metadata;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -137,9 +136,9 @@ public class EndpointRouteOpenApiBuilderTests
             var endpoint = TestRunner(metadataRouteDefinition, metadataTypeDefinition, null, null);
 
             var failedProducesResponseTypeMetadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().First();
-            failedProducesResponseTypeMetadata.Type.Should().Be(typeof(ResultErrorStructure));
+            failedProducesResponseTypeMetadata.Type.Should().Be(typeof(ProblemDetails));
             failedProducesResponseTypeMetadata.StatusCode.Should().Be(metadataRouteDefinition.FailedStatusCode);
-            failedProducesResponseTypeMetadata.ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
+            failedProducesResponseTypeMetadata.ContentTypes.Single().Should().Be(WebApiEndpointContentType.ProblemJson);
         }
 
         private static RouteEndpoint TestRunner(MetadataRouteDefinition metadataRouteDefinition, MetadataTypeDefinition metadataTypeDefinition, MetadataMapFromDefinition metadataMapFromDefinition,
@@ -189,9 +188,9 @@ public class EndpointRouteOpenApiBuilderTests
             var endpoint = TestRunner(metadataRouteDefinition, metadataTypeDefinition, null, null);
 
             var failedProducesResponseTypeMetadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().Skip(1).First();
-            failedProducesResponseTypeMetadata.Type.Should().Be(typeof(ResultErrorStructure));
+            failedProducesResponseTypeMetadata.Type.Should().Be(typeof(ProblemDetails));
             failedProducesResponseTypeMetadata.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-            failedProducesResponseTypeMetadata.ContentTypes.Single().Should().Be(MediaTypeNames.Application.Json);
+            failedProducesResponseTypeMetadata.ContentTypes.Single().Should().Be(WebApiEndpointContentType.ProblemJson);
         }
 
         private static RouteEndpoint TestRunner(MetadataRouteDefinition metadataRouteDefinition, MetadataTypeDefinition metadataTypeDefinition, MetadataMapFromDefinition metadataMapFromDefinition,

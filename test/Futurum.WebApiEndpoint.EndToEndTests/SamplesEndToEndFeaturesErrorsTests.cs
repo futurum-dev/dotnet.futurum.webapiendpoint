@@ -6,11 +6,9 @@ using System.Text.Json;
 
 using FluentAssertions;
 
-using Futurum.Core.Result;
-using Futurum.WebApiEndpoint.Sample.Features;
-using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequest;
 using Futurum.WebApiEndpoint.Sample.Features.Error;
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 using Xunit;
@@ -38,9 +36,9 @@ public class SamplesEndToEndFeaturesErrorsTests
         var httpResponseMessage = await httpClient.SendAsync(request);
 
         httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var response = await httpResponseMessage.Content.ReadFromJsonAsync<ResultErrorStructure>();
+        var response = await httpResponseMessage.Content.ReadFromJsonAsync<ProblemDetails>();
 
-        response.Message.Should().Be($"An result error has occured - {commandDto.Id}");
+        response.Title.Should().Be($"An result error has occured - {commandDto.Id}");
     }
     
     [Fact]
@@ -61,10 +59,10 @@ public class SamplesEndToEndFeaturesErrorsTests
         var httpResponseMessage = await httpClient.SendAsync(request);
 
         httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
-        var response = await httpResponseMessage.Content.ReadFromJsonAsync<ResultErrorStructure>();
+        var response = await httpResponseMessage.Content.ReadFromJsonAsync<ProblemDetails>();
 
-        response.Message.Should().Be("WebApiEndpoint - Internal Server Error");
-        response.Children.Single().Message.Should().Be($"An exception has occured - {commandDto.Id}");
+        response.Title.Should().Be("WebApiEndpoint - Internal Server Error");
+        response.Detail.Should().Contain($"An exception has occured - {commandDto.Id}");
     }
 
     private static HttpClient CreateClient() =>

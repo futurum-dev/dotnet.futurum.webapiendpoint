@@ -13,7 +13,7 @@ using Futurum.WebApiEndpoint.Middleware;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -21,6 +21,8 @@ using Moq;
 
 using Xunit;
 using Xunit.Abstractions;
+
+using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 namespace Futurum.WebApiEndpoint.Tests.Internal;
 
@@ -88,10 +90,9 @@ public class WebApiEndpointExecutorServiceTests
         using var streamReader = new StreamReader(httpContext.Response.Body);
         var requestBody = await streamReader.ReadToEndAsync();
 
-        var resultErrorStructure = JsonSerializer.Deserialize<ResultErrorStructure>(requestBody, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        var problemDetails = JsonSerializer.Deserialize<ProblemDetails>(requestBody, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-        resultErrorStructure.Message.Should().StartWith("WebApiEndpoint - Unable to find WebApiEndpoint for route");
-        resultErrorStructure.Children.Should().BeEmpty();
+        problemDetails.Title.Should().StartWith("WebApiEndpoint - Unable to find WebApiEndpoint for route");
     }
 
     [Fact]
@@ -192,10 +193,10 @@ public class WebApiEndpointExecutorServiceTests
         using var streamReader = new StreamReader(httpContext.Response.Body);
         var requestBody = await streamReader.ReadToEndAsync();
 
-        var resultErrorStructure = JsonSerializer.Deserialize<ResultErrorStructure>(requestBody, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        var problemDetails = JsonSerializer.Deserialize<ProblemDetails>(requestBody, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-        resultErrorStructure.Message.Should().Be(FailedApiEndpoint.ERROR_MESSAGE);
-        resultErrorStructure.Children.Should().BeEmpty();
+        problemDetails.Title.Should().Be(FailedApiEndpoint.ERROR_MESSAGE);
+        problemDetails.Detail.Should().Be(FailedApiEndpoint.ERROR_MESSAGE);
     }
 
     [Fact]
@@ -232,8 +233,8 @@ public class WebApiEndpointExecutorServiceTests
         using var streamReader = new StreamReader(httpContext.Response.Body);
         var requestBody = await streamReader.ReadToEndAsync();
 
-        var resultErrorStructure = JsonSerializer.Deserialize<ResultErrorStructure>(requestBody, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        var problemDetails = JsonSerializer.Deserialize<ProblemDetails>(requestBody, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-        resultErrorStructure.Message.Should().StartWith("WebApiEndpoint - Internal Server Error");
+        problemDetails.Title.Should().StartWith("WebApiEndpoint - Internal Server Error");
     }
 }

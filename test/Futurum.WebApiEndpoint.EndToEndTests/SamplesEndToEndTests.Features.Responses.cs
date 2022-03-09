@@ -7,11 +7,11 @@ using System.Text.Json.Nodes;
 
 using FluentAssertions;
 
-using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Sample.Features;
 using Futurum.WebApiEndpoint.Sample.Features.CommandWithRequest;
 using Futurum.WebApiEndpoint.Sample.Features.QueryWithRequestParameterMapFrom;
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 using Xunit;
@@ -121,9 +121,9 @@ public class SamplesEndToEndFeaturesResponsesTests
                     var httpResponseMessage = await httpClient.SendAsync(request);
 
                     httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.NotFound);
-                    var response = await httpResponseMessage.Content.ReadFromJsonAsync<ResultErrorStructure>();
+                    var response = await httpResponseMessage.Content.ReadFromJsonAsync<ProblemDetails>();
 
-                    response.Message.Should().Be("Unable to get range");
+                    response.Title.Should().Be("Unable to get range");
                 }
 
                 [Theory]
@@ -236,11 +236,10 @@ public class SamplesEndToEndFeaturesResponsesTests
                     var httpResponseMessage = await httpClient.SendAsync(request);
 
                     httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
-                    var response = await httpResponseMessage.Content.ReadFromJsonAsync<ResultErrorStructure>();
+                    var response = await httpResponseMessage.Content.ReadFromJsonAsync<ProblemDetails>();
 
-                    response.Message.Should()
-                            .Be(
-                                $"Failed to MapFromHeader for {typeof(WebApiEndpoint.Range).FullName} for property : '{nameof(QueryWithRequestParameterMapFromWithResponseBytesRangeScenario.RequestDto.Range)}'");
+                    response.Title.Should()
+                            .Be($"Failed to MapFromHeader for {typeof(WebApiEndpoint.Range).FullName} for property : '{nameof(QueryWithRequestParameterMapFromWithResponseBytesRangeScenario.RequestDto.Range)}'");
                 }
 
                 [Theory]

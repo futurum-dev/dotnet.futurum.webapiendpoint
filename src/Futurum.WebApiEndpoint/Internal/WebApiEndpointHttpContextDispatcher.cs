@@ -23,8 +23,8 @@ internal class WebApiEndpointHttpContextDispatcher : IWebApiEndpointHttpContextD
     
     public Task<Result> HandleFailedResponseAsync(HttpContext httpContext, IResultError error, MetadataRouteDefinition metadataRouteDefinition, CancellationToken cancellation = default)
     {
-        var errorResponse = error.ToErrorStructure();
+        var errorResponse = error.ToProblemDetails(metadataRouteDefinition.FailedStatusCode, httpContext.Request.Path);
 
-        return httpContext.Response.TryWriteAsJsonAsync(errorResponse, _serializationOptions.Value.SerializerOptions, metadataRouteDefinition.FailedStatusCode, cancellation);
+        return httpContext.Response.TryWriteAsProblemJsonAsync(errorResponse, _serializationOptions.Value.SerializerOptions, metadataRouteDefinition.FailedStatusCode, cancellation);
     }
 }

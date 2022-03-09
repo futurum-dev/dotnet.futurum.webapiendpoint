@@ -1,8 +1,8 @@
 using System.Net;
-using System.Net.Mime;
 
-using Futurum.Core.Result;
 using Futurum.WebApiEndpoint.Metadata;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace Futurum.WebApiEndpoint.Internal;
 
@@ -61,11 +61,11 @@ internal class EndpointRouteOpenApiBuilder : IEndpointRouteOpenApiBuilder
             }
         }
         
-        routeHandlerBuilder.Produces(metadataDefinition.MetadataRouteDefinition.FailedStatusCode, typeof(ResultErrorStructure), MediaTypeNames.Application.Json);
+        routeHandlerBuilder.Produces(metadataDefinition.MetadataRouteDefinition.FailedStatusCode, typeof(ProblemDetails), WebApiEndpointContentType.ProblemJson);
 
         if (metadataDefinition.MetadataRouteDefinition.FailedStatusCode != (int)HttpStatusCode.InternalServerError)
         {
-            routeHandlerBuilder.Produces((int)HttpStatusCode.InternalServerError, typeof(ResultErrorStructure), MediaTypeNames.Application.Json);
+            routeHandlerBuilder.Produces((int)HttpStatusCode.InternalServerError, typeof(ProblemDetails), WebApiEndpointContentType.ProblemJson);
         }
     }
 }

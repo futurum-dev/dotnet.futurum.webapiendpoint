@@ -1,13 +1,10 @@
 using System.Net;
-using System.Net.Mime;
 using System.Text.Json;
 
 using Futurum.Core.Result;
 using Futurum.Microsoft.Extensions.DependencyInjection;
 using Futurum.WebApiEndpoint.Metadata;
 using Futurum.WebApiEndpoint.Middleware;
-
-using Serilog;
 
 namespace Futurum.WebApiEndpoint.Internal;
 
@@ -24,17 +21,20 @@ internal static class WebApiEndpointExecutorService
         }
         catch (Exception exception)
         {
-            var errorData = new IWebApiEndpointLogger.WebApiRouteErrorData(routePath, httpContext.Request.Path, "Internal Server Error", (int)HttpStatusCode.InternalServerError, exception.Message);
+            var failedStatusCode = (int)HttpStatusCode.InternalServerError;
+            
+            var errorData = new IWebApiEndpointLogger.WebApiRouteErrorData(routePath, httpContext.Request.Path, "Internal Server Error", failedStatusCode, exception.Message);
 
             var webApiEndpointLogger = httpContext.RequestServices.GetService<IWebApiEndpointLogger>();
             webApiEndpointLogger.Error(exception, errorData);
 
-            var errorResponse = exception.ToResultError("WebApiEndpoint - Internal Server Error").ToErrorStructure();
+            var errorResponse = exception.ToResultError("WebApiEndpoint - Internal Server Error")
+                                         .ToProblemDetails(failedStatusCode, httpContext.Request.Path);
 
-            httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            httpContext.Response.StatusCode = failedStatusCode;
 
-            httpContext.Response.ContentType = MediaTypeNames.Application.Json;
-            
+            httpContext.Response.ContentType = WebApiEndpointContentType.ProblemJson;
+
             await JsonSerializer.SerializeAsync(httpContext.Response.Body, errorResponse, (JsonSerializerOptions)null, cancellationToken);
         }
     }
@@ -49,23 +49,27 @@ internal static class WebApiEndpointExecutorService
         var apiEndpoint = httpContext.RequestServices.TryGetService<IWebApiEndpoint>(metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType);
 
         return Result.CombineAll(webApiEndpointDispatcher, middlewareExecutor, apiEndpoint,
-                         (webApiEndpointDispatcher, middlewareExecutor, apiEndpoint) => (webApiEndpointDispatcher, middlewareExecutor, apiEndpoint))
+                                 (webApiEndpointDispatcher, middlewareExecutor, apiEndpoint) => (webApiEndpointDispatcher, middlewareExecutor, apiEndpoint))
                      .ThenAsync(x => x.webApiEndpointDispatcher.ExecuteAsync(metadataDefinition, httpContext, x.middlewareExecutor, x.apiEndpoint, cancellationToken));
     }
 
     private static Task WebApiEndpointNotFoundAsync(HttpContext httpContext, string routePath, CancellationToken cancellationToken)
     {
         var eventData = new IWebApiEndpointLogger.WebApiEndpointNotFoundData(routePath, httpContext.Request.Method);
-        
+
         var webApiEndpointLogger = httpContext.RequestServices.GetService<IWebApiEndpointLogger>();
         webApiEndpointLogger.Error(eventData);
 
-        var errorResponse = $"WebApiEndpoint - Unable to find WebApiEndpoint for route : '{routePath}'".ToResultError().ToErrorStructure();
+        var failedStatusCode = (int)HttpStatusCode.BadRequest;
 
-        httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+        var errorResponse = $"WebApiEndpoint - Unable to find WebApiEndpoint for route : '{routePath}'"
+                            .ToResultError()
+                            .ToProblemDetails(failedStatusCode, httpContext.Request.Path);
+        
+        httpContext.Response.StatusCode = failedStatusCode;
 
-        httpContext.Response.ContentType = MediaTypeNames.Application.Json;
-            
+        httpContext.Response.ContentType = WebApiEndpointContentType.ProblemJson;
+
         return JsonSerializer.SerializeAsync(httpContext.Response.Body, errorResponse, (JsonSerializerOptions)null, cancellationToken);
     }
 }
