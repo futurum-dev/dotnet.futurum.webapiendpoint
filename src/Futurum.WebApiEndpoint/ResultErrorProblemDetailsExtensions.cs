@@ -34,10 +34,10 @@ public static class ResultErrorProblemDetailsExtensions
     private static ProblemDetails WebApiEndpointResultError(WebApiEndpointResultError webApiEndpointResultError, string requestPath) =>
         new()
         {
-            Detail = webApiEndpointResultError.DetailErrorMessage,
+            Detail = webApiEndpointResultError.GetChildrenErrorString(";"),
             Instance = requestPath,
             Status = (int)webApiEndpointResultError.HttpStatusCode,
-            Title = ReasonPhrases.GetReasonPhrase((int)webApiEndpointResultError.HttpStatusCode)
+            Title = webApiEndpointResultError.Parent.Switch(parent => parent.ToErrorString(), () => "Unknown error")
         };
 
     private static ProblemDetails GeneralError(IResultError resultError, int failedStatusCode, string requestPath) =>
@@ -46,6 +46,6 @@ public static class ResultErrorProblemDetailsExtensions
             Detail = resultError.ToErrorString(),
             Instance = requestPath,
             Status = failedStatusCode,
-            Title = resultError.ToErrorStructure().Message,
+            Title = ReasonPhrases.GetReasonPhrase(failedStatusCode),
         };
 }

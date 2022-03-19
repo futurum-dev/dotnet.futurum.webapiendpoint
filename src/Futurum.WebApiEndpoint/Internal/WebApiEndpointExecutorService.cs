@@ -21,17 +21,15 @@ internal static class WebApiEndpointExecutorService
         }
         catch (Exception exception)
         {
-            var failedStatusCode = (int)HttpStatusCode.InternalServerError;
-            
-            var errorData = new IWebApiEndpointLogger.WebApiRouteErrorData(routePath, httpContext.Request.Path, "Internal Server Error", failedStatusCode, exception.Message);
+            var errorData = new IWebApiEndpointLogger.WebApiRouteErrorData(routePath, httpContext.Request.Path, "Internal Server Error", (int)HttpStatusCode.InternalServerError, exception.Message);
 
             var webApiEndpointLogger = httpContext.RequestServices.GetService<IWebApiEndpointLogger>();
             webApiEndpointLogger.Error(exception, errorData);
 
-            var errorResponse = exception.ToResultError("WebApiEndpoint - Internal Server Error")
-                                         .ToProblemDetails(failedStatusCode, httpContext.Request.Path);
+            var errorResponse = HttpStatusCode.InternalServerError.ToResultError(exception.ToResultError())
+                                         .ToProblemDetails((int)HttpStatusCode.InternalServerError, httpContext.Request.Path);
 
-            httpContext.Response.StatusCode = failedStatusCode;
+            httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
             httpContext.Response.ContentType = WebApiEndpointContentType.ProblemJson;
 

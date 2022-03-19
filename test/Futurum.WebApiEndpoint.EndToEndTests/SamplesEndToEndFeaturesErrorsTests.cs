@@ -10,6 +10,7 @@ using Futurum.WebApiEndpoint.Sample.Features.Error;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.WebUtilities;
 
 using Xunit;
 
@@ -26,10 +27,12 @@ public class SamplesEndToEndFeaturesErrorsTests
         var commandDto = new ErrorResultScenario.CommandDto(Guid.NewGuid().ToString());
         var json = JsonSerializer.Serialize(commandDto);
 
+        var requestPath = "/api/1.0/error-result";
+        
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri("/api/1.0/error-result"),
+            RequestUri = new Uri(requestPath),
             Content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json)
         };
 
@@ -38,7 +41,10 @@ public class SamplesEndToEndFeaturesErrorsTests
         httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var response = await httpResponseMessage.Content.ReadFromJsonAsync<ProblemDetails>();
 
-        response.Title.Should().Be($"An result error has occured - {commandDto.Id}");
+        response.Title.Should().Be(ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest));
+        response.Detail.Should().Be($"An result error has occured - {commandDto.Id}");
+        response.Status.Should().Be((int)HttpStatusCode.BadRequest);
+        response.Instance.Should().Be(requestPath);
     }
     
     [Fact]
@@ -49,10 +55,12 @@ public class SamplesEndToEndFeaturesErrorsTests
         var commandDto = new ErrorExceptionScenario.CommandDto(Guid.NewGuid().ToString());
         var json = JsonSerializer.Serialize(commandDto);
 
+        var requestPath = "/api/1.0/error-exception";
+        
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri("/api/1.0/error-exception"),
+            RequestUri = new Uri(requestPath),
             Content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json)
         };
 
@@ -61,8 +69,10 @@ public class SamplesEndToEndFeaturesErrorsTests
         httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
         var response = await httpResponseMessage.Content.ReadFromJsonAsync<ProblemDetails>();
 
-        response.Title.Should().Be("WebApiEndpoint - Internal Server Error");
+        response.Title.Should().Be("Internal Server Error");
         response.Detail.Should().Contain($"An exception has occured - {commandDto.Id}");
+        response.Status.Should().Be((int)HttpStatusCode.InternalServerError);
+        response.Instance.Should().Be(requestPath);
     }
 
     private static HttpClient CreateClient() =>

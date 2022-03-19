@@ -15,6 +15,7 @@ using Futurum.WebApiEndpoint.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 
 using Moq;
@@ -81,7 +82,7 @@ public class WebApiEndpointDispatcherTests
 
         var problemDetails = JsonSerializer.Deserialize<ProblemDetails>(requestBody, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-        problemDetails.Title.Should().Be(ApiEndpoint.ErrorMessage);
+        problemDetails.Title.Should().Be(ReasonPhrases.GetReasonPhrase(MetadataRouteDefinition.FailedStatusCode));
         problemDetails.Detail.Should().Be(ApiEndpoint.ErrorMessage);
         
         mockWebApiEndpointLogger.Verify(x => x.Error(MetadataRouteDefinition.RouteTemplate, It.IsAny<IResultError>()), Times.Once);

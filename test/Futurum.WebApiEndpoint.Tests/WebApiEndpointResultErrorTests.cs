@@ -18,9 +18,9 @@ public class WebApiEndpointResultErrorTests
 
         var webApiEndpointResultError = new WebApiEndpointResultError(httpStatusCode, detailErrorMessage);
 
-        var errorString = webApiEndpointResultError.GetErrorString();
+        var errorString = webApiEndpointResultError.GetErrorString(";");
 
-        errorString.Should().Be($"{ReasonPhrases.GetReasonPhrase((int)httpStatusCode)} - {detailErrorMessage}");
+        errorString.Should().Be($"{ReasonPhrases.GetReasonPhrase((int)httpStatusCode)};{detailErrorMessage}");
     }
     
     [Fact]
@@ -33,7 +33,8 @@ public class WebApiEndpointResultErrorTests
 
         var errorStructure = webApiEndpointResultError.GetErrorStructure();
 
-        errorStructure.Message.Should().Be($"{ReasonPhrases.GetReasonPhrase((int)httpStatusCode)} - {detailErrorMessage}");
-        errorStructure.Children.Should().BeEmpty();
+        errorStructure.Message.Should().Be(ReasonPhrases.GetReasonPhrase((int)httpStatusCode));
+        errorStructure.Children.First().Message.Should().Be(detailErrorMessage);
+        errorStructure.Children.First().Children.Should().BeEmpty();
     }
 }
