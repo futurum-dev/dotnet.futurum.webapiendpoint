@@ -2,6 +2,11 @@ using System.Net;
 
 using FluentAssertions;
 
+using Futurum.Core.Result;
+using Futurum.Test.Option;
+
+using Microsoft.AspNetCore.WebUtilities;
+
 using Xunit;
 
 namespace Futurum.WebApiEndpoint.Tests;
@@ -19,7 +24,8 @@ public class WebApiEndpointResultErrorExtensionsTests
 
         var webApiEndpointResultError = resultError as WebApiEndpointResultError;
         webApiEndpointResultError.HttpStatusCode.Should().Be(httpStatusCode);
-        webApiEndpointResultError.DetailErrorMessage.Should().BeEmpty();
+        webApiEndpointResultError.Parent.ShouldBeHasValueWithValue(x => x.GetErrorString(),ReasonPhrases.GetReasonPhrase((int)httpStatusCode));
+        webApiEndpointResultError.Children.Single().Should().BeOfType<ResultErrorEmpty>();
     }
     
     [Fact]
@@ -34,6 +40,7 @@ public class WebApiEndpointResultErrorExtensionsTests
 
         var webApiEndpointResultError = resultError as WebApiEndpointResultError;
         webApiEndpointResultError.HttpStatusCode.Should().Be(httpStatusCode);
-        webApiEndpointResultError.DetailErrorMessage.Should().Be(detailErrorMessage);
+        webApiEndpointResultError.Parent.ShouldBeHasValueWithValue(x => x.GetErrorString(),ReasonPhrases.GetReasonPhrase((int)httpStatusCode));
+        webApiEndpointResultError.Children.Single().ToErrorString().Should().Be(detailErrorMessage);
     }
 }

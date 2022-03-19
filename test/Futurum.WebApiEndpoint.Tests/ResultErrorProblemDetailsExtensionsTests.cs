@@ -25,7 +25,7 @@ public class ResultErrorProblemDetailsExtensionsTests
 
         var problemDetails = resultError.ToProblemDetails(failedStatusCode, requestPath);
 
-        problemDetails.Title.Should().BeEmpty();
+        problemDetails.Title.Should().Be(ReasonPhrases.GetReasonPhrase(failedStatusCode));
         problemDetails.Detail.Should().BeEmpty();
         problemDetails.Instance.Should().Be(requestPath);
         problemDetails.Status.Should().Be(failedStatusCode);
@@ -42,7 +42,7 @@ public class ResultErrorProblemDetailsExtensionsTests
 
         var problemDetails = resultError.ToProblemDetails(failedStatusCode, requestPath);
 
-        problemDetails.Title.Should().Be(errorMessage);
+        problemDetails.Title.Should().Be(ReasonPhrases.GetReasonPhrase(failedStatusCode));
         problemDetails.Detail.Should().Be(errorMessage);
         problemDetails.Instance.Should().Be(requestPath);
         problemDetails.Status.Should().Be(failedStatusCode);
@@ -59,7 +59,7 @@ public class ResultErrorProblemDetailsExtensionsTests
 
         var problemDetails = resultError.ToProblemDetails(failedStatusCode, requestPath);
 
-        problemDetails.Title.Should().Be(errorMessage);
+        problemDetails.Title.Should().Be(ReasonPhrases.GetReasonPhrase(failedStatusCode));
         problemDetails.Detail.Should().Be(errorMessage);
         problemDetails.Instance.Should().Be(requestPath);
         problemDetails.Status.Should().Be(failedStatusCode);
@@ -80,7 +80,7 @@ public class ResultErrorProblemDetailsExtensionsTests
 
         var problemDetails = resultError.ToProblemDetails(failedStatusCode, requestPath);
 
-        problemDetails.Title.Should().Be(errorMessage1);
+        problemDetails.Title.Should().Be(ReasonPhrases.GetReasonPhrase(failedStatusCode));
         problemDetails.Detail.Should().Be($"{errorMessage1};{errorMessage2}");
         problemDetails.Instance.Should().Be(requestPath);
         problemDetails.Status.Should().Be(failedStatusCode);

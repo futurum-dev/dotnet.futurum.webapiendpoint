@@ -13,6 +13,7 @@ using Futurum.WebApiEndpoint.Sample.Features.QueryWithRequestParameterMapFrom;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.WebUtilities;
 
 using Xunit;
 
@@ -123,7 +124,8 @@ public class SamplesEndToEndFeaturesResponsesTests
                     httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.NotFound);
                     var response = await httpResponseMessage.Content.ReadFromJsonAsync<ProblemDetails>();
 
-                    response.Title.Should().Be("Unable to get range");
+                    response.Title.Should().Be(ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.NotFound));
+                    response.Detail.Should().Be("Unable to get range");
                 }
 
                 [Theory]
@@ -238,7 +240,8 @@ public class SamplesEndToEndFeaturesResponsesTests
                     httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
                     var response = await httpResponseMessage.Content.ReadFromJsonAsync<ProblemDetails>();
 
-                    response.Title.Should()
+                    response.Title.Should().Be(ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.ServiceUnavailable));
+                    response.Detail.Should()
                             .Be($"Failed to MapFromHeader for {typeof(WebApiEndpoint.Range).FullName} for property : '{nameof(QueryWithRequestParameterMapFromWithResponseBytesRangeScenario.RequestDto.Range)}'");
                 }
 

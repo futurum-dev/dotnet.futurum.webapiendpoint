@@ -14,6 +14,7 @@ using Futurum.WebApiEndpoint.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -92,7 +93,9 @@ public class WebApiEndpointExecutorServiceTests
 
         var problemDetails = JsonSerializer.Deserialize<ProblemDetails>(requestBody, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-        problemDetails.Title.Should().StartWith("WebApiEndpoint - Unable to find WebApiEndpoint for route");
+        problemDetails.Title.Should().Be(ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest));
+        problemDetails.Detail.Should().StartWith("WebApiEndpoint - Unable to find WebApiEndpoint for route");
+        problemDetails.Status.Should().Be((int)HttpStatusCode.BadRequest);
     }
 
     [Fact]
@@ -195,8 +198,9 @@ public class WebApiEndpointExecutorServiceTests
 
         var problemDetails = JsonSerializer.Deserialize<ProblemDetails>(requestBody, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-        problemDetails.Title.Should().Be(FailedApiEndpoint.ERROR_MESSAGE);
+        problemDetails.Title.Should().Be(ReasonPhrases.GetReasonPhrase(metadataRouteDefinition.FailedStatusCode));
         problemDetails.Detail.Should().Be(FailedApiEndpoint.ERROR_MESSAGE);
+        problemDetails.Status.Should().Be(metadataRouteDefinition.FailedStatusCode);
     }
 
     [Fact]
@@ -235,6 +239,8 @@ public class WebApiEndpointExecutorServiceTests
 
         var problemDetails = JsonSerializer.Deserialize<ProblemDetails>(requestBody, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-        problemDetails.Title.Should().StartWith("WebApiEndpoint - Internal Server Error");
+        problemDetails.Title.Should().Be(ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.InternalServerError));
+        problemDetails.Detail.Should().StartWith("Failed to resolve Type");
+        problemDetails.Status.Should().Be((int)HttpStatusCode.InternalServerError);
     }
 }

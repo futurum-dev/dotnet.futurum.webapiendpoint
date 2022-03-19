@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text.Json;
 
 using FluentAssertions;
@@ -11,6 +12,7 @@ using Futurum.WebApiEndpoint.Metadata;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 
 using Xunit;
@@ -49,7 +51,8 @@ public class WebApiEndpointHttpContextDispatcherTests
 
         var problemDetails = JsonSerializer.Deserialize<ProblemDetails>(requestBody, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-        problemDetails.Title.Should().Be(ErrorMessage);
-        problemDetails.Title.Should().Be(ErrorMessage);
+        problemDetails.Title.Should().Be(ReasonPhrases.GetReasonPhrase(metadataRouteDefinition.FailedStatusCode));
+        problemDetails.Detail.Should().Be(ErrorMessage);
+        problemDetails.Status.Should().Be(metadataRouteDefinition.FailedStatusCode);
     }
 }
