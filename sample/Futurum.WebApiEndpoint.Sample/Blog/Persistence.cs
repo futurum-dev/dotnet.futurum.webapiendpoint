@@ -29,7 +29,7 @@ public class BlogStorageBroker : IBlogStorageBroker
 
     public async Task<Result<Blog>> GetByIdAsync(Id id) =>
         _items.TrySingle(x => x.Id == id)
-              .ToResult(() => $"Unable to find {nameof(Blog)} with Id : '{id}'");
+              .ToResultErrorKeyNotFound(id.ToString(), typeof(Blog).FullName);
 
     public async Task<Result<Blog>> AddAsync(Blog blog)
     {

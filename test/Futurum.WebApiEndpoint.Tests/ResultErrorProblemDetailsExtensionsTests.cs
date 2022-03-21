@@ -81,9 +81,29 @@ public class ResultErrorProblemDetailsExtensionsTests
         var problemDetails = resultError.ToProblemDetails(failedStatusCode, requestPath);
 
         problemDetails.Title.Should().Be(ReasonPhrases.GetReasonPhrase(failedStatusCode));
-        problemDetails.Detail.Should().Be($"{errorMessage1};{errorMessage2}");
+        problemDetails.Detail.Should().Be(errorMessage1);
         problemDetails.Instance.Should().Be(requestPath);
         problemDetails.Status.Should().Be(failedStatusCode);
+    }
+    
+    [Fact]
+    public void when_ResultErrorKeyNotFound()
+    {
+        var failedStatusCode = 503;
+        var requestPath = Guid.NewGuid().ToString();
+        
+        var httpStatusCode = HttpStatusCode.NotFound;
+        var key = Guid.NewGuid().ToString();
+        var sourceDescription = Guid.NewGuid().ToString();
+
+        var resultError = ResultErrorKeyNotFound.Create(key, sourceDescription);
+
+        var problemDetails = resultError.ToProblemDetails(failedStatusCode, requestPath);
+
+        problemDetails.Title.Should().Be(ReasonPhrases.GetReasonPhrase((int)httpStatusCode));
+        problemDetails.Detail.Should().Be($"Unable to find key : '{key}' in source : '{sourceDescription}'");
+        problemDetails.Instance.Should().Be(requestPath);
+        problemDetails.Status.Should().Be((int)httpStatusCode);
     }
     
     [Fact]

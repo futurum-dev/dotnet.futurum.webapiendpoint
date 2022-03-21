@@ -1,3 +1,5 @@
+using System.Net;
+
 using Futurum.Core.Result;
 using Futurum.FluentValidation;
 
@@ -13,6 +15,8 @@ public static class ResultErrorProblemDetailsExtensions
         {
             FluentValidationResultError fluentValidationResultError => FluentValidationResultError(fluentValidationResultError, failedStatusCode, requestPath),
             WebApiEndpointResultError webApiEndpointResultError     => WebApiEndpointResultError(webApiEndpointResultError, requestPath),
+            ResultErrorKeyNotFound notFoundResultError              => NotFoundResultError(notFoundResultError, requestPath),
+            ResultErrorComposite resultErrorComposite               => ToProblemDetails(resultErrorComposite.Flatten().First(), failedStatusCode, requestPath),
             _                                                       => GeneralError(resultError, failedStatusCode, requestPath)
         };
 
@@ -38,6 +42,15 @@ public static class ResultErrorProblemDetailsExtensions
             Instance = requestPath,
             Status = (int)webApiEndpointResultError.HttpStatusCode,
             Title = webApiEndpointResultError.Parent.Switch(parent => parent.ToErrorString(), () => "Unknown error")
+        };
+
+    private static ProblemDetails NotFoundResultError(ResultErrorKeyNotFound resultErrorKeyNotFound, string requestPath) =>
+        new()
+        {
+            Detail = resultErrorKeyNotFound.GetErrorString(),
+            Instance = requestPath,
+            Status = (int)HttpStatusCode.NotFound,
+            Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.NotFound),
         };
 
     private static ProblemDetails GeneralError(IResultError resultError, int failedStatusCode, string requestPath) =>
