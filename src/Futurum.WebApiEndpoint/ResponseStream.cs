@@ -13,7 +13,7 @@ public record ResponseStream(Stream Stream)
     public string? FileName { get; set; } = null;
     public long? FileLengthBytes { get; set; } = null;
     public string ContentType { get; set; } = MediaTypeNames.Application.Octet;
-};
+}
 
 /// <summary>
 /// Response dto for stream

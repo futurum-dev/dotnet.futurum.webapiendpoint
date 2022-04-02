@@ -13,4 +13,4 @@ public record RequestUploadFileWithPayloadDto<TPayload>
     [MapFromMultipartFile(0)] public IFormFile File { get; set; }
 
     [MapFromMultipartJson(1)] public TPayload Payload { get; set; }
-};
+}

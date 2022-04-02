@@ -9,6 +9,7 @@ using Futurum.WebApiEndpoint.Metadata;
 
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Net.Http.Headers;
 
 namespace Futurum.WebApiEndpoint.Internal;
 
@@ -45,9 +46,14 @@ internal static class MapFromRequestMultipartMapper<TRequestDto>
     private static Func<TRequestDto, JsonSerializerOptions, MultipartSection, CancellationToken, Task<Result>> GetMapFromFileMapper(PropertyInfo propertyInfo, TypeAccessor typeAccessor,
                                                                                                                                     MapFromMultipartAttribute mapFromMultipartAttribute)
     {
-        Result Map(MultipartSection multipartSection, TRequestDto requestDto, CancellationToken cancellationToken)
+        Result Execute(MultipartSection multipartSection, TRequestDto requestDto)
         {
-            if (multipartSection.GetContentDispositionHeader() != null)
+            if (propertyInfo.PropertyType != typeof(IFormFile) && propertyInfo.PropertyType != typeof(FormFile))
+            {
+                return Result.Fail($"Property '{propertyInfo.Name}' (type : '{propertyInfo.PropertyType.FullName}') on RequestDto type : '{typeof(TRequestDto).FullName}' is not type : '{typeof(IFormFile).FullName}' or '{typeof(FormFile).FullName}'");
+            }
+            
+            if (multipartSection.GetContentDispositionHeader() != null && multipartSection.GetContentDispositionHeader()?.IsFileDisposition() is true)
             {
                 var fileSection = multipartSection.AsFileSection();
 
@@ -65,33 +71,23 @@ internal static class MapFromRequestMultipartMapper<TRequestDto>
             return Result.Fail($"MultipartSection not set to File");
         }
 
-        Result Execute(MultipartSection multipartSection, TRequestDto dto, CancellationToken cancellationToken)
-        {
-            return Map(multipartSection, dto, cancellationToken);
-        }
-
-        return (requestDto, _, multipartSection, cancellationToken) => Result.Try(() => Execute(multipartSection, requestDto, cancellationToken),
-                                                                               () => $"Failed to Files MapMultipart for SectionPosition : '{mapFromMultipartAttribute.SectionPosition}'")
+        return (requestDto, _, multipartSection, _) => Result.Try(() => Execute(multipartSection, requestDto),
+                                                                               () => $"Failed to Files MapMultipart for SectionPosition : '{mapFromMultipartAttribute.SectionPosition}' to Property '{propertyInfo.Name}' on RequestDto type : '{typeof(TRequestDto).FullName}'")
                                                                           .ToResultAsync();
     }
 
     private static Func<TRequestDto, JsonSerializerOptions, MultipartSection, CancellationToken, Task<Result>> GetMapFromJsonMapper(PropertyInfo propertyInfo, TypeAccessor typeAccessor,
                                                                                                                                     MapFromMultipartAttribute mapFromMultipartAttribute)
     {
-        async Task MapAsync(MultipartSection multipartSection, TRequestDto requestDto, JsonSerializerOptions jsonSerializerOptions, CancellationToken cancellationToken)
+        async Task Execute(MultipartSection multipartSection, TRequestDto requestDto, JsonSerializerOptions jsonSerializerOptions, CancellationToken cancellationToken)
         {
             multipartSection.Body.Seek(0, SeekOrigin.Begin);
             var value = await JsonSerializer.DeserializeAsync(multipartSection.Body, propertyInfo.PropertyType, jsonSerializerOptions, cancellationToken);
             typeAccessor[requestDto, propertyInfo.Name] = value;
         }
 
-        Task Execute(MultipartSection multipartSection, TRequestDto dto, JsonSerializerOptions jsonSerializerOptions, CancellationToken cancellationToken)
-        {
-            return MapAsync(multipartSection, dto, jsonSerializerOptions, cancellationToken);
-        }
-
         return (requestDto, jsonSerializerOptions, multipartSection, cancellationToken) => Result.TryAsync(() => Execute(multipartSection, requestDto, jsonSerializerOptions, cancellationToken),
-                                                                                                           () => $"Failed to Json MapMultipart for SectionPosition : '{mapFromMultipartAttribute.SectionPosition}'");
+                                                                                                           () => $"Failed to Json MapMultipart for SectionPosition : '{mapFromMultipartAttribute.SectionPosition}' to Property '{propertyInfo.Name}' on RequestDto type : '{typeof(TRequestDto).FullName}'");
     }
 
     private static Task<Result> MapMultipartAsync(HttpContext httpContext, JsonSerializerOptions jsonSerializerOptions, TRequestDto dto, CancellationToken cancellationToken)
