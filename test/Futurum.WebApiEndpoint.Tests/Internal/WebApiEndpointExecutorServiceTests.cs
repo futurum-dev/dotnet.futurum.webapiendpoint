@@ -106,7 +106,7 @@ public class WebApiEndpointExecutorServiceTests
         services.AddSingleton<IWebApiEndpointHttpContextDispatcher, WebApiEndpointHttpContextDispatcher>();
         services.AddSingleton<IOptions<JsonOptions>>(Options.Create(new JsonOptions()));
         services.AddSingleton(typeof(IWebApiEndpointMiddlewareExecutor<,>), typeof(DisabledWebApiEndpointMiddlewareExecutor<,>));
-        services.AddSingleton<ICommandWebApiEndpoint<RequestJsonDto<CommandDto>, ResponseJsonDto<ResponseDto>, Command, Response,
+        services.AddSingleton<IWebApiEndpoint<RequestJsonDto<CommandDto>, ResponseJsonDto<ResponseDto>, Command, Response,
             RequestJsonMapper<CommandDto, Command, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>, SuccessApiEndpoint>();
         services.AddSingleton<WebApiEndpointDispatcher<RequestJsonDto<CommandDto>, ResponseJsonDto<ResponseDto>, Command, Response, RequestJsonMapper<CommandDto, Command, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>>();
         services.AddSingleton(typeof(IWebApiEndpointRequestValidation<>), typeof(WebApiEndpointRequestValidation<>));
@@ -158,7 +158,7 @@ public class WebApiEndpointExecutorServiceTests
         services.AddSingleton<IWebApiEndpointHttpContextDispatcher, WebApiEndpointHttpContextDispatcher>();
         services.AddSingleton<IOptions<JsonOptions>>(Options.Create(new JsonOptions()));
         services.AddSingleton(typeof(IWebApiEndpointMiddlewareExecutor<,>), typeof(DisabledWebApiEndpointMiddlewareExecutor<,>));
-        services.AddSingleton<ICommandWebApiEndpoint<RequestJsonDto<CommandDto>, ResponseJsonDto<ResponseDto>, Command, Response,
+        services.AddSingleton<IWebApiEndpoint<RequestJsonDto<CommandDto>, ResponseJsonDto<ResponseDto>, Command, Response,
             RequestJsonMapper<CommandDto, Command, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>, FailedApiEndpoint>();
         services.AddSingleton<WebApiEndpointDispatcher<RequestJsonDto<CommandDto>, ResponseJsonDto<ResponseDto>, Command, Response, RequestJsonMapper<CommandDto, Command, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>>();
         services.AddSingleton(typeof(IWebApiEndpointRequestValidation<>), typeof(WebApiEndpointRequestValidation<>));

@@ -37,19 +37,9 @@ internal static class WebApiEndpointExecutorService
         }
     }
 
-    private static Task<Result<(IWebApiEndpointDispatcher, IWebApiEndpointMiddlewareExecutor, IWebApiEndpoint)>> CallWebApiEndpointAsync(
-        HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken)
-    {
-        var webApiEndpointDispatcher = httpContext.RequestServices.TryGetService<IWebApiEndpointDispatcher>(metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType);
-
-        var middlewareExecutor = httpContext.RequestServices.TryGetService<IWebApiEndpointMiddlewareExecutor>(metadataDefinition.MetadataTypeDefinition.MiddlewareExecutorType);
-
-        var apiEndpoint = httpContext.RequestServices.TryGetService<IWebApiEndpoint>(metadataDefinition.MetadataTypeDefinition.WebApiEndpointInterfaceType);
-
-        return Result.CombineAll(webApiEndpointDispatcher, middlewareExecutor, apiEndpoint,
-                                 (webApiEndpointDispatcher, middlewareExecutor, apiEndpoint) => (webApiEndpointDispatcher, middlewareExecutor, apiEndpoint))
-                     .ThenAsync(x => x.webApiEndpointDispatcher.ExecuteAsync(metadataDefinition, httpContext, x.middlewareExecutor, x.apiEndpoint, cancellationToken));
-    }
+    private static Task<Result<IWebApiEndpointDispatcher>> CallWebApiEndpointAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
+        httpContext.RequestServices.TryGetService<IWebApiEndpointDispatcher>(metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType)
+                   .ThenAsync(webApiEndpointDispatcher => webApiEndpointDispatcher.ExecuteAsync(metadataDefinition, httpContext,  cancellationToken));
 
     private static Task WebApiEndpointNotFoundAsync(HttpContext httpContext, string routePath, CancellationToken cancellationToken)
     {

@@ -63,7 +63,7 @@ public class WebApiEndpointModule : IModule
 
     private static void RegisterDispatcher(IServiceCollection services)
     {
-        services.AddSingleton(typeof(WebApiEndpointDispatcher<,,,,,>));
+        services.AddScoped(typeof(WebApiEndpointDispatcher<,,,,,>));
     }
 
     private static void RegisterValidation(IServiceCollection services, Assembly[] assemblies)
