@@ -15,7 +15,7 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class NoResponse
         {
-            public abstract class Mapper<TRequestPayloadMapper> : ICommandWebApiEndpoint<TRequestDto, ResponseEmptyDto, TRequest, ResponseEmpty, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseEmptyMapper>
+            public abstract class Mapper<TRequestPayloadMapper> : ICommandWebApiEndpoint<RequestMapFromMultipartDto<TRequestDto>, ResponseEmptyDto, TRequest, ResponseEmpty, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseEmptyMapper>
                 where TRequestPayloadMapper : IWebApiEndpointRequestMapper<TRequestDto, TRequest>
             {
                 /// <inheritdoc />
@@ -28,14 +28,14 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class Response<TResponseDto, TResponseDomain>
         {
-            public abstract class Mapper<TMapper> : ICommandWebApiEndpoint<TRequestDto, ResponseJsonDto<TResponseDto>, TRequest, TResponseDomain, RequestMapFromMultipartMapper<TRequestDto, TRequest, TMapper>, ResponseJsonMapper<TResponseDomain, TResponseDto, TMapper>>
+            public abstract class Mapper<TMapper> : ICommandWebApiEndpoint<RequestMapFromMultipartDto<TRequestDto>, ResponseJsonDto<TResponseDto>, TRequest, TResponseDomain, RequestMapFromMultipartMapper<TRequestDto, TRequest, TMapper>, ResponseJsonMapper<TResponseDomain, TResponseDto, TMapper>>
                 where TMapper : IWebApiEndpointRequestMapper<TRequestDto, TRequest>, IWebApiEndpointResponseDtoMapper<TResponseDomain, TResponseDto>
             {
                 /// <inheritdoc />
                 public abstract Task<Result<TResponseDomain>> ExecuteAsync(TRequest request, CancellationToken cancellationToken);
             }
 
-            public abstract class Mapper<TRequestPayloadMapper, TResponseMapper> : ICommandWebApiEndpoint<TRequestDto, ResponseJsonDto<TResponseDto>, TRequest, TResponseDomain, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseJsonMapper<TResponseDomain, TResponseDto, TResponseMapper>>
+            public abstract class Mapper<TRequestPayloadMapper, TResponseMapper> : ICommandWebApiEndpoint<RequestMapFromMultipartDto<TRequestDto>, ResponseJsonDto<TResponseDto>, TRequest, TResponseDomain, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseJsonMapper<TResponseDomain, TResponseDto, TResponseMapper>>
                 where TRequestPayloadMapper : IWebApiEndpointRequestMapper<TRequestDto, TRequest>
                 where TResponseMapper : IWebApiEndpointResponseDtoMapper<TResponseDomain, TResponseDto>
             {
@@ -49,7 +49,7 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class ResponseAsyncEnumerable<TDataDto, TData>
         {
-            public abstract class Mapper<TRequestPayloadMapper, TResponseDataMapper> : ICommandWebApiEndpoint<TRequestDto, ResponseAsyncEnumerableDto<TDataDto>, TRequest, ResponseAsyncEnumerable<TData>, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseAsyncEnumerableMapper<TData, TDataDto, TResponseDataMapper>>
+            public abstract class Mapper<TRequestPayloadMapper, TResponseDataMapper> : ICommandWebApiEndpoint<RequestMapFromMultipartDto<TRequestDto>, ResponseAsyncEnumerableDto<TDataDto>, TRequest, ResponseAsyncEnumerable<TData>, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseAsyncEnumerableMapper<TData, TDataDto, TResponseDataMapper>>
                 where TRequestPayloadMapper : IWebApiEndpointRequestMapper<TRequestDto, TRequest>
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
@@ -63,7 +63,7 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class ResponseBytes
         {
-            public abstract class Mapper<TRequestPayloadMapper> : ICommandWebApiEndpoint<TRequestDto, ResponseBytesDto, TRequest, WebApiEndpoint.ResponseBytes, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseBytesMapper>
+            public abstract class Mapper<TRequestPayloadMapper> : ICommandWebApiEndpoint<RequestMapFromMultipartDto<TRequestDto>, ResponseBytesDto, TRequest, WebApiEndpoint.ResponseBytes, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseBytesMapper>
                 where TRequestPayloadMapper : IWebApiEndpointRequestMapper<TRequestDto, TRequest>
             {
                 /// <inheritdoc />
@@ -76,14 +76,14 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class ResponseDataCollection<TDataDto, TData>
         {
-            public abstract class Mapper<TMapper> : ICommandWebApiEndpoint<TRequestDto, ResponseDataCollectionDto<TDataDto>, TRequest, ResponseDataCollection<TData>, RequestMapFromMultipartMapper<TRequestDto, TRequest, TMapper>, ResponseDataCollectionMapper<TData, TDataDto, TMapper>>
+            public abstract class Mapper<TMapper> : ICommandWebApiEndpoint<RequestMapFromMultipartDto<TRequestDto>, ResponseDataCollectionDto<TDataDto>, TRequest, ResponseDataCollection<TData>, RequestMapFromMultipartMapper<TRequestDto, TRequest, TMapper>, ResponseDataCollectionMapper<TData, TDataDto, TMapper>>
                 where TMapper : IWebApiEndpointRequestMapper<TRequestDto, TRequest>, IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
                 /// <inheritdoc />
                 public abstract Task<Result<ResponseDataCollection<TData>>> ExecuteAsync(TRequest request, CancellationToken cancellationToken);
             }
 
-            public abstract class Mapper<TRequestPayloadMapper, TResponseDataMapper> : ICommandWebApiEndpoint<TRequestDto, ResponseDataCollectionDto<TDataDto>, TRequest, ResponseDataCollection<TData>, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseDataCollectionMapper<TData, TDataDto, TResponseDataMapper>>
+            public abstract class Mapper<TRequestPayloadMapper, TResponseDataMapper> : ICommandWebApiEndpoint<RequestMapFromMultipartDto<TRequestDto>, ResponseDataCollectionDto<TDataDto>, TRequest, ResponseDataCollection<TData>, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseDataCollectionMapper<TData, TDataDto, TResponseDataMapper>>
                 where TRequestPayloadMapper : IWebApiEndpointRequestMapper<TRequestDto, TRequest>
                 where TResponseDataMapper : IWebApiEndpointResponseDataMapper<TData, TDataDto>
             {
@@ -97,7 +97,7 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class ResponseEmptyJson
         {
-            public abstract class Mapper<TRequestPayloadMapper> : ICommandWebApiEndpoint<TRequestDto, ResponseEmptyJsonDto, TRequest, WebApiEndpoint.ResponseEmptyJson, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseEmptyJsonMapper>
+            public abstract class Mapper<TRequestPayloadMapper> : ICommandWebApiEndpoint<RequestMapFromMultipartDto<TRequestDto>, ResponseEmptyJsonDto, TRequest, WebApiEndpoint.ResponseEmptyJson, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseEmptyJsonMapper>
                 where TRequestPayloadMapper : IWebApiEndpointRequestMapper<TRequestDto, TRequest>
             {
                 /// <inheritdoc />
@@ -110,7 +110,7 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class ResponseFileStream
         {
-            public abstract class Mapper<TRequestPayloadMapper> : ICommandWebApiEndpoint<TRequestDto, ResponseFileStreamDto, TRequest, WebApiEndpoint.ResponseFileStream, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseFileStreamMapper>
+            public abstract class Mapper<TRequestPayloadMapper> : ICommandWebApiEndpoint<RequestMapFromMultipartDto<TRequestDto>, ResponseFileStreamDto, TRequest, WebApiEndpoint.ResponseFileStream, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseFileStreamMapper>
                 where TRequestPayloadMapper : IWebApiEndpointRequestMapper<TRequestDto, TRequest>
             {
                 /// <inheritdoc />
@@ -123,7 +123,7 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class ResponseStream
         {
-            public abstract class Mapper<TRequestPayloadMapper> : ICommandWebApiEndpoint<TRequestDto, ResponseStreamDto, TRequest, WebApiEndpoint.ResponseStream, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseStreamMapper>
+            public abstract class Mapper<TRequestPayloadMapper> : ICommandWebApiEndpoint<RequestMapFromMultipartDto<TRequestDto>, ResponseStreamDto, TRequest, WebApiEndpoint.ResponseStream, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseStreamMapper>
                 where TRequestPayloadMapper : IWebApiEndpointRequestMapper<TRequestDto, TRequest>
             {
                 /// <inheritdoc />
@@ -136,7 +136,7 @@ public abstract partial class CommandWebApiEndpoint
         /// </summary>
         public abstract class ResponseRedirect
         {
-            public abstract class Mapper<TRequestPayloadMapper> : ICommandWebApiEndpoint<TRequestDto, ResponseRedirectDto, TRequest, WebApiEndpoint.ResponseRedirect, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseRedirectMapper>
+            public abstract class Mapper<TRequestPayloadMapper> : ICommandWebApiEndpoint<RequestMapFromMultipartDto<TRequestDto>, ResponseRedirectDto, TRequest, WebApiEndpoint.ResponseRedirect, RequestMapFromMultipartMapper<TRequestDto, TRequest, TRequestPayloadMapper>, ResponseRedirectMapper>
                 where TRequestPayloadMapper : IWebApiEndpointRequestMapper<TRequestDto, TRequest>
             {
                 /// <inheritdoc />
