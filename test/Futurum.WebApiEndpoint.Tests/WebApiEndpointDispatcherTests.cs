@@ -97,6 +97,8 @@ public class WebApiEndpointDispatcherTests
         mocker.Use<IWebApiEndpointResponseDtoMapper<Response, ResponseDto>>(new Mapper());
         mocker.Use(new RequestJsonMapper<RequestDto, Request, Mapper>(new RequestJsonReader<RequestDto>(Options.Create(new JsonOptions())), new Mapper(), new WebApiEndpointRequestValidation<RequestDto>(EnumerableExtensions.Return(new Validator())) ));
         mocker.Use(new ResponseJsonMapper<Response, ResponseDto, Mapper>(Options.Create(new JsonOptions()), new Mapper()));
+        mocker.Use<IWebApiEndpointMiddlewareExecutor<Request, Response>>(new DisabledWebApiEndpointMiddlewareExecutor<Request, Response>());
+        mocker.Use<IWebApiEndpoint<RequestJsonDto<RequestDto>, ResponseJsonDto<ResponseDto>, Request, Response, RequestJsonMapper<RequestDto, Request, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>>(apiEndpoint);
         autoMockerConfig?.Invoke(mocker);
 
         var metadataTypeDefinition = new MetadataTypeDefinition(typeof(RequestJsonDto<RequestDto>),typeof(RequestDto), typeof(ResponseJsonDto<ResponseDto>),typeof(ResponseDto), typeof(ApiEndpoint),
@@ -110,12 +112,10 @@ public class WebApiEndpointDispatcherTests
         var metadataMapFromMultipartDefinition = new MetadataMapFromMultipartDefinition(new List<MetadataMapFromMultipartParameterDefinition>());
         var metadataDefinition = new MetadataDefinition(MetadataRouteDefinition, metadataTypeDefinition, metadataMapFromDefinition, metadataMapFromMultipartDefinition);
 
-        var middlewareExecutor = new DisabledWebApiEndpointMiddlewareExecutor<Request, Response>();
-
         var commandWebApiEndpointDispatcher = mocker.CreateInstance<WebApiEndpointDispatcher<RequestJsonDto<RequestDto>, ResponseJsonDto<ResponseDto>, Request, Response,
             RequestJsonMapper<RequestDto, Request, Mapper>, ResponseJsonMapper<Response, ResponseDto, Mapper>>>();
 
-        return await commandWebApiEndpointDispatcher.ExecuteAsync(metadataDefinition, httpContext, middlewareExecutor, apiEndpoint, CancellationToken.None);
+        return await commandWebApiEndpointDispatcher.ExecuteAsync(metadataDefinition, httpContext, CancellationToken.None);
     }
 
     private class ApiEndpoint : CommandWebApiEndpoint.Request<RequestDto, Request>.Response<ResponseDto, Response>.Mapper<Mapper>
