@@ -12,7 +12,7 @@ public record ResponseBytes(byte[] Bytes)
     public Option<Range> Range { get; set; } = default;
     public string? FileName { get; set; } = null;
     public string ContentType { get; set; } = MediaTypeNames.Application.Octet;
-};
+}
 
 /// <summary>
 /// Response dto for bytes

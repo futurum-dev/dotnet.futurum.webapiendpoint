@@ -12,7 +12,7 @@ public static class QueryWithRequestParameterMapFromWithResponseBytesRangeScenar
     {
         [MapFromPath("Content")] public string Content { get; set; }
         [MapFromHeader] public Range Range { get; set; }
-    };
+    }
 
     public record Request(string Content, Option<Range> Range);
 

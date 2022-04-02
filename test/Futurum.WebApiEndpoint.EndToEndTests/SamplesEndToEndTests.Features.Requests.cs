@@ -320,6 +320,31 @@ public class SamplesEndToEndFeaturesRequestsTests
         }
 
         [Fact]
+        public async Task RequestUploadFileLargeFileSupport()
+        {
+            var httpClient = CreateClient();
+
+            await using var fileStream = File.OpenRead("./Data/hello-world.txt");
+
+            var multipartFormDataContent = new MultipartFormDataContent();
+            multipartFormDataContent.Add(new StreamContent(fileStream), name: "hello-world.txt", fileName: "hello-world.txt");
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri("/api/1.0/command-with-request-with-response-large-file-support"),
+                Content = multipartFormDataContent
+            };
+
+            var httpResponseMessage = await httpClient.SendAsync(request);
+
+            httpResponseMessage.EnsureSuccessStatusCode();
+            var response = await httpResponseMessage.Content.ReadFromJsonAsync<FeatureDto>();
+
+            response.Name.Should().Be($"Name - 0 - hello-world.txt");
+        }
+
+        [Fact]
         public async Task RequestUploadFileAndJsonSupportedTypes()
         {
             var httpClient = CreateClient();
