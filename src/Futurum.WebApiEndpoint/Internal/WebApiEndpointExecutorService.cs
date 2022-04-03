@@ -4,7 +4,6 @@ using System.Text.Json;
 using Futurum.Core.Result;
 using Futurum.Microsoft.Extensions.DependencyInjection;
 using Futurum.WebApiEndpoint.Metadata;
-using Futurum.WebApiEndpoint.Middleware;
 
 namespace Futurum.WebApiEndpoint.Internal;
 
