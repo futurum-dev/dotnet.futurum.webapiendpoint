@@ -16,15 +16,11 @@ public interface IWebApiEndpointLogger : IApiEndpointLogger
 
     void Error(string path, IResultError error);
 
-    void Error(Exception exception, WebApiRouteErrorData errorData);
+    void ErrorUnhandled(Exception exception, string route, string path, string status, int statusCode, string reason);
 
-    void Error(WebApiEndpointNotFoundData errorData);
+    void ErrorWebApiEndpointNotFound(string path, string httpMethod);
     
     void EndpointConfiguring(string route, MetadataRouteDefinition metadataRouteDefinition);
-
-    public record struct WebApiEndpointNotFoundData(string RoutePath, string HttpMethod);
-
-    public record struct WebApiRouteErrorData(string Route, string Path, string Status, int StatusCode, string Reason);
 }
 
 [ExcludeFromCodeCoverage]
@@ -58,14 +54,18 @@ internal class WebApiEndpointLogger : IWebApiEndpointLogger
         _logger.Error("WebApiEndpoint error {@eventData}", eventData);
     }
 
-    public void Error(Exception exception, IWebApiEndpointLogger.WebApiRouteErrorData errorData)
+    public void ErrorUnhandled(Exception exception, string Route, string Path, string Status, int StatusCode, string Reason)
     {
-        _logger.Error(exception, "WebApiEndpoint error - {@eventData}", errorData);
+        var eventData = new WebApiRouteErrorData(Route, Path, Status, StatusCode, Reason);
+        
+        _logger.Error(exception, "WebApiEndpoint error - {@eventData}", eventData);
     }
 
-    public void Error(IWebApiEndpointLogger.WebApiEndpointNotFoundData errorData)
+    public void ErrorWebApiEndpointNotFound(string path, string httpMethod)
     {
-        _logger.Error("Unable to find WebApiEndpoint - {@eventData}", errorData);
+        var eventData = new WebApiEndpointNotFoundData(path, httpMethod);
+
+        _logger.Error("Unable to find WebApiEndpoint - {@eventData}", eventData);
     }
 
     public void ApiEndpointDebugLog(string apiEndpointDebugLog)
@@ -87,6 +87,10 @@ internal class WebApiEndpointLogger : IWebApiEndpointLogger
     private record struct ResponseSentData<TResponse>(Type RequestType, Type ResponseType, TResponse Response);
 
     private record struct ErrorData(string Path, string Error);
+
+    private record struct WebApiEndpointNotFoundData(string Path, string HttpMethod);
+
+    private record struct WebApiRouteErrorData(string Route, string Path, string Status, int StatusCode, string Reason);
 
     private record struct ApiEndpoints(string Log);
 
