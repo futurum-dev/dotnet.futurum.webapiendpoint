@@ -9,26 +9,30 @@ namespace Futurum.WebApiEndpoint.Internal;
 
 internal static class WebApiEndpointExecutorService
 {
-    public static async Task ExecuteAsync(HttpContext httpContext, MetadataDefinition? metadataDefinition, string routePath, CancellationToken cancellationToken)
+    public static Task ExecuteAsync(HttpContext httpContext, MetadataDefinition? metadataDefinition, string routePath, CancellationToken cancellationToken) =>
+        metadataDefinition != null
+            ? WebApiEndpointAsync(httpContext, metadataDefinition, routePath, cancellationToken)
+            : WebApiEndpointNotFoundAsync(httpContext, routePath, cancellationToken);
+
+    private static async Task WebApiEndpointAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, string routePath, CancellationToken cancellationToken)
     {
         try
         {
-            if (metadataDefinition != null)
-                await CallWebApiEndpointAsync(httpContext, metadataDefinition, cancellationToken).UnwrapAsync();
-            else
-                await WebApiEndpointNotFoundAsync(httpContext, routePath, cancellationToken);
+            await CallWebApiEndpointAsync(httpContext, metadataDefinition, cancellationToken).UnwrapAsync();
         }
         catch (Exception exception)
         {
-            var errorData = new IWebApiEndpointLogger.WebApiRouteErrorData(routePath, httpContext.Request.Path, "Internal Server Error", (int)HttpStatusCode.InternalServerError, exception.Message);
+            const HttpStatusCode internalServerError = HttpStatusCode.InternalServerError;
+
+            string requestPath = httpContext.Request.Path;
 
             var webApiEndpointLogger = httpContext.RequestServices.GetService<IWebApiEndpointLogger>();
-            webApiEndpointLogger.Error(exception, errorData);
+            webApiEndpointLogger.ErrorUnhandled(exception, routePath, requestPath, "Internal Server Error", (int)internalServerError, exception.Message);
 
-            var errorResponse = HttpStatusCode.InternalServerError.ToResultError(exception.ToResultError())
-                                         .ToProblemDetails((int)HttpStatusCode.InternalServerError, httpContext.Request.Path);
+            var errorResponse = internalServerError.ToResultError(exception.ToResultError())
+                                                   .ToProblemDetails((int)internalServerError, requestPath);
 
-            httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            httpContext.Response.StatusCode = (int)internalServerError;
 
             httpContext.Response.ContentType = WebApiEndpointContentType.ProblemJson;
 
@@ -38,22 +42,21 @@ internal static class WebApiEndpointExecutorService
 
     private static Task<Result<IWebApiEndpointDispatcher>> CallWebApiEndpointAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
         httpContext.RequestServices.TryGetService<IWebApiEndpointDispatcher>(metadataDefinition.MetadataTypeDefinition.WebApiEndpointExecutorServiceType)
-                   .ThenAsync(webApiEndpointDispatcher => webApiEndpointDispatcher.ExecuteAsync(metadataDefinition, httpContext,  cancellationToken));
+                   .ThenAsync(webApiEndpointDispatcher => webApiEndpointDispatcher.ExecuteAsync(metadataDefinition, httpContext, cancellationToken));
 
     private static Task WebApiEndpointNotFoundAsync(HttpContext httpContext, string routePath, CancellationToken cancellationToken)
     {
-        var eventData = new IWebApiEndpointLogger.WebApiEndpointNotFoundData(routePath, httpContext.Request.Method);
+        const HttpStatusCode failedStatusCode = HttpStatusCode.BadRequest;
+
+        string requestPath = httpContext.Request.Path;
 
         var webApiEndpointLogger = httpContext.RequestServices.GetService<IWebApiEndpointLogger>();
-        webApiEndpointLogger.Error(eventData);
+        webApiEndpointLogger.ErrorWebApiEndpointNotFound(routePath, httpContext.Request.Method);
 
-        var failedStatusCode = (int)HttpStatusCode.BadRequest;
+        var errorResponse = $"WebApiEndpoint - Unable to find WebApiEndpoint for route : '{routePath}'".ToResultError()
+                                                                                                       .ToProblemDetails((int)failedStatusCode, requestPath);
 
-        var errorResponse = $"WebApiEndpoint - Unable to find WebApiEndpoint for route : '{routePath}'"
-                            .ToResultError()
-                            .ToProblemDetails(failedStatusCode, httpContext.Request.Path);
-        
-        httpContext.Response.StatusCode = failedStatusCode;
+        httpContext.Response.StatusCode = (int)failedStatusCode;
 
         httpContext.Response.ContentType = WebApiEndpointContentType.ProblemJson;
 
