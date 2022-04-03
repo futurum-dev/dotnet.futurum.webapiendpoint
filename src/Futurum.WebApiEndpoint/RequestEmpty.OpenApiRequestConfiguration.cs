@@ -1,5 +1,4 @@
 using Futurum.WebApiEndpoint.Metadata;
-using Futurum.WebApiEndpoint.OpenApi;
 
 using Microsoft.OpenApi.Models;
 
@@ -22,6 +21,5 @@ internal class RequestEmptyOpenApiRequestConfiguration : IWebApiOpenApiRequestCo
 
     public void Execute(OpenApiOperation openApiOperation, OperationFilterContext operationFilterContext, MetadataDefinition metadataDefinition)
     {
-        OpenApiRequestParameterConfiguration.ConfigureParameters(openApiOperation, metadataDefinition);
     }
 }
