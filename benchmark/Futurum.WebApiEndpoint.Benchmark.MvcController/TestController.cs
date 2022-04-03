@@ -22,11 +22,28 @@ public class TestController : Controller
 
     [AllowAnonymous]
     [HttpPost("api/benchmark/{id}")]
-    public IActionResult Index([FromRoute] int id, [FromBody] RequestDto requestDto)
+    public async Task<IActionResult> Index([FromRoute] int id, [FromBody] RequestDto requestDto)
     {
-        _validator.Validate(requestDto);
+        try
+        {
+            var validationResult = await _validator.ValidateAsync(requestDto);
 
-        return Ok(new ResponseDto(id, $"{requestDto.FirstName} {requestDto.LastName}", requestDto.Age, requestDto.PhoneNumbers?.FirstOrDefault()));
+            if (validationResult.IsValid)
+            {
+                return Ok(new ResponseDto(id, $"{requestDto.FirstName} {requestDto.LastName}", requestDto.Age, requestDto.PhoneNumbers?.FirstOrDefault()));
+            }
+
+            foreach (var error in validationResult.Errors)
+            {
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+            }
+
+            return ValidationProblem(ModelState);
+        }
+        catch (Exception exception)
+        {
+            return BadRequest(exception.Message);
+        }
     }
 }
 

@@ -1,5 +1,3 @@
-using System.Text.Json;
-
 using Futurum.ApiEndpoint;
 using Futurum.Microsoft.Extensions.DependencyInjection;
 using Futurum.WebApiEndpoint;
@@ -7,7 +5,6 @@ using Futurum.WebApiEndpoint.Benchmark.WebApiEndpoint;
 using Futurum.WebApiEndpoint.OpenApi;
 
 using Microsoft.AspNetCore.Http.Json;
-
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();

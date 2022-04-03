@@ -8,13 +8,30 @@ namespace Futurum.WebApiEndpoint.Benchmark.MinimalApi;
 
 public static class TestEndpoint
 {
-    public static IResult Execute([FromRoute] int id, [FromBody] RequestDto requestDto, [FromServices] IValidator<RequestDto> validator)
+    public static async Task<IResult> Execute([FromRoute] int id, [FromBody] RequestDto requestDto, [FromServices] IValidator<RequestDto> validator)
     {
-        validator.Validate(requestDto);
+        try
+        {
+            var validationResult = await validator.ValidateAsync(requestDto);
 
-        return Results.Ok(new ResponseDto(id, requestDto.FirstName + " " + requestDto.LastName, requestDto.Age, requestDto.PhoneNumbers?.FirstOrDefault()));
+            if (validationResult.IsValid)
+            {
+                return Results.Ok(new ResponseDto(id, requestDto.FirstName + " " + requestDto.LastName, requestDto.Age, requestDto.PhoneNumbers?.FirstOrDefault()));
+            }
+
+            var errors = validationResult.Errors
+                                         .GroupBy(validationFailure => validationFailure.PropertyName)
+                                         .ToDictionary(x => x.Key,
+                                                       x => x.Select(validationFailure => validationFailure.ErrorMessage).ToArray());
+
+            return Results.ValidationProblem(errors);
+        }
+        catch (Exception exception)
+        {
+            return Results.BadRequest(exception.Message);
+        }
     }
-    
+
     public class Validator : AbstractValidator<RequestDto>
     {
         public Validator()

@@ -27,12 +27,12 @@ internal class WebApiEndpointRequestValidation<TRequest> : IWebApiEndpointReques
             _ => _validator.FlatMapAsync(validator => ValidateAsync(validator, request))
         };
 
-    private static Task<Result> ValidateAsync(IValidator<TRequest> validator, TRequest request)
+    private static async Task<Result> ValidateAsync(IValidator<TRequest> validator, TRequest request)
     {
-        var validationResult = validator.Validate(request);
+        var validationResult = await validator.ValidateAsync(request);
 
         return validationResult.IsValid
-            ? Result.OkAsync()
-            : Result.FailAsync(validationResult.ToResultError());
+            ? Result.Ok()
+            : Result.Fail(validationResult.ToResultError());
     }
 }
