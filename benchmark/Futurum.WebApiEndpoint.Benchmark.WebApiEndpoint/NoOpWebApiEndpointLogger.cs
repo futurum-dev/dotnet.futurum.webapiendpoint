@@ -20,11 +20,11 @@ public class NoOpWebApiEndpointLogger : IWebApiEndpointLogger
     {
     }
 
-    public void Error(Exception exception, IWebApiEndpointLogger.WebApiRouteErrorData errorData)
+    public void ErrorUnhandled(Exception exception, string route, string path, string status, int statusCode, string reason)
     {
     }
 
-    public void Error(IWebApiEndpointLogger.WebApiEndpointNotFoundData errorData)
+    public void ErrorWebApiEndpointNotFound(string path, string httpMethod)
     {
     }
 
