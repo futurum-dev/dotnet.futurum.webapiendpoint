@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Futurum.Core" Version="1.0.8" />
+        <PackageReference Include="Futurum.Core" Version="1.0.10" />
     </ItemGroup>
 
     <ItemGroup>

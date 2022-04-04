@@ -38,10 +38,18 @@ internal class WebApiEndpointDispatcher<TRequestDto, TResponseDto, TRequest, TRe
 
     public Task<Result> ExecuteAsync(MetadataDefinition metadataDefinition, HttpContext httpContext, CancellationToken cancellationToken) =>
         _requestMapper.MapAsync(httpContext, metadataDefinition, cancellationToken)
-                      .DoAsync(command => _logger.RequestReceived<TRequest, TResponse>(command))
-                      .ThenAsync(command => _middlewareExecutor.ExecuteAsync(httpContext, command, _webApiEndpoint.ExecuteAsync, cancellationToken))
-                      .DoAsync(response => _logger.ResponseSent<TRequest, TResponse>(response))
-                      .SwitchAsync(response => _responseMapper.MapAsync(httpContext, metadataDefinition.MetadataRouteDefinition, response, cancellationToken),
+                      .ThenAsync(command =>
+                      {
+                          _logger.RequestReceived<TRequest, TResponse>(command);
+                          
+                          return _middlewareExecutor.ExecuteAsync(httpContext, command, _webApiEndpoint.ExecuteAsync, cancellationToken);
+                      })
+                      .SwitchAsync(response =>
+                                   {
+                                       _logger.ResponseSent<TRequest, TResponse>(response);
+                                       
+                                       return _responseMapper.MapAsync(httpContext, metadataDefinition.MetadataRouteDefinition, response, cancellationToken);
+                                   },
                                    error =>
                                    {
                                        _logger.Error(httpContext.Request.Path, error);

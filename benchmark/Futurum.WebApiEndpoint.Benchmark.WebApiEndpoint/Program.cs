@@ -40,7 +40,7 @@ application.Run();
 
 namespace Futurum.WebApiEndpoint.Benchmark.WebApiEndpoint
 {
-    public partial class Program
+    public class Program
     {
     }
 }

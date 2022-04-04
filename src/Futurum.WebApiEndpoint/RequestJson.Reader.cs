@@ -56,6 +56,6 @@ internal class RequestJsonReader<TRequestDto> : IRequestJsonReader<TRequestDto>
         ValueTask<TRequestDto?> Execute() =>
             JsonSerializer.DeserializeAsync<TRequestDto>(httpContext.Request.Body, _jsonSerializerOptions, cancellationToken);
 
-        return Result.TryAsync(Execute, () => "Failed to deserialize request as json");
+        return Result.TryAsync(Execute, "Failed to deserialize request as json");
     }
 }

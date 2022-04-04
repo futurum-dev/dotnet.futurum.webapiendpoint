@@ -12,5 +12,5 @@ public class RequestUploadFilesMapper : IWebApiEndpointRequestMapper<RequestUplo
     public Task<Result<RequestUploadFiles>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
         httpContext.Request.TryReadUploadFilesAsync(cancellationToken)
                    .MapAsync(files => new RequestUploadFiles(files))
-                   .EnhanceWithErrorAsync(() => "Failed to read upload files");
+                   .EnhanceWithErrorAsync("Failed to read upload files");
 }

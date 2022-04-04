@@ -1,5 +1,4 @@
 using Futurum.Core.Linq;
-using Futurum.Core.Option;
 using Futurum.Core.Result;
 
 using Microsoft.Extensions.Primitives;
@@ -14,61 +13,104 @@ public static partial class HttpContextExtensions
     /// <summary>
     /// Get <see cref="StringValues"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Headers"/> for <paramref name="parameterName"/>
     /// </summary>
-    public static Result<StringValues> GetRequestHeaderParameterAsStringValues(this HttpContext httpContext, string parameterName) =>
-        httpContext.Request.Headers.TryGetValue(parameterName)
-                   .ToResult(() => $"Unable to get Request Header Parameter - '{parameterName}'. Request Header Parameters available are '{httpContext.Request.Headers.Keys.StringJoin(",")}'");
+    public static Result<StringValues> GetRequestHeaderParameterAsStringValues(this HttpContext httpContext, string parameterName)
+    {
+        if (httpContext.Request.Headers.TryGetValue(parameterName, out var value))
+        {
+            return Result.Ok(value);
+        }
+
+        return Result.Fail<StringValues>($"Unable to get Request Header Parameter - '{parameterName}'. Request Header Parameters available are '{httpContext.Request.Headers.Keys.StringJoin(",")}'");
+    }
 
     /// <summary>
     /// Get <see cref="string"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Headers"/> for <paramref name="parameterName"/>
     /// </summary>
-    public static Result<string> GetRequestHeaderFirstParameterAsString(this HttpContext httpContext, string parameterName) =>
-        GetRequestHeaderParameter(httpContext, parameterName,
-                                 value => value.TryFirst().ToResult(() => $"Unable to find Header Parameters with name : '{parameterName}'")
-                                               .Map(parameterValue => parameterValue.ToString()));
+    public static Result<string> GetRequestHeaderFirstParameterAsString(this HttpContext httpContext, string parameterName)
+    {
+        if (httpContext.Request.Headers.TryGetValue(parameterName, out var value))
+        {
+            var firstValue = value.First();
+            return !string.IsNullOrEmpty(firstValue)
+                ? Result.Ok(firstValue)
+                : Result.Fail<string>($"Unable to parse Request Header Parameter - '{parameterName}' to String: '{value}'");
+        }
+
+        return Result.Fail<string>($"Unable to get Request Header Parameter - '{parameterName}'. Request Header Parameters available are '{httpContext.Request.Headers.Keys.StringJoin(",")}'");
+    }
 
     /// <summary>
     /// Get <see cref="int"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Headers"/> for <paramref name="parameterName"/>
     /// </summary>
-    public static Result<int> GetRequestHeaderFirstParameterAsInt(this HttpContext httpContext, string parameterName) =>
-        GetRequestHeaderFirstParameter(httpContext, parameterName,
-                                      value => value.TryParseInt(() => $"Unable to parse Request Header Parameter - '{parameterName}' to Int: '{value}'"));
+    public static Result<int> GetRequestHeaderFirstParameterAsInt(this HttpContext httpContext, string parameterName)
+    {
+        if (httpContext.Request.Headers.TryGetValue(parameterName, out var value))
+        {
+            return int.TryParse(value.First(), out var parsed)
+                ? Result.Ok(parsed)
+                : Result.Fail<int>($"Unable to parse Request Header Parameter - '{parameterName}' to Int: '{value}'");
+        }
+
+        return Result.Fail<int>($"Unable to get Request Header Parameter - '{parameterName}'. Request Header Parameters available are '{httpContext.Request.Headers.Keys.StringJoin(",")}'");
+    }
 
     /// <summary>
     /// Get <see cref="long"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Headers"/> for <paramref name="parameterName"/>
     /// </summary>
-    public static Result<long> GetRequestHeaderFirstParameterAsLong(this HttpContext httpContext, string parameterName) =>
-        GetRequestHeaderFirstParameter(httpContext, parameterName,
-                                      value => value.TryParseLong(() => $"Unable to parse Request Header Parameter - '{parameterName}' to Long: '{value}'"));
+    public static Result<long> GetRequestHeaderFirstParameterAsLong(this HttpContext httpContext, string parameterName)
+    {
+        if (httpContext.Request.Headers.TryGetValue(parameterName, out var value))
+        {
+            return long.TryParse(value.First(), out var parsed)
+                ? Result.Ok(parsed)
+                : Result.Fail<long>($"Unable to parse Request Header Parameter - '{parameterName}' to Long: '{value}'");
+        }
+
+        return Result.Fail<long>($"Unable to get Request Header Parameter - '{parameterName}'. Request Header Parameters available are '{httpContext.Request.Headers.Keys.StringJoin(",")}'");
+    }
 
     /// <summary>
     /// Get <see cref="DateTime"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Headers"/> for <paramref name="parameterName"/>
     /// </summary>
-    public static Result<DateTime> GetRequestHeaderFirstParameterAsDateTime(this HttpContext httpContext, string parameterName) =>
-        GetRequestHeaderFirstParameter(httpContext, parameterName,
-                                      value => value.TryParseDateTime(() => $"Unable to parse Request Header Parameter - '{parameterName}' to DateTime: '{value}'"));
+    public static Result<DateTime> GetRequestHeaderFirstParameterAsDateTime(this HttpContext httpContext, string parameterName)
+    {
+        if (httpContext.Request.Headers.TryGetValue(parameterName, out var value))
+        {
+            return DateTime.TryParse(value.First(), out var parsed)
+                ? Result.Ok(parsed)
+                : Result.Fail<DateTime>($"Unable to parse Request Header Parameter - '{parameterName}' to DateTime: '{value}'");
+        }
+
+        return Result.Fail<DateTime>($"Unable to get Request Header Parameter - '{parameterName}'. Request Header Parameters available are '{httpContext.Request.Headers.Keys.StringJoin(",")}'");
+    }
 
     /// <summary>
     /// Get <see cref="bool"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Headers"/> for <paramref name="parameterName"/>
     /// </summary>
-    public static Result<bool> GetRequestHeaderFirstParameterAsBool(this HttpContext httpContext, string parameterName) =>
-        GetRequestHeaderFirstParameter(httpContext, parameterName,
-                                      value => value.TryParseBool(() => $"Unable to parse Request Header Parameter - '{parameterName}' to Bool: '{value}'"));
+    public static Result<bool> GetRequestHeaderFirstParameterAsBool(this HttpContext httpContext, string parameterName)
+    {
+        if (httpContext.Request.Headers.TryGetValue(parameterName, out var value))
+        {
+            return bool.TryParse(value.First(), out var parsed)
+                ? Result.Ok(parsed)
+                : Result.Fail<bool>($"Unable to parse Request Header Parameter - '{parameterName}' to Bool: '{value}'");
+        }
+
+        return Result.Fail<bool>($"Unable to get Request Header Parameter - '{parameterName}'. Request Header Parameters available are '{httpContext.Request.Headers.Keys.StringJoin(",")}'");
+    }
 
     /// <summary>
     /// Get <see cref="Guid"/> from <see cref="HttpContext"/> <see cref="HttpRequest.Headers"/> for <paramref name="parameterName"/>
     /// </summary>
-    public static Result<Guid> GetRequestHeaderFirstParameterAsGuid(this HttpContext httpContext, string parameterName) =>
-        GetRequestHeaderFirstParameter(httpContext, parameterName,
-                                      value => value.TryParseGuid(() => $"Unable to parse Request Header Parameter - '{parameterName}' to Guid: '{value}'"));
-    
-    private static Option<StringValues> TryGetValue(this IHeaderDictionary source, string key) =>
-        source.TryGetValue(key, out var value) ? Option<StringValues>.From(value) : Option<StringValues>.None;
+    public static Result<Guid> GetRequestHeaderFirstParameterAsGuid(this HttpContext httpContext, string parameterName)
+    {
+        if (httpContext.Request.Headers.TryGetValue(parameterName, out var value))
+        {
+            return Guid.TryParse(value.First(), out var parsed)
+                ? Result.Ok(parsed)
+                : Result.Fail<Guid>($"Unable to parse Request Header Parameter - '{parameterName}' to Guid: '{value}'");
+        }
 
-    public static Result<TR> GetRequestHeaderParameter<TR>(this HttpContext httpContext, string parameterName, Func<StringValues, Result<TR>> nextResult) =>
-        GetRequestHeaderParameterAsStringValues(httpContext, parameterName)
-            .Then(nextResult);
-
-    public static Result<TR> GetRequestHeaderFirstParameter<TR>(this HttpContext httpContext, string parameterName, Func<string, Result<TR>> nextResult) =>
-        GetRequestHeaderFirstParameterAsString(httpContext, parameterName)
-            .Then(nextResult);
+        return Result.Fail<Guid>($"Unable to get Request Header Parameter - '{parameterName}'. Request Header Parameters available are '{httpContext.Request.Headers.Keys.StringJoin(",")}'");
+    }
 }

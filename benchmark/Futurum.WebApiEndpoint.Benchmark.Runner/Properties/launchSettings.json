@@ -1,12 +1,9 @@
 ﻿{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "Futurum.WebApiEndpoint.Benchmark.WebApiEndpoint": {
+    "Futurum.WebApiEndpoint.Benchmark.Runner": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7096;http://localhost:5010",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
       }
