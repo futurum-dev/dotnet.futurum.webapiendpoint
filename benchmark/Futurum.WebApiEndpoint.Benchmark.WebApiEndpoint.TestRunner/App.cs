@@ -22,7 +22,7 @@ public class App : IApp
     
     public Task<Result> ExecuteAsync()
     {
-        return Enumerable.Range(0, 1000000)
+        return Enumerable.Range(0, 1)
                          .FlatMapAsync(async i =>
                          {
                              using (var httpClient = _httpClientFactory.CreateClient())

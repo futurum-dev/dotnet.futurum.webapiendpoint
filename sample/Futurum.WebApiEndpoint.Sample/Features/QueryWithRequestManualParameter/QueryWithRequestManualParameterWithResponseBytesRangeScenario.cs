@@ -23,7 +23,7 @@ public static class QueryWithRequestManualParameterWithResponseBytesRangeScenari
     public class Mapper : IWebApiEndpointRequestMapper<Request>
     {
         public Task<Result<Request>> MapAsync(HttpContext httpContext, MetadataDefinition metadataDefinition, CancellationToken cancellationToken) =>
-            RangeHeaderMapper.Map(httpContext).ToResult(() => "Unable to get range")
+            RangeHeaderMapper.Map(httpContext).ToResult("Unable to get range")
                              .Then(range => httpContext.GetRequestPathParameterAsString("Content")
                                                        .Map(content => new Request(content, range)))
                              .ToResultAsync();

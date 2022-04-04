@@ -22,8 +22,8 @@ public static class TestWebApiEndpoint
 
     public class ApiEndpoint : CommandWebApiEndpoint.Request<RequestDto, Query>.Response<ResponseDto, Response>.Mapper<Mapper>
     {
-        public override Task<Result<Response>> ExecuteAsync(Query request, CancellationToken cancellationToken) =>
-            new Response(request.Id, request.FirstName + " " + request.LastName, request.Age, request.PhoneNumbers?.FirstOrDefault()).ToResultOkAsync();
+        public override async Task<Result<Response>> ExecuteAsync(Query request, CancellationToken cancellationToken) =>
+            new Response(request.Id, request.FirstName + " " + request.LastName, request.Age, request.PhoneNumbers?.FirstOrDefault()).ToResultOk();
     }
 
     public class Mapper : IWebApiEndpointRequestMapper<RequestDto, Query>, IWebApiEndpointResponseDtoMapper<Response, ResponseDto>

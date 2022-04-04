@@ -1,6 +1,6 @@
 using System.Reflection;
 
-using Futurum.Core.Functional;
+using Futurum.WebApiEndpoint.Internal;
 using Futurum.WebApiEndpoint.Metadata;
 
 using Microsoft.AspNetCore.Authorization;

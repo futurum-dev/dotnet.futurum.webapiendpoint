@@ -68,7 +68,7 @@ internal static class HttpResponseExtensions
             return optionRange.Switch(WithRange, WithoutRange);
         }
 
-        return Result.TryAsync(Execute, () => "Failed to send response stream");
+        return Result.TryAsync(Execute, "Failed to send response stream");
     }
 
     public static Task<Result> TrySendResponseFileAsync(this HttpResponse httpResponse, FileInfo fileInfo, Option<Range> range, int responseStatusCode, string contentType = MediaTypeNames.Application.Octet,
@@ -80,7 +80,7 @@ internal static class HttpResponseExtensions
             await httpResponse.TrySendResponseStreamAsync(fileStream, range, responseStatusCode, fileInfo.Name, fileInfo.Length, contentType, cancellation);
         }
 
-        return Result.TryAsync(Execute, () => "Failed to send response file");
+        return Result.TryAsync(Execute, "Failed to send response file");
     }
 
     public static Task<Result> TrySendResponseBytesAsync(this HttpResponse httpResponse, byte[] bytes, Option<Range> range, int responseStatusCode, string? fileName = null, long? fileLengthBytes = null,
@@ -92,7 +92,7 @@ internal static class HttpResponseExtensions
             await httpResponse.TrySendResponseStreamAsync(memoryStream, range, responseStatusCode, fileName, fileLengthBytes, contentType, cancellation);
         }
 
-        return Result.TryAsync(Execute, () => "Failed to send response bytes");
+        return Result.TryAsync(Execute, "Failed to send response bytes");
     }
 
     public static Task<Result> TryWriteAsJsonAsync<TResponse>(this HttpResponse httpResponse, TResponse response, JsonSerializerOptions jsonSerializerOptions, int responseStatusCode,
@@ -106,7 +106,7 @@ internal static class HttpResponseExtensions
             return JsonSerializer.SerializeAsync(httpResponse.Body, response, jsonSerializerOptions, cancellation);
         }
 
-        return Result.TryAsync(Execute, () => "Failed to write as Json");
+        return Result.TryAsync(Execute, "Failed to write as Json");
     }
 
     public static Task<Result> TryWriteAsProblemJsonAsync<TResponse>(this HttpResponse httpResponse, TResponse response, JsonSerializerOptions jsonSerializerOptions, int responseStatusCode,
@@ -120,7 +120,7 @@ internal static class HttpResponseExtensions
             return JsonSerializer.SerializeAsync(httpResponse.Body, response, jsonSerializerOptions, cancellation);
         }
 
-        return Result.TryAsync(Execute, () => "Failed to write as Problem Json");
+        return Result.TryAsync(Execute, "Failed to write as Problem Json");
     }
 
     public static Task<Result> TryWriteAsyncEnumerableAsJsonAsync<T>(this HttpResponse httpResponse, T source, JsonSerializerOptions jsonSerializerOptions, int responseStatusCode,
@@ -134,6 +134,6 @@ internal static class HttpResponseExtensions
             return JsonSerializer.SerializeAsync(httpResponse.Body, source, jsonSerializerOptions, cancellation);
         }
 
-        return Result.TryAsync(Execute, () => "Failed to write AsyncEnumerable as Json");
+        return Result.TryAsync(Execute, "Failed to write AsyncEnumerable as Json");
     }
 }
