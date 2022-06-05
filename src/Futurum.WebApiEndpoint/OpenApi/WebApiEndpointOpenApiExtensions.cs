@@ -17,7 +17,7 @@ public static class WebApiEndpointOpenApiExtensions
         
         serviceCollection.AddSwaggerGen(options =>
         {
-            options.CustomSchemaIds(type => type.FullName);
+            options.CustomSchemaIds(type => type.FullName?.Replace("+", "_"));
             options.OperationFilter<WebApiEndpointOpenApiOperationRequestBodyRequired>();
             options.OperationFilter<WebApiEndpointOpenApiOperationTypeInformation>();
             options.OperationFilter<WebApiEndpointOpenApiOperationInformation>();
