@@ -1,9 +1,14 @@
 # Futurum.WebApiEndpoint
 
 ![license](https://img.shields.io/github/license/futurum-dev/dotnet.futurum.webapiendpoint?style=for-the-badge)
-![CI](https://img.shields.io/github/workflow/status/futurum-dev/dotnet.futurum.webapiendpoint/CI/main?style=for-the-badge)
+![CI](https://img.shields.io/github/actions/workflow/status/futurum-dev/dotnet.futurum.webapiendpoint/ci.yml?branch=main&style=for-the-badge)
 [![Coverage Status](https://img.shields.io/coveralls/github/futurum-dev/dotnet.futurum.webapiendpoint?style=for-the-badge)](https://coveralls.io/github/futurum-dev/dotnet.futurum.webapiendpoint?branch=main)
 [![NuGet version](https://img.shields.io/nuget/v/futurum.webapiendpoint?style=for-the-badge)](https://www.nuget.org/packages/futurum.webapiendpoint)
+
+**This project is now deprecated. I will not be updating this project anymore. I will be focusing on [dotnet.futurum.webapiendpoint.micro](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro)**
+--------------------
+**If you are using dotnet 7 or above, please do not use this library. Use [dotnet.futurum.webapiendpoint.micro](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro)**
+--------------------
 
 A dotnet library that allows you to build WebApiEndpoints using a vertical slice architecture approach.
 
